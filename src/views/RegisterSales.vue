@@ -37,6 +37,7 @@
           </tr>
         </tbody>
       </v-simple-table>
+      <v-btn @click="sumtotal"></v-btn>
     </v-container>
     
   </v-main>
@@ -52,7 +53,8 @@ export default {
       products: [
         { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
         { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000}
-      ]
+      ],
+      total: 0
     }
   },
   methods: {
@@ -79,6 +81,13 @@ export default {
       }
       const date = `${day}/${month}/${dat.getFullYear()} ${hours}:${minutes}`
       this.date = date
+    },
+    sumtotal(){
+      let total = 0;
+      this.products.forEach( (sale) => {
+        total+=sale.subtotal;
+      })
+      this.total = total
     }
   },
   created(){
