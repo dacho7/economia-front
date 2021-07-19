@@ -15,31 +15,48 @@
         </v-flex>
       </v-layout>
     </v-container>
-
+  
     <v-container>
-      <v-simple-table>
-        <thead>
-          <tr>
-            <th class="text-left">Cantidad</th>
-            <th class="text-left">Code</th>
-            <th class="text-left">Descripcion</th>
-            <th class="text-right">Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(item,index) in products" :key="index">
-            <td>{{item.cantidad}}</td>
-            <td>
-              <v-text-field v-model="item.code"></v-text-field>
-            </td>
-            <td> {{item.description}}</td>
-            <td class="text-right">${{item.subtotal}}</td>
-          </tr>
-        </tbody>
-      </v-simple-table>
-      <v-btn @click="sumtotal"></v-btn>
+      <template>
+        <v-simple-table fixed-header height="500px">
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th class="text-left">Cantidad</th>
+                <th class="text-left">Code</th>
+                <th class="text-left">Descripcion</th>
+                <th class="text-right">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item,index) in products" :key="index">
+                <td>{{item.cantidad}}</td>
+                <td>
+                  <v-text-field v-model="item.code"></v-text-field>
+                </td>
+                <td> {{item.description}}</td>
+                <td class="text-right">${{item.subtotal}}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+      </template>
     </v-container>
-    
+     
+    <v-container>
+      <v-layout>
+        <v-flex>
+          <h2 align="center" class="ml-4">Total</h2>
+        </v-flex>
+        <v-flex>
+          <h2 align="center">{{total}}</h2>
+        </v-flex>
+      </v-layout>
+      <v-layout ml-6 mr-6 mt-3 mb-3align="button">
+       <v-btn block class="success">Finalizar Compra</v-btn>
+      </v-layout>
+    </v-container>
+
   </v-main>
 </template>
 
@@ -51,6 +68,15 @@ export default {
       client: '',
       date: '',
       products: [
+        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
+        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
+        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
+        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
+        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
+        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
+        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
+        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
+        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
         { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
         { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000}
       ],
@@ -66,7 +92,7 @@ export default {
 
       let minutes = dat.getMinutes();
       let hours = dat.getHours();
-      
+
       if (month < 10){
         month = "0"+month;
       }
@@ -82,7 +108,7 @@ export default {
       const date = `${day}/${month}/${dat.getFullYear()} ${hours}:${minutes}`
       this.date = date
     },
-    sumtotal(){
+    calculatetotal(){
       let total = 0;
       this.products.forEach( (sale) => {
         total+=sale.subtotal;
