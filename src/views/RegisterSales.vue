@@ -30,16 +30,17 @@
             </thead>
             <tbody>
               <tr v-for="(item,index) in products" :key="index">
-                <td>{{item.cantidad}}</td>
-                <td>
-                  <v-text-field v-model="item.code"></v-text-field>
+                <td>{{1}}</td>
+                <td v-on:keyup.enter="findCode(item.code)">
+                  <v-text-field v-model="item.code" ></v-text-field>
                 </td>
                 <td> {{item.description}}</td>
-                <td class="text-right">${{item.subtotal}}</td>
+                <td class="text-right">${{item.salePrice}}</td>
               </tr>
             </tbody>
           </template>
         </v-simple-table>
+        {{products}}
       </template>
     </v-container>
      
@@ -61,6 +62,8 @@
 </template>
 
 <script>
+import { findProductbyCode } from "../services/sales";
+
 export default {
   name: "RegisterSales",
   data() {
@@ -68,17 +71,7 @@ export default {
       client: '',
       date: '',
       products: [
-        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
-        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
-        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
-        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
-        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
-        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
-        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
-        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
-        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
-        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000},
-        { cantidad: 1, code: '823432', description:'margarita personal', subtotal: 10000}
+        { cantidad: 1, code: '823432323232', description:'margarita personal fritolay edicion infantil', subtotal: 10000},
       ],
       total: 0
     }
@@ -114,6 +107,16 @@ export default {
         total+=sale.subtotal;
       })
       this.total = total
+    },
+    findCode(code){
+      findProductbyCode(code).then( result => {
+        console.log(result)
+        if (result.data.ok){
+          this.products.push(result.data.data)
+        }
+      }).catch( err => {
+        console.log(err)
+      })
     }
   },
   created(){
