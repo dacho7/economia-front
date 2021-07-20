@@ -18,12 +18,35 @@
   
     <v-container>
       <template>
+        <v-simple-table>
+          <template>
+            <thead>
+              <tr>
+                <th>Cantidad</th>
+                <th>Code</th>
+                <th>Descripcion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th class="text-left">
+                  <v-text-field ref="refcode" v-model="amount"></v-text-field>
+                </th>
+                <td v-on:keyup.enter="findCode(code)">
+                  <v-text-field ref="refcode" v-model="code"></v-text-field>
+                </td>
+                <td v-on:keyup.enter="findCode(item.code)">
+                  <v-text-field ></v-text-field>
+                </td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
         <v-simple-table fixed-header height="500px">
-          <template v-slot:default>
+          <template mt-6 v-slot:default>
             <thead>
               <tr>
                 <th class="text-left">Cantidad</th>
-                <th class="text-left">Code</th>
                 <th class="text-left">Descripcion</th>
                 <th class="text-right">Subtotal</th>
               </tr>
@@ -31,9 +54,6 @@
             <tbody>
               <tr v-for="(item,index) in products" :key="index">
                 <td>{{1}}</td>
-                <td v-on:keyup.enter="findCode(item.code)">
-                  <v-text-field v-model="item.code" ></v-text-field>
-                </td>
                 <td> {{item.description}}</td>
                 <td class="text-right">${{item.salePrice}}</td>
               </tr>
@@ -70,10 +90,10 @@ export default {
     return {
       client: '',
       date: '',
-      products: [
-        { cantidad: 1, code: '823432323232', description:'margarita personal fritolay edicion infantil', subtotal: 10000},
-      ],
-      total: 0
+      total: 0,
+      code: '',
+      amount: 1,
+      products: [],
     }
   },
   methods: {
@@ -121,6 +141,9 @@ export default {
   },
   created(){
     this.getDate()
-  }
+  },
+  mounted() {
+    this.$refs["refcode"].focus();
+  },
 };
 </script>
