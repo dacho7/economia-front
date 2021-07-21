@@ -18,3 +18,10 @@ export function registerSale(invoice, product, amount, subtotal) {
     subtotal,
   });
 }
+
+export function finishInvoice(idInvoice, total) {
+  return axios.put("http://localhost:4000/api/invoices/invoice", {
+    idInvoice,
+    total,
+  });
+}

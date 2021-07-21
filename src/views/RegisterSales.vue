@@ -33,7 +33,7 @@
                 <th class="text-left">
                   <v-text-field v-model="amount"></v-text-field>
                 </th>
-                <td v-on:keyup.enter="findCode(code)">
+                <td v-on:keyup.enter="registerSale(code)">
                   <v-text-field
                     outlined
                     ref="refcode"
@@ -58,9 +58,9 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in products" :key="index">
-                <td>{{ 1 }}</td>
+                <td>{{ item.amount }}</td>
                 <td>{{ item.description }}</td>
-                <td class="text-right">${{ item.salePrice }}</td>
+                <td class="text-right">${{ item.subtotal }}</td>
               </tr>
             </tbody>
           </template>
@@ -74,14 +74,15 @@
           <h2 align="center" class="ml-4">Total</h2>
         </v-flex>
         <v-flex>
-          <h2 align="center">{{ total }}</h2>
+          <h2 align="center">{{ total | currency }}</h2>
         </v-flex>
       </v-layout>
-      <v-layout ml-6 mr-6 mt-3 mb-3align="button">
-        <v-btn block class="success">Finalizar Compra</v-btn>
+      <v-layout align="button">
+        <v-btn @click="finishInvoice()" block class="success mt-4"
+          >Finalizar Compra</v-btn
+        >
       </v-layout>
     </v-container>
-    {{ invoice }}
   </v-main>
 </template>
 
@@ -90,6 +91,7 @@ import {
   findProductByCode,
   createInvoice,
   registerSale,
+  finishInvoice,
 } from "../services/sales";
 
 export default {
@@ -137,13 +139,34 @@ export default {
       });
       this.total = total;
     },
-    findCode(code) {
+    registerSale(code) {
       findProductByCode(code)
-        .then((result) => {
-          console.log(result);
-          if (result.data.ok) {
-            this.products.push(result.data.data);
+        .then((product) => {
+          if (product.data.ok) {
+            registerSale(
+              this.invoice,
+              product.data.data.idProduct,
+              this.amount,
+              product.data.data.salePrice * this.amount
+            )
+              .then((sale) => {
+                const newSale = {
+                  amount: this.amount,
+                  description: product.data.data.description,
+                  subtotal: sale.data.data.subtotal,
+                  idSale: sale.data.data.idSale,
+                  idProduct: sale.data.data.idProduct,
+                  idInvoice: sale.data.data.invoice,
+                };
+                this.products.push(newSale);
+                this.code = "";
+                this.total += sale.data.data.subtotal;
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           }
+          this.code = "";
         })
         .catch((err) => {
           console.log(err);
@@ -153,21 +176,23 @@ export default {
       createInvoice()
         .then((result) => {
           this.invoice = result.data.data.idInvoice;
-          console.log(result.data);
-          this.registerSale();
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    registerSale() {
-      registerSale(this.invoice, "123", 10, 1000)
-        .then((result) => {
-          console.log(result);
+    finishInvoice() {
+      let total = 0;
+      this.products.forEach((sale) => {
+        total += sale.subtotal;
+      });
+      finishInvoice(this.invoice, total)
+        .then(() => {
+          this.products = [];
+          this.total = 0;
+          createInvoice();
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => console.log(err));
     },
   },
   created() {
