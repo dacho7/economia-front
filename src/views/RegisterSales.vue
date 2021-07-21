@@ -34,7 +34,11 @@
                   <v-text-field v-model="amount"></v-text-field>
                 </th>
                 <td v-on:keyup.enter="findCode(code)">
-                  <v-text-field ref="refcode" v-model="code"></v-text-field>
+                  <v-text-field
+                    outlined
+                    ref="refcode"
+                    v-model="code"
+                  ></v-text-field>
                 </td>
                 <td>
                   <v-text-field></v-text-field>
@@ -61,7 +65,6 @@
             </tbody>
           </template>
         </v-simple-table>
-        {{ products }}
       </template>
     </v-container>
 
@@ -78,11 +81,16 @@
         <v-btn block class="success">Finalizar Compra</v-btn>
       </v-layout>
     </v-container>
+    {{ invoice }}
   </v-main>
 </template>
 
 <script>
-import { findProductByCode, createInvoice } from "../services/sales";
+import {
+  findProductByCode,
+  createInvoice,
+  registerSale,
+} from "../services/sales";
 
 export default {
   name: "RegisterSales",
@@ -144,6 +152,17 @@ export default {
     createInvoice() {
       createInvoice()
         .then((result) => {
+          this.invoice = result.data.data.idInvoice;
+          console.log(result.data);
+          this.registerSale();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    registerSale() {
+      registerSale(this.invoice, "123", 10, 1000)
+        .then((result) => {
           console.log(result);
         })
         .catch((err) => {
@@ -153,6 +172,7 @@ export default {
   },
   created() {
     this.getDate();
+    this.createInvoice();
   },
   mounted() {
     this.$refs["refcode"].focus();
