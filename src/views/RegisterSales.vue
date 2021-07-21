@@ -3,19 +3,20 @@
     <v-container mt-4>
       <v-layout xs12>
         <v-flex xs6 align-self-center>
-          <v-text-field 
-            color="blue-grey lighten-2" 
-            label="Cliente" 
-            v-model="client">
+          <v-text-field
+            color="blue-grey lighten-2"
+            label="Cliente"
+            v-model="client"
+          >
           </v-text-field>
         </v-flex>
         <v-flex xs6 ml-5>
           <h4>Fecha</h4>
-          <h4>{{date}}</h4>
+          <h4>{{ date }}</h4>
         </v-flex>
       </v-layout>
     </v-container>
-  
+
     <v-container>
       <template>
         <v-simple-table>
@@ -30,13 +31,13 @@
             <tbody>
               <tr>
                 <th class="text-left">
-                  <v-text-field ref="refcode" v-model="amount"></v-text-field>
+                  <v-text-field v-model="amount"></v-text-field>
                 </th>
                 <td v-on:keyup.enter="findCode(code)">
                   <v-text-field ref="refcode" v-model="code"></v-text-field>
                 </td>
-                <td v-on:keyup.enter="findCode(item.code)">
-                  <v-text-field ></v-text-field>
+                <td>
+                  <v-text-field></v-text-field>
                 </td>
               </tr>
             </tbody>
@@ -52,95 +53,106 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item,index) in products" :key="index">
-                <td>{{1}}</td>
-                <td> {{item.description}}</td>
-                <td class="text-right">${{item.salePrice}}</td>
+              <tr v-for="(item, index) in products" :key="index">
+                <td>{{ 1 }}</td>
+                <td>{{ item.description }}</td>
+                <td class="text-right">${{ item.salePrice }}</td>
               </tr>
             </tbody>
           </template>
         </v-simple-table>
-        {{products}}
+        {{ products }}
       </template>
     </v-container>
-     
+
     <v-container>
       <v-layout>
         <v-flex>
           <h2 align="center" class="ml-4">Total</h2>
         </v-flex>
         <v-flex>
-          <h2 align="center">{{total}}</h2>
+          <h2 align="center">{{ total }}</h2>
         </v-flex>
       </v-layout>
       <v-layout ml-6 mr-6 mt-3 mb-3align="button">
-       <v-btn block class="success">Finalizar Compra</v-btn>
+        <v-btn block class="success">Finalizar Compra</v-btn>
       </v-layout>
     </v-container>
-
   </v-main>
 </template>
 
 <script>
-import { findProductbyCode } from "../services/sales";
+import { findProductByCode, createInvoice } from "../services/sales";
 
 export default {
   name: "RegisterSales",
   data() {
     return {
-      client: '',
-      date: '',
+      client: "",
+      date: "",
       total: 0,
-      code: '',
+      code: "",
       amount: 1,
+      invoice: "",
       products: [],
-    }
+    };
   },
   methods: {
-    getDate(){
-      let dat = new Date()
+    getDate() {
+      let dat = new Date();
 
       let day = dat.getDate();
-      let month = dat.getMonth()+1;
+      let month = dat.getMonth() + 1;
 
       let minutes = dat.getMinutes();
       let hours = dat.getHours();
 
-      if (month < 10){
-        month = "0"+month;
+      if (month < 10) {
+        month = "0" + month;
       }
-      if (day < 10){
-        day = "0"+day;
+      if (day < 10) {
+        day = "0" + day;
       }
-      if (minutes < 10){
-        minutes = "0"+minutes;
+      if (minutes < 10) {
+        minutes = "0" + minutes;
       }
-      if (hours < 10){
-        hours = "0"+hours;
+      if (hours < 10) {
+        hours = "0" + hours;
       }
-      const date = `${day}/${month}/${dat.getFullYear()} ${hours}:${minutes}`
-      this.date = date
+      const date = `${day}/${month}/${dat.getFullYear()} ${hours}:${minutes}`;
+      this.date = date;
     },
-    calculatetotal(){
+    calculatetotal() {
       let total = 0;
-      this.products.forEach( (sale) => {
-        total+=sale.subtotal;
-      })
-      this.total = total
+      this.products.forEach((sale) => {
+        total += sale.subtotal;
+      });
+      this.total = total;
     },
-    findCode(code){
-      findProductbyCode(code).then( result => {
-        console.log(result)
-        if (result.data.ok){
-          this.products.push(result.data.data)
-        }
-      }).catch( err => {
-        console.log(err)
-      })
-    }
+    findCode(code) {
+      findProductByCode(code)
+        .then((result) => {
+          console.log(result);
+          if (result.data.ok) {
+            this.products.push(result.data.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    createInvoice() {
+      createInvoice()
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
-  created(){
-    this.getDate()
+  created() {
+    this.getDate();
   },
   mounted() {
     this.$refs["refcode"].focus();
