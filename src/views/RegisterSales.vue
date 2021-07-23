@@ -82,6 +82,9 @@
           >Finalizar Compra</v-btn
         >
       </v-layout>
+      <v-layout>
+        <v-btn @click="undoSales()">cancelar compra</v-btn>
+      </v-layout>
     </v-container>
   </v-main>
 </template>
@@ -92,6 +95,7 @@ import {
   createInvoice,
   registerSale,
   finishInvoice,
+  undoSales,
 } from "../services/sales";
 
 export default {
@@ -193,6 +197,17 @@ export default {
           createInvoice();
         })
         .catch((err) => console.log(err));
+    },
+    undoSales() {
+      let ids = [];
+      this.products.forEach((product) => ids.push(product.idSale));
+      undoSales(ids)
+        .then(() => {
+          this.products = [];
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   created() {

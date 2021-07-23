@@ -25,3 +25,10 @@ export function finishInvoice(idInvoice, total) {
     total,
   });
 }
+
+export function undoSales(ids) {
+  const idSales = JSON.stringify(ids);
+  return axios.delete("http://localhost:4000/api/sales/sales", {
+    data: { idSales },
+  });
+}
