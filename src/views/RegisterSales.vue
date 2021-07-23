@@ -78,13 +78,61 @@
         </v-flex>
       </v-layout>
       <v-layout align="button">
-        <v-btn @click="finishInvoice()" block class="success mt-4"
+        <v-btn
+          :disabled="products.length === 0"
+          @click="finishInvoice()"
+          block
+          x-large
+          class="success mt-4"
           >Finalizar Compra</v-btn
         >
       </v-layout>
-      <v-layout>
-        <v-btn @click="undoSales()">cancelar compra</v-btn>
-      </v-layout>
+    </v-container>
+
+    <v-container>
+      <v-dialog v-model="dialog" width="800">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            :disabled="products.length === 0"
+            color="red lighten-2"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >
+            Cancelar Compra
+          </v-btn>
+        </template>
+
+        <v-card>
+          <v-card-title class="text-h5 red lighten-2">
+            Cacelar Compra
+          </v-card-title>
+
+          <v-card-text>
+            <br />
+            Esta seguro que desea cancelar la compra?
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-btn
+              color="primary"
+              text
+              @click="
+                dialog = false;
+                undoSales();
+              "
+            >
+              Aceptar
+            </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn align="right" color="primary" text @click="dialog = false">
+              Cancelar
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
   </v-main>
 </template>
@@ -109,6 +157,7 @@ export default {
       amount: 1,
       invoice: "",
       products: [],
+      dialog: false,
     };
   },
   methods: {
@@ -190,7 +239,7 @@ export default {
       this.products.forEach((sale) => {
         total += sale.subtotal;
       });
-      finishInvoice(this.invoice, total)
+      finishInvoice(this.invoice, total, this.client)
         .then(() => {
           this.products = [];
           this.total = 0;
@@ -204,6 +253,7 @@ export default {
       undoSales(ids)
         .then(() => {
           this.products = [];
+          this.total = 0;
         })
         .catch((err) => {
           console.log(err);

@@ -19,10 +19,11 @@ export function registerSale(invoice, product, amount, subtotal) {
   });
 }
 
-export function finishInvoice(idInvoice, total) {
+export function finishInvoice(idInvoice, total, client) {
   return axios.put("http://localhost:4000/api/invoices/invoice", {
     idInvoice,
     total,
+    client,
   });
 }
 
