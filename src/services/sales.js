@@ -33,3 +33,23 @@ export function undoSales(ids) {
     data: { idSales },
   });
 }
+
+export function registerProduct(
+  code,
+  description,
+  costPrice,
+  salePrice,
+  quantity,
+  type,
+  expireDate
+) {
+  return axios.post("http://localhost:4000/api/products/product", {
+    code,
+    description,
+    costPrice,
+    salePrice,
+    quantity,
+    type,
+    expireDate,
+  });
+}

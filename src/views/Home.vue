@@ -11,5 +11,13 @@ export default {
   components: {
     HelloWorld,
   },
+  mounted() {
+    if (localStorage.getItem("type") === "0") {
+      this.$router.push("/registersales");
+    }
+    if (localStorage.getItem("type") === "1") {
+      this.$router.push("/registerproducts");
+    }
+  },
 };
 </script>

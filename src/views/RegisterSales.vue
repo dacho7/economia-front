@@ -243,6 +243,8 @@ export default {
         .then(() => {
           this.products = [];
           this.total = 0;
+          this.client = "";
+          this.amount = 1;
           createInvoice();
         })
         .catch((err) => console.log(err));
