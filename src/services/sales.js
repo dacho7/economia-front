@@ -35,7 +35,6 @@ export function undoSales(ids) {
 }
 
 export function registerProduct(
-  code,
   description,
   costPrice,
   salePrice,
@@ -44,7 +43,6 @@ export function registerProduct(
   expireDate
 ) {
   return axios.post("http://localhost:4000/api/products/product", {
-    code,
     description,
     costPrice,
     salePrice,

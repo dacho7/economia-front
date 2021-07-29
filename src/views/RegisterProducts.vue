@@ -8,16 +8,6 @@
       <v-row>
         <v-col>
           <v-text-field
-            disabled
-            v-model="code"
-            label="Codigo de Barras"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col>
-          <v-text-field
             v-model="description"
             label="Descripción"
           ></v-text-field>
@@ -72,15 +62,19 @@
       <v-btn @click="registerProduct()" class="primary"
         >Registrar Producto</v-btn
       >
+      <Barcode :code="code" />
     </v-container>
-    {{ product }}
   </v-form>
 </template>
 
 <script>
 import { registerProduct } from "../services/sales";
+import Barcode from "../components/Barcode";
 export default {
   name: "RegisterProducts",
+  components: {
+    Barcode,
+  },
   data() {
     return {
       product: null,
@@ -94,12 +88,24 @@ export default {
       // type: "",
       // expireDate: "",
 
-      code: "1232435",
+      code: "32421342",
       description: "Cuchilla Gillete 3 hoja",
       costPrice: "3200",
       salePrice: "3600",
       quantity: 1,
-      typesSelection: ["Grano", "Aseo y Limpieza"],
+      typesSelection: [
+        "Granos",
+        "Aseo y Limpieza",
+        "Enlatados",
+        "Frituras",
+        "Agricultura",
+        "Variedades",
+        "Verduras",
+        "Dulces",
+        "Lacteos",
+        "Panaderia",
+        "Plasticos y recipientes",
+      ],
       type: "",
       expireDate: "",
     };
@@ -107,7 +113,6 @@ export default {
   methods: {
     registerProduct() {
       registerProduct(
-        this.code,
         this.description,
         this.costPrice,
         this.salePrice,
