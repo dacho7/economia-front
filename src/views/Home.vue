@@ -18,6 +18,9 @@ export default {
     if (localStorage.getItem("type") === "1") {
       this.$router.push("/registerproducts");
     }
+    if (localStorage.getItem("type") === "2") {
+      this.$router.push("/addproducts");
+    }
   },
 };
 </script>
