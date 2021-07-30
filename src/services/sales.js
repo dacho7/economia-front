@@ -51,3 +51,9 @@ export function registerProduct(
     expireDate,
   });
 }
+
+export function findProductByDescription(description) {
+  return axios.get("http://localhost:4000/api/products/productdescription", {
+    params: { description },
+  });
+}
