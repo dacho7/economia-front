@@ -2,27 +2,42 @@
   <v-container>
     <v-row class="text-center">
       <v-col class="mt-5">
-        <h1>Adicionar Inventario</h1>
+        <h1>Recibir Entrega</h1>
       </v-col>
     </v-row>
     <v-row>
       <v-col>
-        <h2>Buscar por Descripción</h2>
-        <v-autocomplete
-          @keypress.enter="findByDescription"
-          v-moldel="description"
-          :items="products"
-        >
-        </v-autocomplete>
+        <h2 class="center-text">Buscar Producto por Descripción</h2>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-text-field @keyup="findByDescription()" v-model="description">
+        </v-text-field>
       </v-col>
       <v-col>
-        <h2>Buscar por Código</h2>
-        <v-text-field label="Código"></v-text-field>
+        <v-select
+          v-on:input="getByDescription"
+          :items="products"
+          v-model="id"
+          item-value="idProduct"
+          item-text="description"
+        ></v-select>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <h2>Buscar Producto por Código</h2>
+        <v-text-field
+          @keydown.enter="findByCode()"
+          v-model="code"
+          label="Código"
+        ></v-text-field>
       </v-col>
     </v-row>
     <v-row>
       <v-col class="text-center mt-4 mb-4">
-        <h2>{{ product }}</h2>
+        <h2>{{ getBycode }}</h2>
       </v-col>
       <v-container>
         <v-simple-table>
@@ -51,17 +66,18 @@
         </v-row>
       </v-container>
     </v-row>
-    {{ products }}
   </v-container>
 </template>
 
 <script>
-import { findProductByDescription } from "../services/sales";
+import { findProductByDescription, findProductByCode } from "../services/sales";
 export default {
   name: "AddProducts",
   data() {
     return {
-      product: "Papa Margarita 120g",
+      product: null,
+      code: "",
+      id: "",
       description: "",
       amount: 10,
       total: 10000,
@@ -69,15 +85,48 @@ export default {
       products: [],
     };
   },
+  computed: {
+    getBycode() {
+      if (this.product) {
+        return `${this.product.description} | ${this.product.quantity} unidades | $ ${this.product.costPrice} precio unitario`;
+      }
+      return "";
+    },
+  },
   methods: {
     findByDescription() {
-      findProductByDescription(this.description).then((productsDB) => {
-        let prod = [];
-        productsDB.data.data.forEach((product) => {
-          prod.push(product.description);
+      if (this.description.length >= 3)
+        findProductByDescription(this.description).then((productsDB) => {
+          let prod = [];
+          if (productsDB.data.ok) {
+            productsDB.data.data.forEach((product) => {
+              prod.push(product);
+            });
+            this.products = prod;
+          } else {
+            this.products = [];
+            this.id = "";
+          }
         });
-        this.products = prod;
+      if (this.description.trim().length < 3) {
+        this.products = [];
+      }
+    },
+    findByCode() {
+      findProductByCode(this.code).then((result) => {
+        this.product = result.data.data;
+        this.code = "";
       });
+    },
+    getByDescription() {
+      this.products.forEach((product) => {
+        if (this.id == product.idProduct) {
+          this.product = product;
+        }
+      });
+    },
+    finish() {
+      // this.amount
     },
   },
 };
