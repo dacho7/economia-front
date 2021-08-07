@@ -54,7 +54,7 @@
               <v-text-field v-model="total"></v-text-field>
             </td>
             <td width="160px">
-              <v-text-field v-model="unitPrice"></v-text-field>
+              <v-text-field disabled v-model="getUnitPrice"></v-text-field>
             </td>
           </tbody>
         </v-simple-table>
@@ -85,8 +85,7 @@ export default {
       id: "",
       description: "",
       amount: 10,
-      total: 10000,
-      unitPrice: 1000,
+      total: 30000,
       expireDate: "5/22/2024",
       products: [],
     };
@@ -97,6 +96,9 @@ export default {
         return `${this.product.description} | ${this.product.quantity} unidades | $ ${this.product.costPrice} precio unitario`;
       }
       return "";
+    },
+    getUnitPrice() {
+      return this.total / this.amount;
     },
   },
   methods: {
@@ -132,16 +134,26 @@ export default {
       });
     },
     finish() {
+      const unitPrice =
+        (this.product.quantity * this.product.costPrice + this.total) /
+        (this.product.quantity + this.amount);
+      const amount =
+        parseFloat(this.amount) + parseFloat(this.product.quantity);
+      console.log("precio unitario", unitPrice);
       updateProduct(
         this.product.idProduct,
-        this.total / this.amount,
+        unitPrice,
         3000,
-        (this.product.quantity += this.amount),
+        amount,
         this.expireDate,
         "ACTIVE"
-      ).then((result) => {
-        console.log(result);
-      });
+      )
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   },
 };

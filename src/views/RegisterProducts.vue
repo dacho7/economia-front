@@ -88,7 +88,7 @@ export default {
       // type: "",
       // expireDate: "",
 
-      code: "32421342",
+      code: "",
       description: "Cuchilla Gillete 3 hoja",
       costPrice: "3200",
       salePrice: "3600",
@@ -105,6 +105,7 @@ export default {
         "Lacteos",
         "Panaderia",
         "Plasticos y recipientes",
+        "Galletas",
       ],
       type: "",
       expireDate: "",
@@ -122,8 +123,9 @@ export default {
       )
         .then((result) => {
           this.product = result.data.data;
-          console.log(result.data);
-          this.cleanForm();
+          this.code = result.data.data.code;
+          console.log(typeof this.code);
+          // this.cleanForm();
         })
         .catch((err) => {
           console.log(err);
