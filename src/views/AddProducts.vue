@@ -51,26 +51,31 @@
               <v-text-field v-model="amount"></v-text-field>
             </td>
             <td width="180px">
-              <v-text-field disabled v-model="total"></v-text-field>
+              <v-text-field v-model="total"></v-text-field>
             </td>
             <td width="160px">
-              <v-text-field disabled v-model="unitPrice"></v-text-field>
+              <v-text-field v-model="unitPrice"></v-text-field>
             </td>
           </tbody>
         </v-simple-table>
 
         <v-row class="text-center">
           <v-col>
-            <v-btn class="primary">Terminar</v-btn>
+            <v-btn @click="finish" class="primary">Terminar</v-btn>
           </v-col>
         </v-row>
       </v-container>
+      {{ product }}
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { findProductByDescription, findProductByCode } from "../services/sales";
+import {
+  findProductByDescription,
+  findProductByCode,
+  updateProduct,
+} from "../services/sales";
 export default {
   name: "AddProducts",
   data() {
@@ -82,6 +87,7 @@ export default {
       amount: 10,
       total: 10000,
       unitPrice: 1000,
+      expireDate: "5/22/2024",
       products: [],
     };
   },
@@ -126,7 +132,16 @@ export default {
       });
     },
     finish() {
-      // this.amount
+      updateProduct(
+        this.product.idProduct,
+        this.total / this.amount,
+        3000,
+        (this.product.quantity += this.amount),
+        this.expireDate,
+        "ACTIVE"
+      ).then((result) => {
+        console.log(result);
+      });
     },
   },
 };

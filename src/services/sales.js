@@ -57,3 +57,21 @@ export function findProductByDescription(description) {
     params: { description },
   });
 }
+
+export function updateProduct(
+  idProduct,
+  costPrice,
+  salePrice,
+  quantity,
+  expireDate,
+  state
+) {
+  return axios.put("http://localhost:4000/api/products/productupdate", {
+    idProduct,
+    costPrice,
+    salePrice,
+    quantity,
+    expireDate,
+    state,
+  });
+}
