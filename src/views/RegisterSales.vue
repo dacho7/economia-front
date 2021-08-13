@@ -1,5 +1,8 @@
 <template>
   <v-main>
+    <br />
+    <h2 align="center">Registrar Ventas</h2>
+
     <v-container mt-4>
       <v-layout xs12>
         <v-flex xs6 align-self-center>
@@ -47,7 +50,7 @@
             </tbody>
           </template>
         </v-simple-table>
-        <v-simple-table fixed-header height="500px">
+        <v-simple-table fixed-header height="460px">
           <template mt-6 v-slot:default>
             <thead>
               <tr>
@@ -60,7 +63,7 @@
               <tr v-for="(item, index) in products" :key="index">
                 <td>{{ item.amount }}</td>
                 <td>{{ item.description }}</td>
-                <td class="text-right">${{ item.subtotal }}</td>
+                <td class="text-right">{{ item.subtotal | currency }}</td>
               </tr>
             </tbody>
           </template>
@@ -213,6 +216,7 @@ export default {
                 };
                 this.products.push(newSale);
                 this.code = "";
+                this.amount = 1;
                 this.total += sale.data.data.subtotal;
               })
               .catch((err) => {

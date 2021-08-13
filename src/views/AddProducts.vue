@@ -12,7 +12,11 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-text-field @keyup="findByDescription()" v-model="description">
+        <v-text-field
+          @keyup="findByDescription()"
+          v-model="description"
+          label="Descripcion"
+        >
         </v-text-field>
       </v-col>
       <v-col>
@@ -45,6 +49,7 @@
             <th><h4>Cantidad</h4></th>
             <th><h4>Total</h4></th>
             <th><h4>Precio Unitario</h4></th>
+            <th><h4>Fecha de Expiracion</h4></th>
           </thead>
           <tbody>
             <td width="20px">
@@ -56,6 +61,9 @@
             <td width="160px">
               <v-text-field disabled v-model="getUnitPrice"></v-text-field>
             </td>
+            <td width="160px">
+              <v-text-field type="date" v-model="expireDate"></v-text-field>
+            </td>
           </tbody>
         </v-simple-table>
 
@@ -65,7 +73,6 @@
           </v-col>
         </v-row>
       </v-container>
-      {{ product }}
     </v-row>
   </v-container>
 </template>
@@ -85,7 +92,7 @@ export default {
       id: "",
       description: "",
       amount: 10,
-      total: 30000,
+      total: 0,
       expireDate: "5/22/2024",
       products: [],
     };

@@ -78,20 +78,10 @@ export default {
   data() {
     return {
       product: null,
-      // code: "81231321",
-      // value: "",
-      // description: "",
-      // costPrice: "",
-      // salePrice: "",
-      // quantity: 1,
-      // typesSelection: ["Grano", "Aseo y Limpieza"],
-      // type: "",
-      // expireDate: "",
-
       code: "",
-      description: "Cuchilla Gillete 3 hoja",
-      costPrice: "3200",
-      salePrice: "3600",
+      description: "",
+      costPrice: 0,
+      salePrice: 0,
       quantity: 1,
       typesSelection: [
         "Granos",
@@ -106,6 +96,7 @@ export default {
         "Panaderia",
         "Plasticos y recipientes",
         "Galletas",
+        "Papeleria",
       ],
       type: "",
       expireDate: "",
