@@ -28,7 +28,6 @@
               <tr>
                 <th>Cantidad</th>
                 <th>Code</th>
-                <th>Descripcion</th>
               </tr>
             </thead>
             <tbody>
@@ -37,14 +36,12 @@
                   <v-text-field v-model="amount"></v-text-field>
                 </th>
                 <td v-on:keyup.enter="registerSale(code)">
-                  <v-text-field
-                    outlined
-                    ref="refcode"
-                    v-model="code"
-                  ></v-text-field>
+                  <v-text-field ref="refcode" v-model="code"></v-text-field>
                 </td>
                 <td>
-                  <v-text-field></v-text-field>
+                  <v-btn @click="dialogAnonymous = true"
+                    >Agregar venta sin codigo</v-btn
+                  >
                 </td>
               </tr>
             </tbody>
@@ -136,7 +133,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      {{ products }}
     </v-container>
+    <AnonymousSale :dialog="dialogAnonymous" @activate="eventSoon" />
   </v-main>
 </template>
 
@@ -148,6 +147,7 @@ import {
   finishInvoice,
   undoSales,
 } from "../services/sales";
+import AnonymousSale from "../components/sales/AnonymousSale.vue";
 
 export default {
   name: "RegisterSales",
@@ -161,7 +161,11 @@ export default {
       invoice: "",
       products: [],
       dialog: false,
+      dialogAnonymous: true,
     };
+  },
+  components: {
+    AnonymousSale,
   },
   methods: {
     getDate() {
@@ -187,13 +191,6 @@ export default {
       }
       const date = `${day}/${month}/${dat.getFullYear()} ${hours}:${minutes}`;
       this.date = date;
-    },
-    calculatetotal() {
-      let total = 0;
-      this.products.forEach((sale) => {
-        total += sale.subtotal;
-      });
-      this.total = total;
     },
     registerSale(code) {
       findProductByCode(code)
@@ -264,6 +261,10 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    eventSoon(venta) {
+      console.log(venta);
+      this.dialogAnonymous = false;
     },
   },
   created() {
