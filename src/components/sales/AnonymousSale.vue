@@ -110,6 +110,7 @@ export default {
         total: this.total,
         idProduct: this.idProduct,
       });
+      this.clean();
     },
     findByDescription() {
       if (this.description.length >= 3)
