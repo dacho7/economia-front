@@ -36,7 +36,7 @@
                   <v-text-field v-model="amount"></v-text-field>
                 </th>
                 <td v-on:keyup.enter="registerSale(code)">
-                  <v-text-field ref="refcode" v-model="code"></v-text-field>
+                  <v-text-field autofocus v-model="code"></v-text-field>
                 </td>
                 <td>
                   <v-btn @click="dialogAnonymous = true"
@@ -161,7 +161,7 @@ export default {
       invoice: "",
       products: [],
       dialog: false,
-      dialogAnonymous: true,
+      dialogAnonymous: false,
     };
   },
   components: {
@@ -270,9 +270,6 @@ export default {
   created() {
     this.getDate();
     this.createInvoice();
-  },
-  mounted() {
-    this.$refs["refcode"].focus();
   },
 };
 </script>

@@ -50,7 +50,11 @@
           </v-row>
           <v-row v-if="!description">
             <v-col>
-              <v-text-field v-model="total" label="Total"></v-text-field>
+              <v-text-field
+                autofocus
+                v-model="total"
+                label="Total"
+              ></v-text-field>
             </v-col>
           </v-row>
         </v-card-text>
@@ -81,7 +85,7 @@ export default {
       product: "",
       idProduct: "",
       amount: 1,
-      total: 0,
+      total: null,
       allProducts: [],
     };
   },
