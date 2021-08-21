@@ -103,14 +103,21 @@ export default {
   methods: {
     acept() {
       if (!this.product) this.product = "101010";
-      registerSale(this.invoice, this.product, this.amount, this.total).then();
-      this.$emit("aceptAnonymousSale", {
-        product: this.product,
-        amount: this.amount,
-        total: this.total,
-        idProduct: this.idProduct,
-      });
-      this.clean();
+      if (!this.description) this.description = "No registrado";
+      registerSale(this.invoice, this.product, this.amount, this.total)
+        .then((sale) => {
+          const newSale = {
+            amount: this.amount,
+            description: this.description,
+            subtotal: sale.data.data.subtotal,
+            idSale: sale.data.data.idSale,
+            idProduct: sale.data.data.idProduct,
+            idInvoice: sale.data.data.invoice,
+          };
+          this.$emit("aceptAnonymousSale", newSale);
+          this.clean();
+        })
+        .catch((e) => console.log(e));
     },
     findByDescription() {
       if (this.description.length >= 3)

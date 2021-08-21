@@ -133,7 +133,6 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      {{ products }}
     </v-container>
     <AnonymousSale
       :invoice="invoice"
@@ -267,8 +266,8 @@ export default {
           console.log(err);
         });
     },
-    eventSoon(venta) {
-      console.log(venta);
+    eventSoon(newSale) {
+      this.products.push(newSale);
       this.dialogAnonymous = false;
     },
   },
