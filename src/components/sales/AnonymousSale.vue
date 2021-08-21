@@ -60,13 +60,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-1" text @click="sendFather">
-            Cancelar
-          </v-btn>
+          <v-btn color="red darken-1" text @click="clean"> Cancelar </v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="dialog = false">
-            Aceptar
-          </v-btn>
+          <v-btn color="green darken-1" text @click="acept"> Aceptar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -74,11 +70,11 @@
 </template>
 
 <script>
-import { findProductByDescription } from "../../services/sales";
+import { findProductByDescription, registerSale } from "../../services/sales";
 
 export default {
   name: "AnonymousSale",
-  props: ["dialog"],
+  props: ["dialog", "invoice"],
   data() {
     return {
       description: "",
@@ -105,8 +101,10 @@ export default {
     },
   },
   methods: {
-    sendFather() {
-      this.$emit("activate", {
+    acept() {
+      if (!this.product) this.product = "101010";
+      registerSale(this.invoice, this.product, this.amount, this.total).then();
+      this.$emit("aceptAnonymousSale", {
         product: this.product,
         amount: this.amount,
         total: this.total,
@@ -117,7 +115,6 @@ export default {
       if (this.description.length >= 3)
         findProductByDescription(this.description).then((productsDB) => {
           let prod = [];
-          console.log(productsDB);
           if (productsDB.data.ok) {
             productsDB.data.data.forEach((product) => {
               prod.push(product);
@@ -132,6 +129,17 @@ export default {
         this.allProducts = [];
         this.product = "";
       }
+    },
+    registerSale() {
+      registerSale;
+    },
+    clean() {
+      this.description = "";
+      this.product = "";
+      this.idProduct = "";
+      this.total = null;
+      this.allProducts = [];
+      this.$emit("cancelAnonymousSale");
     },
   },
 };

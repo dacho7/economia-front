@@ -135,7 +135,12 @@
       </v-dialog>
       {{ products }}
     </v-container>
-    <AnonymousSale :dialog="dialogAnonymous" @activate="eventSoon" />
+    <AnonymousSale
+      :invoice="invoice"
+      :dialog="dialogAnonymous"
+      @cancelAnonymousSale="dialogAnonymous = false"
+      @aceptAnonymousSale="eventSoon"
+    />
   </v-main>
 </template>
 
