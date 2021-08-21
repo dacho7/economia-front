@@ -34,11 +34,10 @@
           <a
             v-for="(link, i) in importantLinks"
             :key="i"
-            :href="link.href"
             class="subheading mx-3"
             target="_blank"
           >
-            {{ link.text }}
+            <router-link :to="link.route">{{ link.text }}</router-link>
           </a>
         </v-row>
       </v-col>
@@ -54,15 +53,15 @@ export default {
     importantLinks: [
       {
         text: "Registro de Ventas",
-        href: "localhost:8081/registersales",
+        route: "/registersales",
       },
       {
         text: "Registro De Productos",
-        href: "localhost:8081/registerproducts",
+        route: "/registerproducts",
       },
       {
         text: "Recibir Pedido",
-        href: "localhost:8081/addproducts",
+        route: "/addproducts",
       },
     ],
   }),
