@@ -197,38 +197,40 @@ export default {
       this.date = date;
     },
     registerSale(code) {
-      findProductByCode(code)
-        .then((product) => {
-          if (product.data.ok) {
-            registerSale(
-              this.invoice,
-              product.data.data.idProduct,
-              this.amount,
-              product.data.data.salePrice * this.amount
-            )
-              .then((sale) => {
-                const newSale = {
-                  amount: this.amount,
-                  description: product.data.data.description,
-                  subtotal: sale.data.data.subtotal,
-                  idSale: sale.data.data.idSale,
-                  idProduct: sale.data.data.idProduct,
-                  idInvoice: sale.data.data.invoice,
-                };
-                this.products.push(newSale);
-                this.code = "";
-                this.amount = 1;
-                this.total += sale.data.data.subtotal;
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
-          this.code = "";
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (code != "") {
+        findProductByCode(code)
+          .then((product) => {
+            if (product.data.ok) {
+              registerSale(
+                this.invoice,
+                product.data.data.idProduct,
+                this.amount,
+                product.data.data.salePrice * this.amount
+              )
+                .then((sale) => {
+                  const newSale = {
+                    amount: this.amount,
+                    description: product.data.data.description,
+                    subtotal: sale.data.data.subtotal,
+                    idSale: sale.data.data.idSale,
+                    idProduct: sale.data.data.idProduct,
+                    idInvoice: sale.data.data.invoice,
+                  };
+                  this.products.push(newSale);
+                  this.code = "";
+                  this.amount = 1;
+                  this.total += sale.data.data.subtotal;
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+            this.code = "";
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
     createInvoice() {
       createInvoice()

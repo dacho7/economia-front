@@ -42,15 +42,17 @@
             </v-col>
             <v-col>
               <v-text-field
-                v-model="total"
+                v-model="totalwithProduct"
                 type="number"
                 label="Total"
+                disabled
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row v-if="!description">
             <v-col>
               <v-text-field
+                class="centered-input"
                 autofocus
                 v-model="total"
                 label="Total"
@@ -99,16 +101,34 @@ export default {
       });
       return products;
     },
+    totalwithProduct() {
+      let totalPrice = 0;
+      this.allProducts.forEach((product) => {
+        if (this.product === product.description) {
+          totalPrice = this.amount * product.salePrice;
+        }
+      });
+      return totalPrice;
+    },
   },
   methods: {
     acept() {
-      if (!this.product) this.product = "101010";
-      if (!this.description) this.description = "No registrado";
-      registerSale(this.invoice, this.product, this.amount, this.total)
+      if (!this.product) {
+        this.idProduct = "101010";
+      } else {
+        this.allProducts.forEach((product) => {
+          if (this.product === product.description) {
+            this.idProduct = product.idProduct;
+            this.total = this.amount * product.salePrice;
+          }
+        });
+      }
+      if (!this.description) this.product = "No registrado";
+      registerSale(this.invoice, this.idProduct, this.amount, this.total)
         .then((sale) => {
           const newSale = {
             amount: this.amount,
-            description: this.description,
+            description: this.product,
             subtotal: sale.data.data.subtotal,
             idSale: sale.data.data.idSale,
             idProduct: sale.data.data.idProduct,
@@ -138,16 +158,23 @@ export default {
         this.product = "";
       }
     },
-    registerSale() {
-      registerSale;
-    },
     clean() {
       this.description = "";
       this.product = "";
       this.idProduct = "";
       this.total = null;
       this.allProducts = [];
+      this.amount = 1;
       this.$emit("cancelAnonymousSale");
+    },
+    getSalePrice(description) {
+      let totalPrice = 0;
+      this.allProducts.forEach((product) => {
+        if (description === product.description) {
+          totalPrice = this.amount * product.salePrice;
+        }
+      });
+      return totalPrice;
     },
   },
 };
