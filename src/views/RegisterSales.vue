@@ -140,6 +140,12 @@
       @cancelAnonymousSale="dialogAnonymous = false"
       @aceptAnonymousSale="eventSoon"
     />
+    <br />
+    <br />
+    <br />
+    <br />
+    <v-btn @click="printInvoice">imprimir</v-btn>
+    <invoice-to-print />
   </v-main>
 </template>
 
@@ -152,6 +158,8 @@ import {
   undoSales,
 } from "../services/sales";
 import AnonymousSale from "../components/sales/AnonymousSale.vue";
+import InvoiceToPrint from "../components/sales/InvoiceToPrint.vue";
+import printJS from "print-js";
 
 export default {
   name: "RegisterSales",
@@ -166,10 +174,12 @@ export default {
       products: [],
       dialog: false,
       dialogAnonymous: false,
+      toPrint: false,
     };
   },
   components: {
     AnonymousSale,
+    InvoiceToPrint,
   },
   methods: {
     getDate() {
@@ -252,7 +262,8 @@ export default {
           this.total = 0;
           this.client = "";
           this.amount = 1;
-          createInvoice();
+          this.printInvoice();
+          this.createInvoice();
         })
         .catch((err) => console.log(err));
     },
@@ -271,6 +282,10 @@ export default {
     eventSoon(newSale) {
       this.products.push(newSale);
       this.dialogAnonymous = false;
+    },
+    printInvoice() {
+      this.toPrint = true;
+      printJS("printJS-form", "html");
     },
   },
   created() {
