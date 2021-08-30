@@ -34,7 +34,7 @@
       <br />
       <br />
       <br />
-      .
+      .{{ products }}
     </div>
   </div>
 </template>
