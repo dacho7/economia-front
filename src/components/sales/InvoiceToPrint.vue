@@ -13,16 +13,15 @@
       <div>
         <table>
           <tr>
-            <th>Producto</th>
+            <th>Detalle</th>
             <th>Precio</th>
           </tr>
-          <tr>
-            <td>3x Papas Fritas</td>
-            <td>2000</td>
-          </tr>
-          <tr>
-            <td>coacola personal</td>
-            <td>1800000</td>
+          <tr v-for="(item, index) of products" :key="index">
+            <td v-if="item.amount === 1">{{ item.description }}</td>
+            <td v-if="item.amount > 1">
+              {{ item.amount }} {{ item.description }}
+            </td>
+            <td>{{ item.subtotal }}</td>
           </tr>
         </table>
         Total: {{ total }}
