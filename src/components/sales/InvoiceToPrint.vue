@@ -42,10 +42,9 @@
 <script>
 export default {
   name: "InvoiceToPrint",
-  props: ["products"],
+  props: ["client", "products"],
   data() {
     return {
-      client: "David Tobar",
       total: 3800,
     };
   },
