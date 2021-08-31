@@ -145,7 +145,7 @@
     <br />
     <br />
     <v-btn @click="printInvoice">imprimir</v-btn>
-    <invoice-to-print :client="client" :products="products" />
+    <invoice-to-print :client="client" :products="products" :total="total" />
   </v-main>
 </template>
 

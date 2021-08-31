@@ -1,6 +1,8 @@
 <template>
-  <div id="printJS-form">
-    <div class="container">
+  <div id="printJS-form" class="">
+    <div>
+      <!-- <h1>Autoservicio La Economia</h1>
+      <h2>Nit:432432</h2> -->
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Autoservicio La
       Economia <br />
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nit:
@@ -9,7 +11,7 @@
       Barrio Libertad
       <br />
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Celular
-      3147581354
+      3147581354 <br />________________________________
       <div>
         <table>
           <tr>
@@ -21,19 +23,22 @@
             <td v-if="item.amount > 1">
               {{ item.amount }} {{ item.description }}
             </td>
-            <td>{{ item.subtotal }}</td>
+            <td>{{ item.subtotal | currency }}</td>
           </tr>
         </table>
-        Total: {{ total }}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:
+        {{ total }}
       </div>
+      <br />________________________________
       <div v-if="client">
+        <br />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cliente:
         {{ client }}
       </div>
       <br />
       <br />
       <br />
-      .{{ products }}
+      .
     </div>
   </div>
 </template>
@@ -41,17 +46,18 @@
 <script>
 export default {
   name: "InvoiceToPrint",
-  props: ["client", "products"],
-  data() {
-    return {
-      total: 3800,
-    };
-  },
+  props: ["client", "products", "total"],
 };
 </script>
 
 <style>
 h3 {
   text-align: center;
+}
+h1 {
+  text-align: center;
+}
+h2 {
+  text-align: right;
 }
 </style>
