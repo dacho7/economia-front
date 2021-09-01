@@ -23,18 +23,19 @@
             <td v-if="item.amount > 1">
               {{ item.amount }} {{ item.description }}
             </td>
-            <td>{{ item.subtotal | currency }}</td>
+            <td>{{ item.subtotal | currency_2 }}</td>
           </tr>
         </table>
+        <br />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:
-        {{ total }}
+        {{ total | currency }}
       </div>
-      <br />________________________________
       <div v-if="client">
         <br />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cliente:
         {{ client }}
       </div>
+      <br />________________________________
       <br />
       <br />
       <br />
