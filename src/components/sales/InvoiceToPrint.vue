@@ -27,11 +27,13 @@
           </tr>
         </table>
         <br />
+        ________________________________
+        <br />
+        <br />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:
         {{ total | currency }}
         <div v-if="client">
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cliente: {{ client }}
-          <br />________________________________
         </div>
       </div>
       <br />
