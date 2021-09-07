@@ -8,9 +8,7 @@
       </template>
 
       <v-card>
-        <v-card-title class="text-h5 grey lighten-2">
-          Privacy Policy
-        </v-card-title>
+        <v-card-title class="text-h5 grey lighten-2"> Acept shop </v-card-title>
 
         <v-card-text>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
