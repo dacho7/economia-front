@@ -53,10 +53,17 @@
           </thead>
           <tbody>
             <td width="20px">
-              <v-text-field v-model="amount"></v-text-field>
+              <v-text-field
+                :disabled="!product"
+                v-model="amount"
+              ></v-text-field>
             </td>
             <td width="180px">
-              <v-text-field v-model="total"></v-text-field>
+              <v-text-field
+                :disabled="!product"
+                type="number"
+                v-model="total"
+              ></v-text-field>
             </td>
             <td width="160px">
               <v-text-field disabled v-model="getUnitPrice"></v-text-field>
@@ -69,7 +76,12 @@
 
         <v-row class="text-center">
           <v-col>
-            <v-btn @click="finish" class="primary">Terminar</v-btn>
+            <v-btn
+              :disabled="!product || !amount || !total || !expireDate"
+              @click="finish"
+              class="primary"
+              >Terminar</v-btn
+            >
           </v-col>
         </v-row>
       </v-container>
@@ -91,9 +103,9 @@ export default {
       code: "",
       id: "",
       description: "",
-      amount: 10,
-      total: 0,
-      expireDate: "5/22/2024",
+      amount: 12,
+      total: null,
+      expireDate: "",
       products: [],
     };
   },
@@ -157,10 +169,21 @@ export default {
       )
         .then((result) => {
           console.log(result);
+          this.clean();
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    clean() {
+      this.product = null;
+      this.code = "";
+      this.id = "";
+      this.description = "";
+      this.amount = 12;
+      this.total = null;
+      this.expireDate = "";
+      this.products = [];
     },
   },
 };
