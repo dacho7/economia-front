@@ -49,11 +49,13 @@ export default {
   name: "InvoiceToPrint",
   props: ["client", "products", "total"],
 };
+//something here
 </script>
 
 <style>
 h3 {
   text-align: center;
+  color-background: #ffff;
 }
 h1 {
   text-align: center;
