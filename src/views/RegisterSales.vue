@@ -1,7 +1,8 @@
 <template>
   <v-main>
-    <br />
-    <h2 align="center">Registrar Ventas</h2>
+    <v-container mt-4>
+      <h2>Registrar Ventas</h2>
+    </v-container>
 
     <v-container mt-4>
       <v-layout xs12>
@@ -33,7 +34,7 @@
             <tbody>
               <tr>
                 <th class="text-left">
-                  <v-text-field v-model="amount"></v-text-field>
+                  <v-text-field type="number" v-model="amount"></v-text-field>
                 </th>
                 <td v-on:keyup.enter="registerSale(code)">
                   <v-text-field autofocus v-model="code"></v-text-field>

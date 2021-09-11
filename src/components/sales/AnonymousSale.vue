@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row justify="center" align="center">
     <v-dialog v-model="dialog" persistent max-width="700">
       <template>
         <v-btn color="primary" dark> Venta No Registrada </v-btn>
@@ -54,6 +54,7 @@
               <v-text-field
                 class="centered-input"
                 autofocus
+                type="number"
                 v-model="total"
                 label="Total"
               ></v-text-field>
