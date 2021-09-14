@@ -64,6 +64,10 @@ export default {
         text: "Recibir Pedido",
         route: "/receiveorder",
       },
+      {
+        text: "Actualizar Precios",
+        route: "/updateprice",
+      },
     ],
   }),
 };
