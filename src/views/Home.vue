@@ -19,7 +19,7 @@ export default {
       this.$router.push("/registerproducts");
     }
     if (localStorage.getItem("type") === "2") {
-      this.$router.push("/addproducts");
+      this.$router.push("/receiveorder");
     }
   },
 };

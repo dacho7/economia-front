@@ -62,7 +62,7 @@ export default {
       },
       {
         text: "Recibir Pedido",
-        route: "/addproducts",
+        route: "/receiveorder",
       },
     ],
   }),

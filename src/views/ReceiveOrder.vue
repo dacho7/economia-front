@@ -96,7 +96,7 @@ import {
   updateProduct,
 } from "../services/sales";
 export default {
-  name: "AddProducts",
+  name: "ReceiveOrder",
   data() {
     return {
       product: null,
