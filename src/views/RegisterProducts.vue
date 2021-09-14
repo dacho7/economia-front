@@ -53,15 +53,21 @@
             v-model="expireDate"
             label="Fecha de Expiración"
             type="date"
+            :disabled="noexpire"
           ></v-text-field>
+          <v-checkbox v-model="noexpire" label="No expira"></v-checkbox>
         </v-col>
       </v-row>
     </v-container>
 
     <v-container>
-      <v-btn @click="registerProduct()" class="primary"
+      <v-btn
+        :disabled="!description || !costPrice || !salePrice || !type"
+        @click="registerProduct()"
+        class="primary"
         >Registrar Producto</v-btn
       >
+      <!-- || !description || !costPrice || !salePrice -->
       <Barcode :code="code" />
     </v-container>
   </v-form>
@@ -97,13 +103,24 @@ export default {
         "Plasticos y recipientes",
         "Galletas",
         "Papeleria",
+        "Bebidas",
+        "Jugueteria",
+        "Licores",
+        "Tecnologia",
+        "Agro",
       ],
       type: "",
       expireDate: "",
+      noexpire: false,
     };
   },
   methods: {
     registerProduct() {
+      console.log(this.noexpire);
+      console.log(this.expireDate);
+      if (this.noexpire) {
+        this.expireDate = "2100-01-01";
+      }
       registerProduct(
         this.description,
         this.costPrice,
@@ -113,10 +130,11 @@ export default {
         this.expireDate
       )
         .then((result) => {
+          console.log(result);
           this.product = result.data.data;
           this.code = result.data.data.code;
           console.log(typeof this.code);
-          // this.cleanForm();
+          this.cleanForm();
         })
         .catch((err) => {
           console.log(err);
