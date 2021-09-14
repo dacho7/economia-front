@@ -26,9 +26,9 @@ const routes = [
     component: () => import("../views/ReceiveOrder.vue"),
   },
   {
-    path: "/changeprice",
-    name: "ChangePrice",
-    component: () => import("../views/ChangePrice.vue"),
+    path: "/updateprice",
+    name: "UpdatePrice",
+    component: () => import("../views/UpdatePrice.vue"),
   },
 ];
 

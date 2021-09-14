@@ -39,7 +39,7 @@
 
 <script>
 export default {
-  name: "ChangePrice",
+  name: "UpdatePrice",
   data() {
     return {
       products: [],
