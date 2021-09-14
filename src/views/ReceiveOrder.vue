@@ -165,7 +165,7 @@ export default {
         3000,
         amount,
         this.expireDate,
-        "ACTIVE"
+        "WITHOUT-REVIEW"
       )
         .then((result) => {
           console.log(result);
