@@ -116,8 +116,6 @@ export default {
   },
   methods: {
     registerProduct() {
-      console.log(this.noexpire);
-      console.log(this.expireDate);
       if (this.noexpire) {
         this.expireDate = "2100-01-01";
       }
@@ -130,10 +128,8 @@ export default {
         this.expireDate
       )
         .then((result) => {
-          console.log(result);
           this.product = result.data.data;
           this.code = result.data.data.code;
-          console.log(typeof this.code);
           this.cleanForm();
         })
         .catch((err) => {

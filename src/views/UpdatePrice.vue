@@ -26,11 +26,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in products" :key="item.name">
-              <td>{{ item.name }}</td>
+            <tr v-for="(item, index) in products" :key="index">
+              <td>{{ item.description }}</td>
               <td>{{ item.calories }}</td>
             </tr>
           </tbody>
+          {{ products }}
         </template>
       </v-simple-table>
     </template>
@@ -38,12 +39,23 @@
 </template>
 
 <script>
+import { FINDPRODUCTBYSTATE } from "../services/products";
 export default {
   name: "UpdatePrice",
   data() {
     return {
       products: [],
     };
+  },
+  methods: {
+    listProducts() {
+      FINDPRODUCTBYSTATE("WITHOUT-REVIEW").then((res) => {
+        this.products = res.data.data;
+      });
+    },
+  },
+  created() {
+    this.listProducts();
   },
 };
 </script>
