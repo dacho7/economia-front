@@ -79,11 +79,6 @@ export default {
       newPrice: null,
     };
   },
-  computed: {
-    getDateShortFormat() {
-      return "f";
-    },
-  },
   methods: {
     listProducts() {
       FINDPRODUCTBYSTATE("WITHOUT-REVIEW").then((res) => {
