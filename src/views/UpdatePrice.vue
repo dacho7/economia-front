@@ -56,7 +56,7 @@
 
               <td>
                 <v-btn
-                  :disabled="!newPrice ^ (newPrice > item.costPrice)"
+                  :disabled="!newPrice || newPrice < item.costPrice"
                   class="success"
                   >Aceptar</v-btn
                 >
