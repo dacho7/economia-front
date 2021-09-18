@@ -58,6 +58,7 @@
           </template>
         </v-simple-table>
       </template>
+      {{ products }}
     </v-card>
     <br />
     <v-card>
@@ -65,29 +66,40 @@
         <h2>Actualizar Precios de otros Productos</h2>
       </v-card-title>
       <v-card-text>
-        <v-row align="center">
-          <v-col class="col-2">
-            <h3>Descripcion</h3>
-          </v-col>
-          <v-col class="col-2">
-            <h3>Fecha</h3>
-          </v-col>
-          <v-col class="col-6">
-            <h3>Buscar</h3>
+        <v-row>
+          <v-col>
+            <h3>Buscar Productos</h3>
           </v-col>
         </v-row>
 
-        <v-row align="center">
-          <v-col class="col-2">
-            <v-text-field></v-text-field>
+        <v-row>
+          <v-col>
+            <v-btn class="warning" block x-large>Buscar Por Descripción</v-btn>
           </v-col>
-          <v-col class="col-2">
-            <v-text-field></v-text-field>
+          <v-col>
+            <v-btn class="warning" block x-large
+              >Buscar Por Fecha de Llegada de pedido</v-btn
+            >
           </v-col>
-          <v-col class="col-6">
-            <v-btn class="primary">Buscar</v-btn>
+          <v-col>
+            <v-btn class="warning" block x-large>Buscar Por Código</v-btn>
           </v-col>
         </v-row>
+      </v-card-text>
+      <v-card-title> <h2>Productos Encontrados</h2> </v-card-title>
+      <v-card-text>
+        <v-simple-table>
+          <thead>
+            <tr>
+              <th>Descripcion</th>
+              <th>Código</th>
+              <th>Precio De compra</th>
+              <th>Precio De Venta</th>
+              <th>Fecha de Vencimiento</th>
+              <th>Fecha De última Actualización</th>
+            </tr>
+          </thead>
+        </v-simple-table>
       </v-card-text>
     </v-card>
   </v-container>
@@ -101,6 +113,8 @@ export default {
     return {
       products: [],
       newPrice: null,
+      activePicker: null,
+      dateDatePicker: null,
     };
   },
   methods: {
@@ -108,6 +122,9 @@ export default {
       FINDPRODUCTBYSTATE("WITHOUT-REVIEW").then((res) => {
         this.products = res.data.data;
       });
+    },
+    save(date) {
+      this.$refs.menu.save(date);
     },
   },
   created() {
