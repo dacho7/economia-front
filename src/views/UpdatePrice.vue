@@ -55,10 +55,12 @@
                 </td>
               </tr>
             </tbody>
+            <h2 v-if="(products.length = 0)">
+              No se han recibido productos Recientemente
+            </h2>
           </template>
         </v-simple-table>
       </template>
-      {{ products }}
     </v-card>
     <br />
     <v-card>
@@ -78,7 +80,7 @@
           </v-col>
           <v-col>
             <v-btn class="warning" block x-large
-              >Buscar Por Fecha de Llegada de pedido</v-btn
+              >Buscar Por Fecha de Llegada</v-btn
             >
           </v-col>
           <v-col>
@@ -86,21 +88,7 @@
           </v-col>
         </v-row>
       </v-card-text>
-      <v-card-title> <h2>Productos Encontrados</h2> </v-card-title>
-      <v-card-text>
-        <v-simple-table>
-          <thead>
-            <tr>
-              <th>Descripcion</th>
-              <th>Código</th>
-              <th>Precio De compra</th>
-              <th>Precio De Venta</th>
-              <th>Fecha de Vencimiento</th>
-              <th>Fecha De última Actualización</th>
-            </tr>
-          </thead>
-        </v-simple-table>
-      </v-card-text>
+      <v-card-title></v-card-title>
     </v-card>
   </v-container>
 </template>
