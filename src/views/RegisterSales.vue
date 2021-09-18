@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <v-container mt-4>
+    <v-container>
       <h2>Registrar Ventas</h2>
     </v-container>
 

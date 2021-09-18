@@ -1,20 +1,23 @@
 <template>
   <v-container>
     <v-row class="text-center">
+      <br />
+      <br />
+      <br />
       <v-col cols="12">
-        <v-img
+        <!-- <v-img
           :src="require('../assets/logo.svg')"
           class="my-3"
           contain
           height="200"
-        />
+        /> -->
       </v-col>
 
       <v-col class="mb-4">
         <h1 class="display-2 font-weight-bold mb-3">
-          Bienvenido Autoservicio La Economia
+          Bienvenido a Autoservicio La Economía
         </h1>
-
+        <br />
         <p class="subheading font-weight-regular">
           Si tiene algun problema contactese con soporte
           <br />Numero de Contacto
