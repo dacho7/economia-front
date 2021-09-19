@@ -55,9 +55,9 @@
                 </td>
               </tr>
             </tbody>
-            <h2 v-if="(products.length = 0)">
+            <h3 v-if="products.length == 0">
               No se han recibido productos Recientemente
-            </h2>
+            </h3>
           </template>
         </v-simple-table>
       </template>
@@ -76,7 +76,9 @@
 
         <v-row>
           <v-col>
-            <v-btn class="warning" block x-large>Buscar Por Descripción</v-btn>
+            <v-btn @click="findByDescription()" class="warning" block x-large
+              >Buscar Por Descripción</v-btn
+            >
           </v-col>
           <v-col>
             <v-btn class="warning" block x-large
@@ -94,7 +96,11 @@
 </template>
 
 <script>
-import { FINDPRODUCTBYSTATE } from "../services/products";
+import {
+  FINDPRODUCTBYSTATE,
+  FINDPRODUCTSBYDESCRIPTION,
+} from "../services/products";
+
 export default {
   name: "UpdatePrice",
   data() {
@@ -103,6 +109,7 @@ export default {
       newPrice: null,
       activePicker: null,
       dateDatePicker: null,
+      description: "rrozs",
     };
   },
   methods: {
@@ -111,8 +118,23 @@ export default {
         this.products = res.data.data;
       });
     },
-    save(date) {
-      this.$refs.menu.save(date);
+    findByDescription() {
+      if (this.description.length >= 3)
+        FINDPRODUCTSBYDESCRIPTION(this.description).then((productsDB) => {
+          let prod = [];
+          if (productsDB.data.ok) {
+            console.log(productsDB);
+            productsDB.data.data.forEach((product) => {
+              prod.push(product);
+            });
+            this.products = prod;
+          } else {
+            this.products = [];
+          }
+        });
+      if (this.description.trim().length < 3) {
+        this.products = [];
+      }
     },
   },
   created() {
