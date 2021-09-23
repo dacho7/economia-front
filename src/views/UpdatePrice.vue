@@ -114,9 +114,11 @@ export default {
   },
   methods: {
     listProducts() {
-      FINDPRODUCTBYSTATE("WITHOUT-REVIEW").then((res) => {
-        this.products = res.data.data;
-      });
+      FINDPRODUCTBYSTATE("WITHOUT-REVIEW")
+        .then((res) => {
+          this.products = res.data.data;
+        })
+        .catch((e) => console.log(e));
     },
     findByDescription() {
       if (this.description.length >= 3)
