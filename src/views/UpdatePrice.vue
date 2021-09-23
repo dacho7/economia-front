@@ -76,9 +76,7 @@
 
         <v-row>
           <v-col>
-            <v-btn @click="findByDescription()" class="warning" block x-large
-              >Buscar Por Descripción</v-btn
-            >
+            <UpdateByDescription />
           </v-col>
           <v-col>
             <v-btn class="warning" block x-large
@@ -100,6 +98,7 @@ import {
   FINDPRODUCTBYSTATE,
   FINDPRODUCTSBYDESCRIPTION,
 } from "../services/products";
+import UpdateByDescription from "../components/updateproducts/UpdateByDescription.vue";
 
 export default {
   name: "UpdatePrice",
@@ -109,8 +108,11 @@ export default {
       newPrice: null,
       activePicker: null,
       dateDatePicker: null,
-      description: "rrozs",
+      description: "",
     };
+  },
+  components: {
+    UpdateByDescription,
   },
   methods: {
     listProducts() {
@@ -137,6 +139,9 @@ export default {
       if (this.description.trim().length < 3) {
         this.products = [];
       }
+    },
+    activeDialogDescription() {
+      this.dialogUpdateByDescription = true;
     },
   },
   created() {
