@@ -11,3 +11,7 @@ export function FINDPRODUCTSBYDESCRIPTION(description) {
     params: { description },
   });
 }
+
+export function FINDPRODUCTBYID(id) {
+  return axios.get("");
+}
