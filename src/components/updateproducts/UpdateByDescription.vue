@@ -23,7 +23,7 @@
           </v-toolbar-items>
         </v-toolbar>
         <v-list three-line subheader>
-          <v-subheader>User Controls</v-subheader>
+          <v-subheader>Buscar por descripcion</v-subheader>
           <v-list-item>
             <v-list-item-content>
               <v-list-item-title>Content filtering</v-list-item-title>
@@ -89,7 +89,6 @@
 <script>
 export default {
   name: "UpdateByDescription",
-  //   props: ["dialog"],
   data() {
     return {
       dialog: false,
