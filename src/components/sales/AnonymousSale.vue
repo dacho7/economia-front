@@ -14,7 +14,7 @@
             <v-col>
               <v-text-field
                 v-model="description"
-                label="descripción"
+                label="Ingrese Descripción"
                 @keyup="findByDescription"
               ></v-text-field>
             </v-col>
@@ -65,7 +65,14 @@
           <v-spacer></v-spacer>
           <v-btn color="red darken-1" text @click="clean"> Cancelar </v-btn>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="acept"> Aceptar </v-btn>
+          <v-btn
+            :disabled="total < 50"
+            color="green darken-1"
+            text
+            @click="acept"
+          >
+            Aceptar
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
