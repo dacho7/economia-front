@@ -141,6 +141,7 @@ export default {
     },
     findByCode() {
       findProductByCode(this.code).then((result) => {
+        (this.description = ""), (this.products = []);
         this.product = result.data.data;
         this.code = "";
       });

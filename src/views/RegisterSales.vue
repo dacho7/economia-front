@@ -14,11 +14,19 @@
       <v-card-title>
         <v-container>
           <v-layout xs12>
-            <v-flex xs6 align-self-center>
+            <v-flex xs6 align-self-center mr-5>
               <v-text-field
                 color="blue-grey lighten-2"
                 label="Nombre del Cliente"
                 v-model="client"
+              >
+              </v-text-field>
+            </v-flex>
+            <v-flex xs6 align-self-center ml-5>
+              <v-text-field
+                color="blue-grey lighten-2"
+                label="Documento del cliente"
+                v-model="document"
               >
               </v-text-field>
             </v-flex>
@@ -187,6 +195,7 @@ export default {
   data() {
     return {
       client: "",
+      document: null,
       date: "",
       total: 0,
       code: "",
