@@ -1,153 +1,173 @@
 <template>
-  <v-main>
-    <v-container>
-      <h2>Registrar Ventas</h2>
-    </v-container>
+  <v-container>
+    <template class="center">
+      <div>
+        <v-row>
+          <v-col>
+            <h1 class="text-center">Registrar Ventas</h1>
+          </v-col>
+        </v-row>
+      </div>
+    </template>
 
-    <v-container mt-4>
-      <v-layout xs12>
-        <v-flex xs6 align-self-center>
-          <v-text-field
-            color="blue-grey lighten-2"
-            label="Cliente"
-            v-model="client"
-          >
-          </v-text-field>
-        </v-flex>
-        <v-flex xs6 ml-5>
-          <h4>Fecha</h4>
-          <h4>{{ date }}</h4>
-        </v-flex>
-      </v-layout>
-    </v-container>
+    <v-card>
+      <v-card-title>
+        <v-container>
+          <v-layout xs12>
+            <v-flex xs6 align-self-center>
+              <v-text-field
+                color="blue-grey lighten-2"
+                label="Nombre del Cliente"
+                v-model="client"
+              >
+              </v-text-field>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card-title>
 
-    <v-container>
-      <template>
-        <v-simple-table>
+      <v-card-text>
+        <v-container>
           <template>
-            <thead>
-              <tr>
-                <th>Cantidad</th>
-                <th>Code</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th class="text-left">
-                  <v-text-field type="number" v-model="amount"></v-text-field>
-                </th>
-                <td v-on:keyup.enter="registerSale(code)">
-                  <v-text-field autofocus v-model="code"></v-text-field>
-                </td>
-                <td>
-                  <v-btn @click="dialogAnonymous = true"
-                    >Agregar venta sin codigo</v-btn
-                  >
-                </td>
-              </tr>
-            </tbody>
+            <v-simple-table>
+              <template>
+                <thead>
+                  <tr>
+                    <th>Cantidad</th>
+                    <th>Code</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th class="text-left">
+                      <v-text-field
+                        type="number"
+                        v-model="amount"
+                      ></v-text-field>
+                    </th>
+                    <td v-on:keyup.enter="registerSale(code)">
+                      <v-text-field autofocus v-model="code"></v-text-field>
+                    </td>
+                    <td>
+                      <v-btn @click="dialogAnonymous = true"
+                        >Agregar venta sin codigo</v-btn
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+            <v-simple-table fixed-header height="460px">
+              <template mt-6 v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">Cantidad</th>
+                    <th class="text-left">Descripcion</th>
+                    <th class="text-right">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in products" :key="index">
+                    <td>{{ item.amount }}</td>
+                    <td>{{ item.description }}</td>
+                    <td class="text-right">{{ item.subtotal | currency }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </template>
-        </v-simple-table>
-        <v-simple-table fixed-header height="460px">
-          <template mt-6 v-slot:default>
-            <thead>
-              <tr>
-                <th class="text-left">Cantidad</th>
-                <th class="text-left">Descripcion</th>
-                <th class="text-right">Subtotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in products" :key="index">
-                <td>{{ item.amount }}</td>
-                <td>{{ item.description }}</td>
-                <td class="text-right">{{ item.subtotal | currency }}</td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
-      </template>
-    </v-container>
+        </v-container>
 
-    <v-container>
-      <v-layout>
-        <v-flex>
-          <h2 align="center" class="ml-4">Total</h2>
-        </v-flex>
-        <v-flex>
-          <h2 align="center">{{ total | currency }}</h2>
-        </v-flex>
-      </v-layout>
-      <v-layout align="button">
-        <v-btn
-          :disabled="products.length === 0"
-          @click="finishInvoice()"
-          block
-          x-large
-          class="success mt-4"
-          >Finalizar Compra</v-btn
-        >
-      </v-layout>
-    </v-container>
-
-    <v-container>
-      <v-dialog v-model="dialog" width="800">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            :disabled="products.length === 0"
-            color="red lighten-2"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            Cancelar Compra
-          </v-btn>
-        </template>
-
-        <v-card>
-          <v-card-title class="text-h5 red lighten-2">
-            Cacelar Compra
-          </v-card-title>
-
-          <v-card-text>
-            <br />
-            Esta seguro que desea cancelar la compra?
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-actions>
+        <v-container>
+          <v-layout>
+            <v-flex>
+              <h2 align="center" class="ml-4">Total</h2>
+            </v-flex>
+            <v-flex>
+              <h2 align="center">{{ total | currency }}</h2>
+            </v-flex>
+          </v-layout>
+          <v-layout align="button">
             <v-btn
-              color="primary"
-              text
-              @click="
-                dialog = false;
-                undoSales();
-              "
+              :disabled="products.length === 0"
+              @click="finishInvoice()"
+              block
+              x-large
+              class="success mt-4"
+              >Finalizar Compra</v-btn
             >
-              Aceptar
-            </v-btn>
-            <v-spacer></v-spacer>
-            <v-btn align="right" color="primary" text @click="dialog = false">
-              Cancelar
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-container>
-    <AnonymousSale
-      :invoice="invoice"
-      :dialog="dialogAnonymous"
-      @cancelAnonymousSale="dialogAnonymous = false"
-      @aceptAnonymousSale="eventSoon"
-    />
-    <br />
-    <br />
-    <br />
-    <br />
-    <v-btn @click="printInvoice">imprimir</v-btn>
-    <invoice-to-print :client="client" :products="products" :total="total" />
-  </v-main>
+          </v-layout>
+        </v-container>
+
+        <v-container>
+          <v-dialog v-model="dialog" width="800">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                :disabled="products.length === 0"
+                color="red lighten-2"
+                dark
+                v-bind="attrs"
+                v-on="on"
+              >
+                Cancelar Compra
+              </v-btn>
+            </template>
+
+            <v-card>
+              <v-card-title class="text-h5 red lighten-2">
+                Cacelar Compra
+              </v-card-title>
+
+              <v-card-text>
+                <br />
+                Esta seguro que desea cancelar la compra?
+              </v-card-text>
+
+              <v-divider></v-divider>
+
+              <v-card-actions>
+                <v-btn
+                  color="primary"
+                  text
+                  @click="
+                    dialog = false;
+                    undoSales();
+                  "
+                >
+                  Aceptar
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn
+                  align="right"
+                  color="primary"
+                  text
+                  @click="dialog = false"
+                >
+                  Cancelar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-container>
+        <AnonymousSale
+          :invoice="invoice"
+          :dialog="dialogAnonymous"
+          @cancelAnonymousSale="dialogAnonymous = false"
+          @aceptAnonymousSale="eventSoon"
+        />
+        <br />
+        <br />
+        <br />
+        <br />
+        <v-btn @click="printInvoice">imprimir</v-btn>
+        <invoice-to-print
+          :client="client"
+          :products="products"
+          :total="total"
+        />
+      </v-card-text>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
