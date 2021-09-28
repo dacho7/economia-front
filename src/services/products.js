@@ -13,5 +13,7 @@ export function FINDPRODUCTSBYDESCRIPTION(description) {
 }
 
 export function FINDPRODUCTBYID(id) {
-  return axios.get("");
+  return axios.get("http://localhost:4000/api/products//findById", {
+    params: { id },
+  });
 }

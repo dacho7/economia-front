@@ -51,10 +51,14 @@
                 </td>
 
                 <td>
-                  <p>
-                    <v-btn class="primary">Actualizar</v-btn>&nbsp;
-                    <v-btn class="secondary">Ignorar</v-btn>
-                  </p>
+                  <v-row>
+                    <v-col>
+                      <UpdateProduct :id="item.idProduct" />
+                    </v-col>
+                    <v-col>
+                      <v-btn class="secondary">Ignorar</v-btn>
+                    </v-col>
+                  </v-row>
                 </td>
               </tr>
             </tbody>
@@ -102,6 +106,7 @@ import {
   FINDPRODUCTSBYDESCRIPTION,
 } from "../services/products";
 import UpdateByDescription from "../components/updateproducts/UpdateByDescription.vue";
+import UpdateProduct from "../components/updateproducts/UpdateProduct.vue";
 
 export default {
   name: "UpdatePrice",
@@ -112,10 +117,12 @@ export default {
       activePicker: null,
       dateDatePicker: null,
       description: "",
+      idProduct: null,
     };
   },
   components: {
     UpdateByDescription,
+    UpdateProduct,
   },
   methods: {
     listProducts() {
@@ -145,6 +152,9 @@ export default {
     },
     activeDialogDescription() {
       this.dialogUpdateByDescription = true;
+    },
+    setId(id) {
+      this.idProduct = id;
     },
   },
   created() {
