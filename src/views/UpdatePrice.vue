@@ -51,7 +51,10 @@
                 </td>
 
                 <td>
-                  <v-btn class="primary">Actualizar</v-btn>
+                  <p>
+                    <v-btn class="primary">Actualizar</v-btn>&nbsp;
+                    <v-btn class="secondary">Ignorar</v-btn>
+                  </p>
                 </td>
               </tr>
             </tbody>
