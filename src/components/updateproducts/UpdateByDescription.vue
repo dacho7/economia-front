@@ -27,11 +27,10 @@
           <v-text-field
             label="Ingrese Descripción"
             v-model="description"
-            @blur="findProduct()"
+            @input="findProduct()"
           ></v-text-field>
         </v-container>
         {{ products }}
-
         <v-divider></v-divider>
       </v-card>
     </v-dialog>
