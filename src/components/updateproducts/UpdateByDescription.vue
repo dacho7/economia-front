@@ -29,8 +29,8 @@
             v-model="description"
             @input="findProduct()"
           ></v-text-field>
+          <ListProductsFinded :products="products"></ListProductsFinded>
         </v-container>
-        {{ products }}
         <v-divider></v-divider>
       </v-card>
     </v-dialog>
@@ -38,6 +38,7 @@
 </template>
 <script>
 import { FINDPRODUCTSBYDESCRIPTION } from "../../services/products";
+import ListProductsFinded from "../lists/ListProductsFinded.vue";
 export default {
   name: "UpdateByDescription",
   data() {
@@ -46,6 +47,9 @@ export default {
       description: "",
       products: [],
     };
+  },
+  components: {
+    ListProductsFinded,
   },
   methods: {
     async findProduct() {
