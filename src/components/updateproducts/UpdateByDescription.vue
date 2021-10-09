@@ -38,12 +38,12 @@
 </template>
 <script>
 import { FINDPRODUCTSBYDESCRIPTION } from "../../services/products";
-import ListProductsFinded from "../lists/ListProductsFinded.vue";
+import ListProductsFinded from "./ListProductsFinded.vue";
 export default {
   name: "UpdateByDescription",
   data() {
     return {
-      dialog: true,
+      dialog: false,
       description: "",
       products: [],
     };
