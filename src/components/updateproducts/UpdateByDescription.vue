@@ -22,7 +22,15 @@
             <v-btn dark text @click="dialog = false"> Save </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-text-field label="Ingrese Descripción"></v-text-field>
+        <v-container>
+          <h1>Ingrese descripción del producto</h1>
+          <v-text-field
+            label="Ingrese Descripción"
+            v-model="description"
+            @blur="findProduct()"
+          ></v-text-field>
+        </v-container>
+        {{ products }}
 
         <v-divider></v-divider>
       </v-card>
@@ -30,12 +38,29 @@
   </v-row>
 </template>
 <script>
+import { FINDPRODUCTSBYDESCRIPTION } from "../../services/products";
 export default {
   name: "UpdateByDescription",
   data() {
     return {
-      dialog: false,
+      dialog: true,
+      description: "",
+      products: [],
     };
+  },
+  methods: {
+    async findProduct() {
+      try {
+        const result = await FINDPRODUCTSBYDESCRIPTION(this.description);
+        if (await result.data.ok) {
+          this.products = result.data.data;
+        } else {
+          this.products = [];
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
 };
 </script>
