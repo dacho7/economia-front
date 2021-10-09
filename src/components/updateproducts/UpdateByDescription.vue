@@ -22,26 +22,8 @@
             <v-btn dark text @click="dialog = false"> Save </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-list three-line subheader>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>Content filtering</v-list-item-title>
-              <v-list-item-subtitle
-                >Set the content filtering level to restrict apps that can be
-                downloaded</v-list-item-subtitle
-              >
-            </v-list-item-content>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>Password</v-list-item-title>
-              <v-list-item-subtitle
-                >Require password for purchase or use password to restrict
-                purchase</v-list-item-subtitle
-              >
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
+        <v-text-field label="Ingrese Descripción"></v-text-field>
+
         <v-divider></v-divider>
       </v-card>
     </v-dialog>
