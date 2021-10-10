@@ -243,18 +243,18 @@ export default {
             if (product.data.ok) {
               registerSale(
                 this.invoice,
-                product.data.data.idProduct,
+                product.data.data.id_product,
                 this.amount,
-                product.data.data.salePrice * this.amount
+                product.data.data.sale_price * this.amount
               )
                 .then((sale) => {
                   const newSale = {
                     amount: this.amount,
                     description: product.data.data.description,
                     subtotal: sale.data.data.subtotal,
-                    idSale: sale.data.data.idSale,
-                    idProduct: sale.data.data.idProduct,
-                    idInvoice: sale.data.data.invoice,
+                    id_sale: sale.data.data.id_sale,
+                    id_product: sale.data.data.id_product,
+                    id_invoice: sale.data.data.invoice,
                   };
                   this.products.push(newSale);
                   this.code = "";
@@ -275,7 +275,7 @@ export default {
     createInvoice() {
       createInvoice()
         .then((result) => {
-          this.invoice = result.data.data.idInvoice;
+          this.invoice = result.data.data.id_invoice;
         })
         .catch((err) => {
           console.log(err);
@@ -299,7 +299,7 @@ export default {
     },
     undoSales() {
       let ids = [];
-      this.products.forEach((product) => ids.push(product.idSale));
+      this.products.forEach((product) => ids.push(product.id_sale));
       undoSales(ids)
         .then(() => {
           this.products = [];

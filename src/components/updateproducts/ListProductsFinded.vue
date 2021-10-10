@@ -16,9 +16,9 @@
           <tr v-for="product in products" :key="product.name">
             <td style="pading: 10px">{{ product.description }}</td>
             <td>{{ product.quantity }}</td>
-            <td>{{ product.costPrice }}</td>
-            <td>{{ product.salePrice }}</td>
-            <td>{{ product.dateUpdate }}</td>
+            <td>{{ product.cost_price }}</td>
+            <td>{{ product.sale_price }}</td>
+            <td>{{ product.date_update }}</td>
             <td><v-btn class="primary" large>Actualizar</v-btn></td>
           </tr>
         </tbody>

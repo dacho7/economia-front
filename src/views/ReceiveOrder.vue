@@ -24,7 +24,7 @@
           v-on:input="getByDescription"
           :items="products"
           v-model="id"
-          item-value="idProduct"
+          item-value="id_product"
           item-text="description"
         ></v-select>
       </v-col>
@@ -69,7 +69,7 @@
               <v-text-field disabled v-model="getUnitPrice"></v-text-field>
             </td>
             <td width="160px">
-              <v-text-field type="date" v-model="expireDate"></v-text-field>
+              <v-text-field type="date" v-model="expire_date"></v-text-field>
             </td>
           </tbody>
         </v-simple-table>
@@ -77,7 +77,7 @@
         <v-row class="text-center">
           <v-col>
             <v-btn
-              :disabled="!product || !amount || !total || !expireDate"
+              :disabled="!product || !amount || !total || !expire_date"
               @click="finish"
               class="primary"
               >Terminar</v-btn
@@ -105,14 +105,14 @@ export default {
       description: "",
       amount: 12,
       total: null,
-      expireDate: "",
+      expire_date: "",
       products: [],
     };
   },
   computed: {
     getBycode() {
       if (this.product) {
-        return `${this.product.description} | ${this.product.quantity} unidades | $ ${this.product.costPrice} precio unitario`;
+        return `${this.product.description} | ${this.product.quantity} unidades | $ ${this.product.cost_price} precio unitario`;
       }
       return "";
     },
@@ -148,24 +148,24 @@ export default {
     },
     getByDescription() {
       this.products.forEach((product) => {
-        if (this.id == product.idProduct) {
+        if (this.id == product.id_product) {
           this.product = product;
         }
       });
     },
     finish() {
       const unitPrice =
-        (this.product.quantity * this.product.costPrice + this.total) /
+        (this.product.quantity * this.product.cost_price + this.total) /
         (this.product.quantity + this.amount);
       const amount =
         parseFloat(this.amount) + parseFloat(this.product.quantity);
       console.log("precio unitario", unitPrice);
       updateProduct(
-        this.product.idProduct,
+        this.product.id_product,
         unitPrice,
         3000,
         amount,
-        this.expireDate,
+        this.expire_date,
         "WITHOUT-REVIEW"
       )
         .then((result) => {
@@ -183,7 +183,7 @@ export default {
       this.description = "";
       this.amount = 12;
       this.total = null;
-      this.expireDate = "";
+      this.expire_date = "";
       this.products = [];
     },
   },

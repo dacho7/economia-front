@@ -19,36 +19,36 @@ export function registerSale(invoice, product, amount, subtotal) {
   });
 }
 
-export function finishInvoice(idInvoice, total, client) {
+export function finishInvoice(id_invoice, total, client) {
   return axios.put("http://localhost:4000/api/invoices/invoice", {
-    idInvoice,
+    id_invoice,
     total,
     client,
   });
 }
 
 export function undoSales(ids) {
-  const idSales = JSON.stringify(ids);
+  const id_sales = JSON.stringify(ids);
   return axios.delete("http://localhost:4000/api/sales/sales", {
-    data: { idSales },
+    data: { id_sales },
   });
 }
 
 export function registerProduct(
   description,
-  costPrice,
-  salePrice,
+  cost_price,
+  sale_price,
   quantity,
   type,
-  expireDate
+  expire_date
 ) {
   return axios.post("http://localhost:4000/api/products/product", {
     description,
-    costPrice,
-    salePrice,
+    cost_price,
+    sale_price,
     quantity,
     type,
-    expireDate,
+    expire_date,
   });
 }
 
@@ -59,19 +59,19 @@ export function findProductByDescription(description) {
 }
 
 export function updateProduct(
-  idProduct,
-  costPrice,
-  salePrice,
+  id_product,
+  cost_price,
+  sale_price,
   quantity,
-  expireDate,
+  expire_date,
   state
 ) {
   return axios.put("http://localhost:4000/api/products/productupdate", {
-    idProduct,
-    costPrice,
-    salePrice,
+    id_product,
+    cost_price,
+    sale_price,
     quantity,
-    expireDate,
+    expire_date,
     state,
   });
 }

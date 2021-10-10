@@ -31,23 +31,24 @@
             <tbody>
               <tr v-for="(item, index) in products" :key="index">
                 <td>{{ item.description }}</td>
-                <td>{{ Math.round(item.costPrice) }}</td>
-                <td>{{ Math.round(item.salePrice - item.costPrice) }}</td>
+                <td>{{ Math.round(item.cost_price) }}</td>
+                <td>{{ Math.round(item.sale_price - item.cost_price) }}</td>
                 <td>
                   {{
                     `
                   ${Math.round(
-                    ((item.salePrice - item.costPrice) / item.costPrice) * 100
+                    ((item.sale_price - item.cost_price) / item.cost_price) *
+                      100
                   )}%`
                   }}
                 </td>
                 <td>{{ item.quantity }}</td>
 
-                <td v-if="item.expireDate == '2100-01-01T00:00:00.000Z'">
+                <td v-if="item.expire_date == '2100-01-01T00:00:00.000Z'">
                   No Vence
                 </td>
-                <td v-if="item.expireDate != '2100-01-01T00:00:00.000Z'">
-                  {{ item.expireDate.substring(0, 10) }}
+                <td v-if="item.expire_date != '2100-01-01T00:00:00.000Z'">
+                  {{ item.expire_date.substring(0, 10) }}
                 </td>
 
                 <td>
@@ -111,7 +112,7 @@ export default {
       activePicker: null,
       dateDatePicker: null,
       description: null,
-      idProduct: null,
+      id_product: null,
     };
   },
   components: { ListAllProducts },
@@ -143,7 +144,7 @@ export default {
       this.dialogUpdateByDescription = true;
     },
     setId(id) {
-      this.idProduct = id;
+      this.id_product = id;
     },
   },
   created() {

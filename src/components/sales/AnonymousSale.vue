@@ -89,7 +89,7 @@ export default {
     return {
       description: "",
       product: "",
-      idProduct: "",
+      id_product: "",
       amount: 1,
       total: null,
       allProducts: [],
@@ -113,7 +113,7 @@ export default {
       let totalPrice = 0;
       this.allProducts.forEach((product) => {
         if (this.product === product.description) {
-          totalPrice = this.amount * product.salePrice;
+          totalPrice = this.amount * product.sale_price;
         }
       });
       return totalPrice;
@@ -122,25 +122,25 @@ export default {
   methods: {
     acept() {
       if (!this.product) {
-        this.idProduct = "101010";
+        this.id_product = "101010";
       } else {
         this.allProducts.forEach((product) => {
           if (this.product === product.description) {
-            this.idProduct = product.idProduct;
-            this.total = this.amount * product.salePrice;
+            this.id_product = product.id_product;
+            this.total = this.amount * product.sale_price;
           }
         });
       }
       if (!this.description) this.product = "No registrado";
-      registerSale(this.invoice, this.idProduct, this.amount, this.total)
+      registerSale(this.invoice, this.id_product, this.amount, this.total)
         .then((sale) => {
           const newSale = {
             amount: this.amount,
             description: this.product,
             subtotal: sale.data.data.subtotal,
-            idSale: sale.data.data.idSale,
-            idProduct: sale.data.data.idProduct,
-            idInvoice: sale.data.data.invoice,
+            id_sale: sale.data.data.id_sale,
+            id_product: sale.data.data.id_product,
+            id_invoice: sale.data.data.invoice,
           };
           this.$emit("aceptAnonymousSale", newSale);
           this.clean();
@@ -169,7 +169,7 @@ export default {
     clean() {
       this.description = "";
       this.product = "";
-      this.idProduct = "";
+      this.id_product = "";
       this.total = null;
       this.allProducts = [];
       this.amount = 1;
@@ -179,7 +179,7 @@ export default {
       let totalPrice = 0;
       this.allProducts.forEach((product) => {
         if (description === product.description) {
-          totalPrice = this.amount * product.salePrice;
+          totalPrice = this.amount * product.sale_price;
         }
       });
       return totalPrice;

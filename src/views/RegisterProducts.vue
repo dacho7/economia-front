@@ -16,7 +16,7 @@
       <v-row>
         <v-col>
           <v-text-field
-            v-model="costPrice"
+            v-model="cost_price"
             label="Precio De compra"
           ></v-text-field>
         </v-col>
@@ -24,7 +24,7 @@
       <v-row>
         <v-col>
           <v-text-field
-            v-model="salePrice"
+            v-model="sale_price"
             label="Precio de venta"
           ></v-text-field>
         </v-col>
@@ -50,7 +50,7 @@
       <v-row>
         <v-col>
           <v-text-field
-            v-model="expireDate"
+            v-model="expire_date"
             label="Fecha de Expiración"
             type="date"
             :disabled="noexpire"
@@ -62,12 +62,12 @@
 
     <v-container>
       <v-btn
-        :disabled="!description || !costPrice || !salePrice || !type"
+        :disabled="!description || !cost_price || !sale_price || !type"
         @click="registerProduct()"
         class="primary"
         >Registrar Producto</v-btn
       >
-      <!-- || !description || !costPrice || !salePrice -->
+      <!-- || !description || !cost_price || !sale_price -->
       <Barcode :code="code" />
     </v-container>
   </v-form>
@@ -86,8 +86,8 @@ export default {
       product: null,
       code: "",
       description: "",
-      costPrice: 0,
-      salePrice: 0,
+      cost_price: 0,
+      sale_price: 0,
       quantity: 1,
       typesSelection: [
         "Granos",
@@ -110,22 +110,22 @@ export default {
         "Agro",
       ],
       type: "",
-      expireDate: "",
+      expire_date: "",
       noexpire: false,
     };
   },
   methods: {
     registerProduct() {
       if (this.noexpire) {
-        this.expireDate = "2100-01-01";
+        this.expire_date = "2100-01-01";
       }
       registerProduct(
         this.description,
-        this.costPrice,
-        this.salePrice,
+        this.cost_price,
+        this.sale_price,
         this.quantity,
         this.type,
-        this.expireDate
+        this.expire_date
       )
         .then((result) => {
           this.product = result.data.data;
@@ -140,11 +140,11 @@ export default {
       this.product = null;
       this.code = "";
       this.description = "";
-      this.costPrice = "";
-      this.salePrice = "";
+      this.cost_price = "";
+      this.sale_price = "";
       this.quantity = 1;
       this.type = "";
-      this.expireDate = "";
+      this.expire_date = "";
     },
   },
 };
