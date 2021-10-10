@@ -30,6 +30,11 @@ const routes = [
     name: "UpdatePrice",
     component: () => import("../views/UpdatePrice.vue"),
   },
+  {
+    path: "/updateprice/product",
+    name: "UpdatePriceProduct",
+    component: () => import("../components/lists/ProductAllFields.vue"),
+  },
 ];
 
 const router = new VueRouter({

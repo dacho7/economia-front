@@ -53,7 +53,7 @@
                 <td>
                   <v-row>
                     <v-col>
-                      <UpdateProduct :id="item.idProduct" />
+                      <v-btn class="primary">Actualizar</v-btn>
                     </v-col>
                     <v-col>
                       <v-btn class="secondary">Ignorar</v-btn>
@@ -72,30 +72,23 @@
     <br />
     <v-card>
       <v-card-title>
-        <h2>Actualizar Precios de otros Productos</h2>
+        <h2>Buscar Productos</h2>
       </v-card-title>
       <v-card-text>
-        <v-row>
-          <v-col>
-            <h3>Buscar Productos</h3>
-          </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col>
-            <UpdateByDescription />
-          </v-col>
-          <v-col>
-            <v-btn class="warning" block x-large
-              >Buscar Por Fecha de Llegada</v-btn
-            >
-          </v-col>
-          <v-col>
-            <v-btn class="warning" block x-large>Buscar Por Código</v-btn>
-          </v-col>
-        </v-row>
+        <v-container class="m-5">
+          <v-text-field
+            @input="findByDescription()"
+            v-model="description"
+            label="Buscar Por Descripción"
+          ></v-text-field>
+          <v-text-field
+            label="Buscar Por Fecha de llegada"
+            type="date"
+          ></v-text-field>
+          <v-text-field label="Buscar Por Código"></v-text-field>
+        </v-container>
+        <ListAllProducts :products="productsFinded" />
       </v-card-text>
-      <v-card-title></v-card-title>
     </v-card>
   </v-container>
 </template>
@@ -105,25 +98,23 @@ import {
   FINDPRODUCTBYSTATE,
   FINDPRODUCTSBYDESCRIPTION,
 } from "../services/products";
-import UpdateByDescription from "../components/updateproducts/UpdateByDescription.vue";
-import UpdateProduct from "../components/updateproducts/UpdateProduct.vue";
+
+import ListAllProducts from "../components/updateproducts/ListAllProducts.vue";
 
 export default {
   name: "UpdatePrice",
   data() {
     return {
       products: [],
+      productsFinded: [],
       newPrice: null,
       activePicker: null,
       dateDatePicker: null,
-      description: "",
+      description: null,
       idProduct: null,
     };
   },
-  components: {
-    UpdateByDescription,
-    UpdateProduct,
-  },
+  components: { ListAllProducts },
   methods: {
     listProducts() {
       FINDPRODUCTBYSTATE("WITHOUT-REVIEW")
@@ -132,22 +123,20 @@ export default {
         })
         .catch((e) => console.log(e));
     },
-    findByDescription() {
-      if (this.description.length >= 3)
-        FINDPRODUCTSBYDESCRIPTION(this.description).then((productsDB) => {
-          let prod = [];
-          if (productsDB.data.ok) {
-            console.log(productsDB);
-            productsDB.data.data.forEach((product) => {
-              prod.push(product);
-            });
-            this.products = prod;
-          } else {
-            this.products = [];
+    async findByDescription() {
+      if (this.description) {
+        try {
+          const result = await FINDPRODUCTSBYDESCRIPTION(this.description);
+          if (result.data.ok) {
+            this.productsFinded = result.data.data;
           }
-        });
-      if (this.description.trim().length < 3) {
-        this.products = [];
+        } catch (e) {
+          console.log(e);
+          this.productsFinded = [];
+          this.description = "";
+        }
+      } else {
+        this.productsFinded = [];
       }
     },
     activeDialogDescription() {
