@@ -86,6 +86,7 @@
         </v-row>
       </v-container>
     </v-row>
+    {{ product }}
   </v-container>
 </template>
 
@@ -154,22 +155,24 @@ export default {
       });
     },
     finish() {
+      // if (this.product.expire_date == "2100-01-01") {
+      //   this.expire_date = "2100-01-01";
+      // }
       const unitPrice =
-        (this.product.quantity * this.product.cost_price + this.total) /
-        (this.product.quantity + this.amount);
-      const amount =
-        parseFloat(this.amount) + parseFloat(this.product.quantity);
-      console.log("precio unitario", unitPrice);
+        (parseInt(this.product.quantity) * parseFloat(this.product.cost_price) +
+          parseFloat(this.total)) /
+        (parseInt(this.product.quantity) + parseInt(this.amount));
+      const amount = parseInt(this.amount) + parseInt(this.product.quantity);
+
       updateProduct(
         this.product.id_product,
         unitPrice,
-        3000,
+        this.product.sale_price,
         amount,
         this.expire_date,
         "WITHOUT-REVIEW"
       )
-        .then((result) => {
-          console.log(result);
+        .then(() => {
           this.clean();
         })
         .catch((e) => {
