@@ -15,7 +15,7 @@ export default {
   methods: {},
   async created() {
     try {
-      const result = await FINDPRODUCTBYID(3213);
+      const result = await FINDPRODUCTBYID(this.$route.params.id);
       this.product = result.data.data;
     } catch (e) {
       console.log(e);

@@ -38,13 +38,14 @@
           <td>
             <v-row>
               <v-col>
-                <v-btn class="primary">Actualizar</v-btn>
+                <v-btn class="primary" @click="selectProduct(item.id_product)"
+                  >Actualizar</v-btn
+                >
               </v-col>
             </v-row>
           </td>
         </tr>
       </tbody>
-      {{ products.length }}
       <h3 v-if="products.length == 0">No se han Encontrado Productos</h3>
     </template>
   </v-simple-table>
@@ -54,5 +55,15 @@
 export default {
   name: "ListAllProducts",
   props: ["products"],
+  methods: {
+    selectProduct(idproduct) {
+      this.$router.push({
+        name: "UpdatePriceProduct",
+        params: {
+          id: idproduct,
+        },
+      });
+    },
+  },
 };
 </script>

@@ -31,7 +31,7 @@ const routes = [
     component: () => import("../views/UpdatePrice.vue"),
   },
   {
-    path: "/updateprice/product",
+    path: "/updateprice/product/:id",
     name: "UpdatePriceProduct",
     component: () => import("../components/lists/ProductAllFields.vue"),
   },
