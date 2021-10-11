@@ -116,7 +116,6 @@ export default {
   },
   methods: {
     registerProduct() {
-      console.log("register product");
       if (this.noexpire) {
         this.expire_date = "2100-01-01";
       }

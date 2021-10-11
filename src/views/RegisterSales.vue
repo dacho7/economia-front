@@ -249,7 +249,6 @@ export default {
                 product.data.data.cost_price
               )
                 .then((sale) => {
-                  console.log(sale);
                   const newSale = {
                     amount: this.amount,
                     description: product.data.data.description,
