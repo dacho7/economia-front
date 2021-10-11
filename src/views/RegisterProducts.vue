@@ -129,7 +129,6 @@ export default {
         this.expire_date
       )
         .then((result) => {
-          console.log(result);
           this.product = result.data.data;
           this.code = result.data.data.code;
           this.cleanForm();

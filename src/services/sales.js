@@ -10,12 +10,13 @@ export function createInvoice() {
   return axios.post("http://localhost:4000/api/invoices/invoice");
 }
 
-export function registerSale(invoice, product, amount, subtotal) {
+export function registerSale(invoice, product, amount, subtotal, cost_price) {
   return axios.post("http://localhost:4000/api/sales/sale", {
     invoice,
     product,
     amount,
     subtotal,
+    cost_price,
   });
 }
 

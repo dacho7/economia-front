@@ -245,9 +245,11 @@ export default {
                 this.invoice,
                 product.data.data.id_product,
                 this.amount,
-                product.data.data.sale_price * this.amount
+                product.data.data.sale_price * this.amount,
+                product.data.data.cost_price
               )
                 .then((sale) => {
+                  console.log(sale);
                   const newSale = {
                     amount: this.amount,
                     description: product.data.data.description,
@@ -255,6 +257,7 @@ export default {
                     id_sale: sale.data.data.id_sale,
                     id_product: sale.data.data.id_product,
                     id_invoice: sale.data.data.invoice,
+                    cost_price: sale.data.data.cost_price,
                   };
                   this.products.push(newSale);
                   this.code = "";

@@ -25,6 +25,7 @@
                 :items="showAllProducts"
                 label="Seleccione Producto"
               ></v-select>
+              <h3 v-else>No se encontraron productos</h3>
             </v-col>
           </v-row>
           <v-row>
@@ -132,7 +133,14 @@ export default {
         });
       }
       if (!this.description) this.product = "No registrado";
-      registerSale(this.invoice, this.id_product, this.amount, this.total)
+      const cost_price = this.total / (1 + 0.1);
+      registerSale(
+        this.invoice,
+        this.id_product,
+        this.amount,
+        this.total,
+        cost_price
+      )
         .then((sale) => {
           const newSale = {
             amount: this.amount,
