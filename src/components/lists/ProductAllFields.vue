@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pb-4 pt-4">
+  <v-card class="pb-4 pt-4" v-if="product">
     <v-row>
       <v-col class="text-center">
         <h1>Editar Producto</h1>
@@ -124,15 +124,21 @@
           <v-spacer></v-spacer>
           <v-btn large class="col-4">Cancelar</v-btn>
           <v-spacer></v-spacer>
-
-          <v-btn large class="col-4 success">
-            <router-link to="/"> Finalizar </router-link>
-          </v-btn>
+          <v-btn large class="col-4 success" @click="redirectToHome()"
+            >Finalizar</v-btn
+          >
 
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
     </v-card-text>
+  </v-card>
+  <v-card v-else>
+    <v-row class="text-center">
+      <v-col>
+        <h1>No existe ese producto</h1>
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 
@@ -143,6 +149,7 @@ export default {
   data() {
     return {
       product: null,
+      productAux: null,
       description: null,
       cost_price: null,
       sale_price: null,
@@ -150,11 +157,16 @@ export default {
       expire_date: null,
     };
   },
-  methods: {},
+  methods: {
+    redirectToHome() {
+      this.$router.push("/");
+    },
+  },
   async created() {
     try {
       const result = await FINDPRODUCTBYID(this.$route.params.id);
       this.product = result.data.data;
+      this.productAux = result.data.data;
       this.description = this.product.description;
       this.cost_price = this.product.cost_price;
       this.sale_price = this.product.sale_price;
