@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <v-btn color="secondary" depressed>
-      <router-link to="/">
+    <router-link to="/">
+      <v-btn block color="secondary" depressed>
         <v-icon color="white"> mdi-home </v-icon>
-      </router-link>
-    </v-btn>
+      </v-btn>
+    </router-link>
     <router-view></router-view>
   </v-app>
 </template>
