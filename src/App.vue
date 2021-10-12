@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <router-link to="/">
-      <v-btn block color="secondary" depressed>
+      <v-btn color="primary" depressed>
         <v-icon color="white"> mdi-home </v-icon>
       </v-btn>
     </router-link>
