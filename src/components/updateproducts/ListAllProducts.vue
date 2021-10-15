@@ -46,7 +46,6 @@
           </td>
         </tr>
       </tbody>
-      <h3 v-if="products.length == 0">No se han Encontrado Productos</h3>
     </template>
   </v-simple-table>
 </template>

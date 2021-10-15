@@ -153,7 +153,7 @@
 <script>
 import { FINDPRODUCTBYID } from "../../services/products";
 export default {
-  name: "ProductAllFields",
+  name: "ProductReceiveRecent",
   data() {
     return {
       product: null,

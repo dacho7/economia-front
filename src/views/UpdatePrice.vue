@@ -81,7 +81,7 @@
     <br />
     <v-card>
       <v-card-title>
-        <h2>Buscar Productos</h2>
+        <h2>Buscar Productos Para Actualizar Datos</h2>
       </v-card-title>
       <v-card-text>
         <v-container class="m-5">
