@@ -48,10 +48,16 @@
                         ></v-text-field>
                       </v-col>
                       <v-col>
-                        <v-text-field label="Ganancia"></v-text-field>
+                        <v-text-field
+                          disabled
+                          v-model="utility"
+                          label="Ganancia Neta"
+                        ></v-text-field>
                       </v-col>
                       <v-col>
                         <v-text-field
+                          disabled
+                          v-model="utilityporcent"
                           label="Porcentaje de Ganancia"
                         ></v-text-field>
                       </v-col>
@@ -59,7 +65,9 @@
                   </td>
                   <td>
                     <v-btn
-                      :disabled="product.cost_price == cost_price"
+                      :disabled="
+                        product.cost_price == cost_price || cost_price < 1
+                      "
                       class="warning"
                     >
                       Actualizar
@@ -76,7 +84,10 @@
                   </td>
                   <td>
                     <v-btn
-                      :disabled="product.sale_price == sale_price"
+                      :disabled="
+                        product.sale_price == sale_price ||
+                        sale_price < cost_price
+                      "
                       class="warning"
                     >
                       Actualizar
@@ -92,7 +103,7 @@
                   </td>
                   <td>
                     <v-btn
-                      :disabled="product.quantity == quantity"
+                      :disabled="product.quantity == quantity || quantity < 0"
                       class="warning"
                     >
                       Actualizar
@@ -108,10 +119,7 @@
                     ></v-text-field>
                   </td>
                   <td>
-                    <v-btn
-                      :disabled="product.expire_date == expire_date"
-                      class="warning"
-                    >
+                    <v-btn :disabled="!expire_date" class="warning">
                       Actualizar
                     </v-btn>
                   </td>
@@ -157,6 +165,16 @@ export default {
       expire_date: null,
     };
   },
+  computed: {
+    utility() {
+      return this.sale_price - this.cost_price;
+    },
+    utilityporcent() {
+      return (
+        100 * ((this.sale_price - this.cost_price) / this.sale_price) + " %"
+      );
+    },
+  },
   methods: {
     redirectUpdateProducts() {
       this.$router.push("/updateprice");
@@ -171,7 +189,6 @@ export default {
       this.cost_price = this.product.cost_price;
       this.sale_price = this.product.sale_price;
       this.quantity = this.product.quantity;
-      this.expire_date = this.product.expire_date;
     } catch (e) {
       console.log(e);
     }
