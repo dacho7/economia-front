@@ -54,10 +54,18 @@
                 <td>
                   <v-row>
                     <v-col>
-                      <v-btn class="primary">Actualizar</v-btn>
+                      <v-btn
+                        class="primary"
+                        @click="selectProduct(item.id_product)"
+                        >Actualizar</v-btn
+                      >
                     </v-col>
                     <v-col>
-                      <v-btn class="secondary">Ignorar</v-btn>
+                      <v-btn
+                        @click="ignorarProduct(item.id_product)"
+                        class="secondary"
+                        >Ignorar</v-btn
+                      >
                     </v-col>
                   </v-row>
                 </td>
@@ -98,6 +106,7 @@
 import {
   FINDPRODUCTBYSTATE,
   FINDPRODUCTSBYDESCRIPTION,
+  UPDATEPRODUCTSTATE,
 } from "../services/products";
 
 import ListAllProducts from "../components/updateproducts/ListAllProducts.vue";
@@ -145,6 +154,23 @@ export default {
     },
     setId(id) {
       this.id_product = id;
+    },
+    selectProduct(idproduct) {
+      this.$router.push({
+        name: "UpdatePriceProduct",
+        params: {
+          id: idproduct,
+        },
+      });
+    },
+    ignorarProduct(idProduct) {
+      UPDATEPRODUCTSTATE(idProduct, "ACTIVE")
+        .then(() => {
+          this.products = this.products.filter(
+            (prod) => prod.id_product != idProduct
+          );
+        })
+        .catch((e) => console.log(e));
     },
   },
   created() {

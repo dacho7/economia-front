@@ -17,3 +17,10 @@ export function FINDPRODUCTBYID(id) {
     params: { id },
   });
 }
+
+export function UPDATEPRODUCTSTATE(id_product, state) {
+  return axios.put("http://localhost:4000/api/products/productupdatestate", {
+    id_product,
+    state,
+  });
+}

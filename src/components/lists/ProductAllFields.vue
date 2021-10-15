@@ -124,7 +124,7 @@
           <v-spacer></v-spacer>
           <v-btn large class="col-4">Cancelar</v-btn>
           <v-spacer></v-spacer>
-          <v-btn large class="col-4 success" @click="redirectToHome()"
+          <v-btn large class="col-4 success" @click="redirectUpdateProducts()"
             >Finalizar</v-btn
           >
 
@@ -158,8 +158,8 @@ export default {
     };
   },
   methods: {
-    redirectToHome() {
-      this.$router.push("/");
+    redirectUpdateProducts() {
+      this.$router.push("/updateprice");
     },
   },
   async created() {
