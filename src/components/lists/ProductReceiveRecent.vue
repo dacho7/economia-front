@@ -2,7 +2,7 @@
   <v-card class="pb-4 pt-4" v-if="product">
     <v-row>
       <v-col class="text-center">
-        <h1>Editar Producto</h1>
+        <h1>Actualizar Precio de un producto</h1>
       </v-col>
     </v-row>
     <v-card-text>
@@ -22,22 +22,7 @@
               <br />
               <br />
               <tbody>
-                <tr>
-                  <td>
-                    <v-text-field
-                      label="Descripción"
-                      v-model="description"
-                    ></v-text-field>
-                  </td>
-                  <td>
-                    <v-btn
-                      :disabled="product.description == description"
-                      class="warning"
-                    >
-                      Actualizar
-                    </v-btn>
-                  </td>
-                </tr>
+                <tr></tr>
                 <tr>
                   <td>
                     <v-row>
@@ -45,6 +30,7 @@
                         <v-text-field
                           label="Precio de Compra"
                           v-model="cost_price"
+                          disabled
                         ></v-text-field>
                       </v-col>
                       <v-col>
@@ -89,6 +75,7 @@
                         sale_price < cost_price
                       "
                       class="warning"
+                      @click="updatePrice()"
                     >
                       Actualizar
                     </v-btn>
@@ -97,8 +84,9 @@
                 <tr>
                   <td>
                     <v-text-field
-                      label="Cantidad de Productos Recibidos hoy"
+                      label="Cantidad de Productos En Inventario"
                       v-model="quantity"
+                      disabled
                     ></v-text-field>
                   </td>
                   <td>
@@ -113,7 +101,7 @@
                 <tr>
                   <td>
                     <v-text-field
-                      label="Fecha de Expiracón"
+                      label="Cambiar Fecha de Expiracón de p"
                       type="date"
                       v-model="expire_date"
                     ></v-text-field>
@@ -130,12 +118,12 @@
         </v-card-text>
         <v-card-actions class="pt-5 pb-5 white-text">
           <v-spacer></v-spacer>
-          <v-btn large class="col-4">Cancelar</v-btn>
-          <v-spacer></v-spacer>
-          <v-btn large class="col-4 success" @click="redirectUpdateProducts()"
-            >Finalizar</v-btn
+          <v-btn large class="col-4" @click="redirectUpdateProducts()"
+            >Cancelar</v-btn
           >
-
+          <v-spacer></v-spacer>
+          <v-btn large class="col-4 success" @click="finish()">Finalizar</v-btn>
+          {{ product }}{{ sale_price }}
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -151,7 +139,11 @@
 </template>
 
 <script>
-import { FINDPRODUCTBYID } from "../../services/products";
+import {
+  FINDPRODUCTBYID,
+  UPDATEPRICEPRODUCT,
+  UPDATEPRODUCTSTATE,
+} from "../../services/products";
 export default {
   name: "ProductReceiveRecent",
   data() {
@@ -176,22 +168,34 @@ export default {
     },
   },
   methods: {
-    redirectUpdateProducts() {
-      this.$router.push("/updateprice");
+    finish() {
+      UPDATEPRODUCTSTATE(this.product.id_product, "ACTIVE")
+        .then(() => {
+          this.$router.push("/updateprice");
+        })
+        .catch((e) => console.log(e));
+    },
+    updatePrice() {
+      UPDATEPRICEPRODUCT(this.product.id_product, this.sale_price).then(() => {
+        this.findProduct();
+      });
+    },
+    async findProduct() {
+      try {
+        const result = await FINDPRODUCTBYID(this.$route.params.id);
+        this.product = result.data.data;
+        this.productAux = result.data.data;
+        this.description = this.product.description;
+        this.cost_price = this.product.cost_price;
+        this.sale_price = this.product.sale_price;
+        this.quantity = this.product.quantity;
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
-  async created() {
-    try {
-      const result = await FINDPRODUCTBYID(this.$route.params.id);
-      this.product = result.data.data;
-      this.productAux = result.data.data;
-      this.description = this.product.description;
-      this.cost_price = this.product.cost_price;
-      this.sale_price = this.product.sale_price;
-      this.quantity = this.product.quantity;
-    } catch (e) {
-      console.log(e);
-    }
+  created() {
+    this.findProduct();
   },
 };
 </script>

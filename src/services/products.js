@@ -24,3 +24,13 @@ export function UPDATEPRODUCTSTATE(id_product, state) {
     state,
   });
 }
+
+export function UPDATEPRICEPRODUCT(id_product, sale_price) {
+  return axios.put(
+    "http://localhost:4000/api/products/productupdatesaleprice",
+    {
+      id_product,
+      sale_price,
+    }
+  );
+}

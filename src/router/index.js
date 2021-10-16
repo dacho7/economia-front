@@ -35,6 +35,11 @@ const routes = [
     name: "UpdatePriceProduct",
     component: () => import("../components/lists/ProductAllFields.vue"),
   },
+  {
+    path: "/updateprice/productrecent/:id",
+    name: "ProductReceiveRecent",
+    component: () => import("../components/lists/ProductReceiveRecent"),
+  },
 ];
 
 const router = new VueRouter({

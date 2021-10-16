@@ -2,7 +2,7 @@
   <v-card class="pb-4 pt-4" v-if="product">
     <v-row>
       <v-col class="text-center">
-        <h1>Editar Producto</h1>
+        <h1>Editar Datos de un Producto</h1>
       </v-col>
     </v-row>
     <v-card-text>

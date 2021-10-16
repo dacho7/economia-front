@@ -71,9 +71,7 @@
                 </td>
               </tr>
             </tbody>
-            <h3 v-if="products.length == 0">
-              No se han recibido productos Recientemente
-            </h3>
+            <h3 v-if="products.length == 0">No hay productos sin revisar</h3>
           </template>
         </v-simple-table>
       </template>
@@ -157,7 +155,7 @@ export default {
     },
     selectProduct(idproduct) {
       this.$router.push({
-        name: "UpdatePriceProduct",
+        name: "ProductReceiveRecent",
         params: {
           id: idproduct,
         },

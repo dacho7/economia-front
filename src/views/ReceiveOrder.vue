@@ -13,7 +13,7 @@
     <v-row>
       <v-col>
         <v-text-field
-          @keyup="findByDescription()"
+          @input="findByDescription()"
           v-model="description"
           label="Descripcion"
         >
@@ -26,6 +26,7 @@
           v-model="id"
           item-value="id_product"
           item-text="description"
+          label="Seleccionar productos encontrados"
         ></v-select>
       </v-col>
     </v-row>
@@ -41,12 +42,12 @@
     </v-row>
     <v-row>
       <v-col class="text-center mt-4 mb-4">
-        <h2>{{ getBycode }}</h2>
+        <h2>{{ textfind }}</h2>
       </v-col>
       <v-container>
         <v-simple-table>
           <thead>
-            <th><h4>Cantidad</h4></th>
+            <th><h4>Cantidad De unidades</h4></th>
             <th><h4>Total</h4></th>
             <th><h4>Precio Unitario</h4></th>
             <th><h4>Fecha de Expiracion</h4></th>
@@ -108,56 +109,53 @@ export default {
       total: null,
       expire_date: "",
       products: [],
+      textfind: "",
     };
   },
   computed: {
-    getBycode() {
-      if (this.product) {
-        return `${this.product.description} | ${this.product.quantity} unidades | $ ${this.product.cost_price} precio unitario`;
-      }
-      return "";
-    },
     getUnitPrice() {
       return this.total / this.amount;
     },
   },
   methods: {
     findByDescription() {
-      if (this.description.length >= 3)
-        findProductByDescription(this.description).then((productsDB) => {
-          let prod = [];
-          if (productsDB.data.ok) {
-            productsDB.data.data.forEach((product) => {
-              prod.push(product);
-            });
-            this.products = prod;
-          } else {
-            this.products = [];
-            this.id = "";
-          }
-        });
-      if (this.description.trim().length < 3) {
-        this.products = [];
-      }
+      findProductByDescription(this.description).then((productsDB) => {
+        let prod = [];
+        if (productsDB.data.ok) {
+          productsDB.data.data.forEach((product) => {
+            prod.push(product);
+          });
+          this.products = prod;
+        } else {
+          this.products = [];
+          this.id = "";
+        }
+      });
     },
     findByCode() {
-      findProductByCode(this.code).then((result) => {
-        (this.description = ""), (this.products = []);
-        this.product = result.data.data;
-        this.code = "";
-      });
+      findProductByCode(this.code)
+        .then((result) => {
+          if (result.data.ok) {
+            this.product = result.data.data;
+          } else {
+            this.description = "";
+            this.products = [];
+            this.textfind = "no econtrado";
+            this.product = result.data.data;
+            this.code = "";
+          }
+        })
+        .catch((e) => console.log(e));
     },
     getByDescription() {
       this.products.forEach((product) => {
         if (this.id == product.id_product) {
           this.product = product;
+          this.textfind = `${this.product.description} | ${this.product.quantity} unidades | $ ${this.product.cost_price} precio unitario`;
         }
       });
     },
     finish() {
-      // if (this.product.expire_date == "2100-01-01") {
-      //   this.expire_date = "2100-01-01";
-      // }
       const unitPrice =
         (parseInt(this.product.quantity) * parseFloat(this.product.cost_price) +
           parseFloat(this.total)) /
