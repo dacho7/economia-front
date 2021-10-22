@@ -129,7 +129,6 @@ export default {
       }
       const cost = Number(this.total_price) / Number(this.quantity);
       const sale = Number(cost) + Number(cost) * 0.15;
-      console.log(cost);
       registerProduct(
         this.description,
         cost,
@@ -139,7 +138,6 @@ export default {
         this.expire_date
       )
         .then((result) => {
-          console.log(result);
           if (result.data.ok) {
             this.product = result.data.data;
             this.code = result.data.data.code;

@@ -1,93 +1,111 @@
 <template>
   <v-container>
-    <v-row class="text-center">
-      <v-col class="mt-5">
-        <h1>Recibir Entrega</h1>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <h2 class="center-text">Buscar Producto por Descripción</h2>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-text-field
-          @input="findByDescription()"
-          v-model="description"
-          label="Descripcion"
-        >
-        </v-text-field>
-      </v-col>
-      <v-col>
-        <v-select
-          v-on:input="getByDescription"
-          :items="products"
-          v-model="id"
-          item-value="id_product"
-          item-text="description"
-          label="Seleccionar productos encontrados"
-        ></v-select>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col>
-        <h2>Buscar Producto por Código</h2>
-        <v-text-field
-          @keydown.enter="findByCode()"
-          v-model="code"
-          label="Código"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col class="text-center mt-4 mb-4">
-        <h2>{{ textfind }}</h2>
-      </v-col>
-      <v-container>
-        <v-simple-table>
-          <thead>
-            <th><h4>Cantidad De unidades</h4></th>
-            <th><h4>Total</h4></th>
-            <th><h4>Precio Unitario</h4></th>
-            <th><h4>Fecha de Expiracion</h4></th>
-          </thead>
-          <tbody>
-            <td width="20px">
-              <v-text-field
-                :disabled="!product"
-                v-model="amount"
-              ></v-text-field>
-            </td>
-            <td width="180px">
-              <v-text-field
-                :disabled="!product"
-                type="number"
-                v-model="total"
-              ></v-text-field>
-            </td>
-            <td width="160px">
-              <v-text-field disabled v-model="getUnitPrice"></v-text-field>
-            </td>
-            <td width="160px">
-              <v-text-field type="date" v-model="expire_date"></v-text-field>
-            </td>
-          </tbody>
-        </v-simple-table>
-
+    <v-card>
+      <v-card-title>
         <v-row class="text-center">
-          <v-col>
-            <v-btn
-              :disabled="!product || !amount || !total || !expire_date"
-              @click="finish"
-              class="primary"
-              >Terminar</v-btn
-            >
+          <v-col class="mt-5">
+            <h1>Recibir Entrega</h1>
           </v-col>
         </v-row>
-      </v-container>
-    </v-row>
-    {{ product }}
+      </v-card-title>
+      <v-card-text>
+        <v-container>
+          <v-row>
+            <v-col>
+              <h2 class="center-text">Buscar Producto por Descripción</h2>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                @input="findByDescription()"
+                v-model="description"
+                label="Descripcion"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col>
+              <v-select
+                v-on:input="getByDescription"
+                :items="products"
+                v-model="id"
+                item-value="id_product"
+                item-text="description"
+                label="Seleccionar productos encontrados"
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <h2>Buscar Producto por Código</h2>
+              <v-text-field
+                @keydown.enter="findByCode()"
+                v-model="code"
+                label="Código"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="text-center mt-4 mb-4">
+              <v-btn large block class="primary">{{ textfind }}</v-btn>
+            </v-col>
+            <v-container>
+              <v-row>
+                <v-col cols="2">
+                  <h4>Cantidad De unidades Recibidas</h4>
+                </v-col>
+                <v-col>
+                  <h4>Valor Total pagado por las unidades</h4>
+                </v-col>
+                <v-col>
+                  <h4>Precio Unitario</h4>
+                </v-col>
+                <v-col>
+                  <h4>Fecha de Expiracion</h4>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="2">
+                  <v-text-field
+                    :disabled="!product"
+                    v-model="amount"
+                  ></v-text-field>
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    :disabled="!product"
+                    type="number"
+                    v-model="total"
+                  ></v-text-field>
+                </v-col>
+                <v-col>
+                  <v-text-field disabled v-model="getUnitPrice"></v-text-field>
+                </v-col>
+                <v-col>
+                  <v-text-field
+                    type="date"
+                    v-model="expire_date"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+            <v-container>
+              <v-row class="text-center">
+                <v-col>
+                  <v-btn
+                    :disabled="!product || !amount || !total || !expire_date"
+                    @click="finish"
+                    class="primary"
+                    >Terminar Registro
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-row>
+          {{ product }}
+        </v-container>
+      </v-card-text>
+    </v-card>
   </v-container>
 </template>
 
@@ -109,7 +127,7 @@ export default {
       total: null,
       expire_date: "",
       products: [],
-      textfind: "",
+      textfind: "Sin busqueda",
     };
   },
   computed: {
