@@ -62,7 +62,16 @@
 
     <v-container>
       <v-btn
-        :disabled="!description || !cost_price || !sale_price || !type"
+        :disabled="
+          !description ||
+          !cost_price ||
+          !sale_price ||
+          !type ||
+          quantity < 0 ||
+          cost_price < 0 ||
+          sale_price < cost_price ||
+          (!expire_date && !noexpire)
+        "
         @click="registerProduct()"
         class="primary"
         >Registrar Producto</v-btn
@@ -110,6 +119,7 @@ export default {
         "Utiles Escolares",
         "Bebidas",
         "Detalles",
+        "Bioseguridad",
       ],
       type: "",
       expire_date: "",
@@ -130,11 +140,15 @@ export default {
         this.expire_date
       )
         .then((result) => {
-          this.product = result.data.data;
-          this.code = result.data.data.code;
-          this.cleanForm();
+          console.log(result);
+          if (result.data.ok) {
+            this.product = result.data.data;
+            this.code = result.data.data.code;
+            this.cleanForm();
+          }
         })
         .catch((err) => {
+          console.log("cath erro");
           console.log(err);
         });
     },

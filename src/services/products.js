@@ -18,6 +18,12 @@ export function FINDPRODUCTBYID(id) {
   });
 }
 
+export function FINDPRODUCTBYDATEUPDATE(date) {
+  return axios.get("http://localhost:4000/api/products/findbydateupdate", {
+    params: { date },
+  });
+}
+
 export function UPDATEPRODUCTSTATE(id_product, state) {
   return axios.put("http://localhost:4000/api/products/productupdatestate", {
     id_product,

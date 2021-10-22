@@ -91,6 +91,8 @@
           <v-text-field
             label="Buscar Por Fecha de llegada"
             type="date"
+            v-model="dateDatePicker"
+            @input="findByDateUpdate()"
           ></v-text-field>
           <v-text-field label="Buscar Por Código"></v-text-field>
         </v-container>
@@ -145,6 +147,14 @@ export default {
           this.productsFinded = [];
           this.description = "";
         }
+      } else {
+        this.productsFinded = [];
+      }
+    },
+    async findByDateUpdate() {
+      if (this.dateDatePicker) {
+        console.log(typeof this.dateDatePicker);
+        console.log(this.dateDatePicker);
       } else {
         this.productsFinded = [];
       }
