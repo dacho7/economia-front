@@ -1,59 +1,30 @@
 <template>
   <v-container>
     <v-card>
-      <v-card-title>
-        <v-row class="text-center mt-2">
-          <v-col>
-            <h1 class="text-center">Registrar Ventas</h1>
-          </v-col>
-        </v-row>
-      </v-card-title>
-
-      <!-- <v-card-title>
-        <v-container>
-          <v-layout xs12>
-            <v-flex xs6 align-self-center mr-5>
-              <v-text-field
-                color="blue-grey lighten-2"
-                label="Factura a Nombre de "
-                v-model="headline"
-              >
-              </v-text-field>
-            </v-flex>
-          </v-layout>
-          <v-layout xs12 v-if="false">
-            <v-flex xs6 align-self-center mr-5>
-              <v-text-field
-                color="blue-grey lighten-2"
-                label="Documento del cliente"
-                v-model="document"
-              >
-              </v-text-field>
-            </v-flex>
-            <v-flex xs6 align-self-center ml-5>
-              <v-text-field
-                color="blue-grey lighten-2"
-                label="Nombre del Cliente"
-                v-model="client"
-              >
-              </v-text-field>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card-title> -->
       <v-card-text>
-        <v-container class="ml-5">
-          <v-row>
-            <v-col cols="3">
-              <v-text-field
-                color="blue-grey lighten-2"
-                label="Factura a Nombre de "
-                v-model="headline"
-              >
-              </v-text-field>
-            </v-col>
-          </v-row>
-        </v-container>
+        <v-card>
+          <v-card-title>
+            <v-row>
+              <v-col>
+                <h1 class="text-center">Registrar Ventas</h1>
+              </v-col>
+            </v-row>
+          </v-card-title>
+          <v-card-text>
+            <v-container class="ml-5">
+              <v-row>
+                <v-col cols="3">
+                  <v-text-field
+                    color="blue-grey lighten-2"
+                    label="Factura a Nombre de "
+                    v-model="headline"
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+        </v-card>
         <v-container>
           <template>
             <v-simple-table>
