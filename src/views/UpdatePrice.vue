@@ -137,6 +137,8 @@ export default {
           const result = await FINDPRODUCTSBYDESCRIPTION(this.description);
           if (result.data.ok) {
             this.productsFinded = result.data.data;
+          } else {
+            this.productsFinded = [];
           }
         } catch (e) {
           console.log(e);
