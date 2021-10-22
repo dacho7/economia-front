@@ -85,6 +85,7 @@
                   <v-text-field
                     type="date"
                     v-model="expire_date"
+                    disabled
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -102,7 +103,6 @@
               </v-row>
             </v-container>
           </v-row>
-          {{ product }}
         </v-container>
       </v-card-text>
     </v-card>

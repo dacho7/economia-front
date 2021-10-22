@@ -1,28 +1,28 @@
 <template>
   <v-container>
-    <template class="center">
-      <div>
-        <v-row>
+    <v-card>
+      <v-card-title>
+        <v-row class="text-center mt-2">
           <v-col>
             <h1 class="text-center">Registrar Ventas</h1>
           </v-col>
         </v-row>
-      </div>
-    </template>
+      </v-card-title>
 
-    <v-card>
-      <v-card-title>
+      <!-- <v-card-title>
         <v-container>
           <v-layout xs12>
             <v-flex xs6 align-self-center mr-5>
               <v-text-field
                 color="blue-grey lighten-2"
-                label="Nombre del Cliente"
-                v-model="client"
+                label="Factura a Nombre de "
+                v-model="headline"
               >
               </v-text-field>
             </v-flex>
-            <v-flex xs6 align-self-center ml-5>
+          </v-layout>
+          <v-layout xs12 v-if="false">
+            <v-flex xs6 align-self-center mr-5>
               <v-text-field
                 color="blue-grey lighten-2"
                 label="Documento del cliente"
@@ -30,11 +30,30 @@
               >
               </v-text-field>
             </v-flex>
+            <v-flex xs6 align-self-center ml-5>
+              <v-text-field
+                color="blue-grey lighten-2"
+                label="Nombre del Cliente"
+                v-model="client"
+              >
+              </v-text-field>
+            </v-flex>
           </v-layout>
         </v-container>
-      </v-card-title>
-
+      </v-card-title> -->
       <v-card-text>
+        <v-container class="ml-5">
+          <v-row>
+            <v-col cols="3">
+              <v-text-field
+                color="blue-grey lighten-2"
+                label="Factura a Nombre de "
+                v-model="headline"
+              >
+              </v-text-field>
+            </v-col>
+          </v-row>
+        </v-container>
         <v-container>
           <template>
             <v-simple-table>
@@ -169,7 +188,7 @@
         <br />
         <v-btn @click="printInvoice">imprimir</v-btn>
         <invoice-to-print
-          :client="client"
+          :client="headline"
           :products="products"
           :total="total"
         />
@@ -194,6 +213,7 @@ export default {
   name: "RegisterSales",
   data() {
     return {
+      headline: "",
       client: "",
       document: null,
       date: "",
