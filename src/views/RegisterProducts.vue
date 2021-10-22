@@ -12,31 +12,26 @@
             <v-col>
               <v-text-field
                 v-model="description"
-                label="Descripción"
+                label="Descripción del producto a registrar"
               ></v-text-field>
             </v-col>
           </v-row>
           <v-row>
             <v-col>
               <v-text-field
-                v-model="cost_price"
-                label="Precio De compra"
+                v-model="total_price"
+                label="Precio Total de compra"
+                title="Mirar en la factura el valor total que se pago por todas las unidades de ese producto"
+                type="number"
               ></v-text-field>
             </v-col>
           </v-row>
-          <v-row>
-            <v-col>
-              <v-text-field
-                v-model="sale_price"
-                label="Precio de venta"
-              ></v-text-field>
-            </v-col>
-          </v-row>
+
           <v-row>
             <v-col>
               <v-text-field
                 v-model="quantity"
-                label="Cantidad"
+                label="Cantidad de unidades Recibidas"
                 type="number"
               ></v-text-field>
             </v-col>
@@ -67,12 +62,9 @@
           <v-btn
             :disabled="
               !description ||
-              !cost_price ||
-              !sale_price ||
               !type ||
               quantity < 0 ||
-              cost_price < 0 ||
-              sale_price < cost_price ||
+              total_price < 0 ||
               (!expire_date && !noexpire)
             "
             @click="registerProduct()"
@@ -100,9 +92,8 @@ export default {
       product: null,
       code: "",
       description: "",
-      cost_price: 0,
-      sale_price: 0,
-      quantity: 1,
+      total_price: null,
+      quantity: 24,
       typesSelection: [
         "Granos",
         "Aseo y Limpieza",
@@ -136,15 +127,19 @@ export default {
       if (this.noexpire) {
         this.expire_date = "2100-01-01";
       }
+      const cost = Number(this.total_price) / Number(this.quantity);
+      const sale = Number(cost) + Number(cost) * 0.15;
+      console.log(cost);
       registerProduct(
         this.description,
-        this.cost_price,
-        this.sale_price,
+        cost,
+        sale,
         this.quantity,
         this.type,
         this.expire_date
       )
         .then((result) => {
+          console.log(result);
           if (result.data.ok) {
             this.product = result.data.data;
             this.code = result.data.data.code;
