@@ -1,85 +1,90 @@
 <template>
-  <v-form>
-    <v-container mt-10>
-      <h1 align="center">Registrar productos</h1>
-    </v-container>
+  <v-container>
+    <v-card>
+      <v-card-title>
+        <v-container class="text-center">
+          <h1 align="center">Registrar productos</h1>
+        </v-container>
+      </v-card-title>
+      <v-card-text>
+        <v-container>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="description"
+                label="Descripción"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="cost_price"
+                label="Precio De compra"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="sale_price"
+                label="Precio de venta"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="quantity"
+                label="Cantidad"
+                type="number"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-autocomplete
+                label="Tipo de producto"
+                v-model="type"
+                :items="typesSelection"
+              ></v-autocomplete>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <v-text-field
+                v-model="expire_date"
+                label="Fecha de Expiración"
+                type="date"
+                :disabled="noexpire"
+              ></v-text-field>
+              <v-checkbox v-model="noexpire" label="No expira"></v-checkbox>
+            </v-col>
+          </v-row>
+        </v-container>
 
-    <v-container>
-      <v-row>
-        <v-col>
-          <v-text-field
-            v-model="description"
-            label="Descripción"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-text-field
-            v-model="cost_price"
-            label="Precio De compra"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-text-field
-            v-model="sale_price"
-            label="Precio de venta"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-text-field
-            v-model="quantity"
-            label="Cantidad"
-            type="number"
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-autocomplete
-            label="Tipo de producto"
-            v-model="type"
-            :items="typesSelection"
-          ></v-autocomplete>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col>
-          <v-text-field
-            v-model="expire_date"
-            label="Fecha de Expiración"
-            type="date"
-            :disabled="noexpire"
-          ></v-text-field>
-          <v-checkbox v-model="noexpire" label="No expira"></v-checkbox>
-        </v-col>
-      </v-row>
-    </v-container>
-
-    <v-container>
-      <v-btn
-        :disabled="
-          !description ||
-          !cost_price ||
-          !sale_price ||
-          !type ||
-          quantity < 0 ||
-          cost_price < 0 ||
-          sale_price < cost_price ||
-          (!expire_date && !noexpire)
-        "
-        @click="registerProduct()"
-        class="primary"
-        >Registrar Producto</v-btn
-      >
-      <!-- || !description || !cost_price || !sale_price -->
-      <Barcode :code="code" />
-    </v-container>
-  </v-form>
+        <v-container>
+          <v-btn
+            :disabled="
+              !description ||
+              !cost_price ||
+              !sale_price ||
+              !type ||
+              quantity < 0 ||
+              cost_price < 0 ||
+              sale_price < cost_price ||
+              (!expire_date && !noexpire)
+            "
+            @click="registerProduct()"
+            class="primary"
+            >Registrar Producto</v-btn
+          >
+          <!-- || !description || !cost_price || !sale_price -->
+          <Barcode :code="code" />
+        </v-container>
+      </v-card-text>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
@@ -140,7 +145,6 @@ export default {
         this.expire_date
       )
         .then((result) => {
-          console.log(result);
           if (result.data.ok) {
             this.product = result.data.data;
             this.code = result.data.data.code;
@@ -148,7 +152,6 @@ export default {
           }
         })
         .catch((err) => {
-          console.log("cath erro");
           console.log(err);
         });
     },
