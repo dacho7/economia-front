@@ -19,9 +19,11 @@
             <th>Precio</th>
           </tr>
           <tr v-for="(item, index) of products" :key="index">
-            <td v-if="item.amount === 1">{{ item.description }}</td>
+            <td v-if="item.amount === 1">
+              {{ item.description.substr(1, 28) }}
+            </td>
             <td v-if="item.amount > 1">
-              {{ item.amount }} {{ item.description }}
+              {{ item.amount }}x {{ item.description.substr(1, 23) }}
             </td>
             <td>{{ item.subtotal | currency_2 }}</td>
           </tr>
@@ -30,11 +32,9 @@
         ________________________________
         <br />
         <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total:
+        Total:
         {{ total | currency }}
-        <div v-if="client">
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cliente: {{ client }}
-        </div>
+        <div v-if="client">Cliente: {{ client }}</div>
       </div>
       <br />
       <br />

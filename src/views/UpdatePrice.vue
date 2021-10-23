@@ -89,7 +89,8 @@
             label="Buscar Por Descripción"
           ></v-text-field>
           <v-text-field
-            label="Buscar Por Fecha de llegada"
+            disabled
+            label="Buscar Por Fecha de llegada (No disponible)"
             type="date"
             v-model="dateDatePicker"
             @input="findByDateUpdate()"
