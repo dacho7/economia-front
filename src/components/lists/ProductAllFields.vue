@@ -97,7 +97,7 @@
                 <tr>
                   <td>
                     <v-text-field
-                      label="Cantidad de Productos Recibidos hoy"
+                      label="Cantidad de Productos En Inventario"
                       v-model="quantity"
                     ></v-text-field>
                   </td>
@@ -111,15 +111,20 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>
+                  <td v-if="disableexpiredateinput">
+                    <h3>No expira</h3>
+                  </td>
+                  <td v-else>
                     <v-text-field
                       label="Fecha de Expiracón"
                       type="date"
                       v-model="expire_date"
+                      @input="activateUpdateDateExpire()"
+                      :disabled="disableexpiredateinput"
                     ></v-text-field>
                   </td>
                   <td>
-                    <v-btn :disabled="!expire_date" class="warning">
+                    <v-btn :disabled="disableexpiredatebutton" class="warning">
                       Actualizar
                     </v-btn>
                   </td>
@@ -163,6 +168,8 @@ export default {
       sale_price: null,
       quantity: null,
       expire_date: null,
+      disableexpiredatebutton: true,
+      disableexpiredateinput: true,
     };
   },
   computed: {
@@ -179,6 +186,9 @@ export default {
     redirectUpdateProducts() {
       this.$router.push("/updateprice");
     },
+    activateUpdateDateExpire() {
+      this.disableexpiredatebutton = false;
+    },
   },
   async created() {
     try {
@@ -189,6 +199,11 @@ export default {
       this.cost_price = this.product.cost_price;
       this.sale_price = this.product.sale_price;
       this.quantity = this.product.quantity;
+      this.expire_date = this.product.expire_date.substr(0, 10);
+      if (this.product.expire_date.substr(0, 10) != "2100-01-01") {
+        this.disableexpiredateinput = false;
+        this.expire_date = this.product.expire_date.substr(0, 10);
+      }
     } catch (e) {
       console.log(e);
     }
