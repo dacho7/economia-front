@@ -94,7 +94,9 @@
               <v-row class="text-center">
                 <v-col>
                   <v-btn
-                    :disabled="!product || !amount || !total || !expire_date"
+                    :disabled="
+                      !product || !amount || !total || total < 0 || amount < 1
+                    "
                     @click="finish"
                     class="primary"
                     >Terminar Registro
@@ -169,7 +171,7 @@ export default {
       this.products.forEach((product) => {
         if (this.id == product.id_product) {
           this.product = product;
-          this.textfind = `${this.product.description} | ${this.product.quantity} unidades | $ ${this.product.cost_price} precio unitario`;
+          this.textfind = `${this.product.description} | ${this.product.quantity} unidades |  precio unitario $ ${this.product.cost_price} | Fecha de Vencimimiento `;
         }
       });
     },

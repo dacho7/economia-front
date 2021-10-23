@@ -154,9 +154,10 @@ export default {
       this.description = "";
       this.cost_price = "";
       this.sale_price = "";
-      this.quantity = 1;
+      this.quantity = 24;
       this.type = "";
       this.expire_date = "";
+      this.total_price = null;
     },
   },
 };
