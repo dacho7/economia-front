@@ -52,10 +52,10 @@
             <v-container>
               <v-row>
                 <v-col cols="2">
-                  <h4>Cantidad De unidades Recibidas</h4>
+                  <h4>Cantidad De unidades</h4>
                 </v-col>
                 <v-col>
-                  <h4>Valor Total pagado por las unidades</h4>
+                  <h4>Valor Total</h4>
                 </v-col>
                 <v-col>
                   <h4>Precio Unitario</h4>
@@ -69,6 +69,7 @@
                   <v-text-field
                     :disabled="!product"
                     v-model="amount"
+                    label="Cantidad de unidades recibidas"
                   ></v-text-field>
                 </v-col>
                 <v-col>
@@ -76,6 +77,7 @@
                     :disabled="!product"
                     type="number"
                     v-model="total"
+                    label="Ingrese El valor total Pagado"
                   ></v-text-field>
                 </v-col>
                 <v-col>
