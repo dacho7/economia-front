@@ -88,7 +88,7 @@
           <v-layout align="button">
             <v-btn
               :disabled="products.length === 0"
-              @click="finishInvoice()"
+              @click="answerAcept()"
               block
               x-large
               class="success mt-4"
@@ -147,6 +147,11 @@
             </v-card>
           </v-dialog>
         </v-container>
+        <ConfirmSale
+          :dialog="showConfirmSale"
+          @cancel="showConfirmSale = false"
+          @acept="finishInvoice()"
+        ></ConfirmSale>
         <AnonymousSale
           :invoice="invoice"
           :dialog="dialogAnonymous"
@@ -157,7 +162,6 @@
         <br />
         <br />
         <br />
-        <v-btn @click="printInvoice">imprimir</v-btn>
         <invoice-to-print
           :client="headline"
           :products="products"
@@ -178,6 +182,7 @@ import {
 } from "../services/sales";
 import AnonymousSale from "../components/sales/AnonymousSale.vue";
 import InvoiceToPrint from "../components/sales/InvoiceToPrint.vue";
+import ConfirmSale from "../components/confirmDialog/ConfirmSale";
 import printJS from "print-js";
 
 export default {
@@ -196,11 +201,13 @@ export default {
       dialog: false,
       dialogAnonymous: false,
       toPrint: false,
+      showConfirmSale: false,
     };
   },
   components: {
     AnonymousSale,
     InvoiceToPrint,
+    ConfirmSale,
   },
   methods: {
     getDate() {
@@ -275,6 +282,7 @@ export default {
         });
     },
     finishInvoice() {
+      this.showConfirmSale = false;
       let total = 0;
       this.products.forEach((sale) => {
         total += sale.subtotal;
@@ -305,6 +313,12 @@ export default {
     eventSoon(newSale) {
       this.products.push(newSale);
       this.dialogAnonymous = false;
+    },
+    changeshowConfirmSaleFalse() {
+      this.showConfirmSale = false;
+    },
+    answerAcept() {
+      this.showConfirmSale = true;
     },
     printInvoice() {
       this.toPrint = true;

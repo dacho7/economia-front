@@ -98,6 +98,7 @@
               <v-row class="text-center">
                 <v-col>
                   <v-btn
+                    large
                     :disabled="
                       !product || !amount || !total || total < 0 || amount < 1
                     "
@@ -181,7 +182,6 @@ export default {
       });
     },
     setDate() {
-      console.log(this.product);
       if (this.product.expire_date == "2100-01-01T00:00:00.000Z") {
         this.msgExpireDate = "No vence";
         this.expire_date = null;

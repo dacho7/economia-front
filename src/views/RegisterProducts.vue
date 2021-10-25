@@ -58,8 +58,9 @@
           </v-row>
         </v-container>
 
-        <v-container>
+        <v-container class="text-center">
           <v-btn
+            large
             :disabled="
               !description ||
               !type ||
@@ -116,6 +117,12 @@ export default {
         "Bebidas",
         "Detalles",
         "Bioseguridad",
+        "Herramientas",
+        "Farmacia",
+        "Promociones",
+        "Cereales",
+        "Embutidos",
+        "Carnes",
       ],
       type: "",
       expire_date: "",
