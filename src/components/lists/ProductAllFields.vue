@@ -8,7 +8,7 @@
     <v-card-text>
       <v-card color="pb-4 pt-4">
         <v-card-title>
-          <h2>Producto - {{ product.description }}</h2>
+          <h2>Producto - {{ product.description | capitalize }}</h2>
         </v-card-title>
         <v-card-text>
           <v-simple-table>

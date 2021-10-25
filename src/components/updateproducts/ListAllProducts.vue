@@ -15,7 +15,7 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in products" :key="index">
-          <td>{{ item.description }}</td>
+          <td>{{ item.description | capitalize }}</td>
           <td>{{ Math.round(item.cost_price) }}</td>
           <td>{{ item.sale_price }}</td>
           <td>{{ Math.round(item.sale_price - item.cost_price) }}</td>

@@ -23,6 +23,14 @@ Vue.use(VueCurrencyFilter, [
   },
 ]);
 
+Vue.filter("capitalize", function (value) {
+  if (!value) return "";
+  let cap = value.replace(/\w\S*/g, (w) =>
+    w.replace(/^\w/, (c) => c.toUpperCase())
+  );
+  return cap;
+});
+
 Vue.config.productionTip = false;
 
 new Vue({

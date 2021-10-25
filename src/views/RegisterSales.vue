@@ -67,7 +67,7 @@
                 <tbody>
                   <tr v-for="(item, index) in products" :key="index">
                     <td>{{ item.amount }}</td>
-                    <td>{{ item.description }}</td>
+                    <td>{{ item.description | capitalize }}</td>
                     <td class="text-right">{{ item.subtotal | currency }}</td>
                   </tr>
                 </tbody>
