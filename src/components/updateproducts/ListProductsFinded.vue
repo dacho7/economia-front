@@ -18,7 +18,7 @@
             <td>{{ product.quantity }}</td>
             <td>{{ product.cost_price }}</td>
             <td>{{ product.sale_price }}</td>
-            <td>{{ product.date_update }}</td>
+            <td>{{ product.date_update | dateFormat }}</td>
             <td><v-btn class="primary" large>Actualizar</v-btn></td>
           </tr>
         </tbody>

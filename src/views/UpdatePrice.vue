@@ -48,7 +48,7 @@
                   No Vence
                 </td>
                 <td v-if="item.expire_date != '2100-01-01T00:00:00.000Z'">
-                  {{ item.expire_date.substring(0, 10) }}
+                  {{ item.expire_date | dateFormat }}
                 </td>
 
                 <td>

@@ -32,6 +32,7 @@
                 item-value="id_product"
                 item-text="description"
                 label="Seleccionar productos encontrados"
+                @input="setDate()"
               ></v-select>
             </v-col>
           </v-row>
@@ -87,7 +88,8 @@
                   <v-text-field
                     type="date"
                     v-model="expire_date"
-                    disabled
+                    :disabled="!expire_date"
+                    :label="msgExpireDate"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -129,9 +131,10 @@ export default {
       description: "",
       amount: 12,
       total: null,
-      expire_date: "",
+      expire_date: null,
       products: [],
       textfind: "Sin busqueda",
+      msgExpireDate: "",
     };
   },
   computed: {
@@ -176,6 +179,16 @@ export default {
           this.textfind = `${this.product.description} | ${this.product.quantity} unidades |  precio unitario $ ${this.product.cost_price} | Fecha de Vencimimiento `;
         }
       });
+    },
+    setDate() {
+      console.log(this.product);
+      if (this.product.expire_date == "2100-01-01T00:00:00.000Z") {
+        this.msgExpireDate = "No vence";
+        this.expire_date = null;
+      } else {
+        this.expire_date = this.product.expire_date.substr(0, 10);
+        this.msgExpireDate = "";
+      }
     },
     finish() {
       const unitPrice =

@@ -31,6 +31,11 @@ Vue.filter("capitalize", function (value) {
   return cap;
 });
 
+Vue.filter("dateFormat", function (value) {
+  if (!value) return "";
+  return value.substr(0, 10);
+});
+
 Vue.config.productionTip = false;
 
 new Vue({
