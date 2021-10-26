@@ -68,13 +68,18 @@
               total_price < 0 ||
               (!expire_date && !noexpire)
             "
-            @click="registerProduct()"
+            @click="showConfirRegisterProduct = true"
             class="primary"
             >Registrar Producto</v-btn
           >
           <!-- || !description || !cost_price || !sale_price -->
           <Barcode :code="code" />
         </v-container>
+        <ConfirmRegisterProduct
+          :dialog="showConfirRegisterProduct"
+          @cancel="showConfirRegisterProduct = false"
+          @acept="registerProduct()"
+        />
       </v-card-text>
     </v-card>
   </v-container>
@@ -83,10 +88,13 @@
 <script>
 import { registerProduct } from "../services/sales";
 import Barcode from "../components/Barcode";
+import ConfirmRegisterProduct from "../components/confirmDialog/ConfirmRegisterProduct.vue";
+
 export default {
   name: "RegisterProducts",
   components: {
     Barcode,
+    ConfirmRegisterProduct,
   },
   data() {
     return {
@@ -127,6 +135,7 @@ export default {
       type: "",
       expire_date: "",
       noexpire: false,
+      showConfirRegisterProduct: false,
     };
   },
   methods: {
@@ -165,6 +174,7 @@ export default {
       this.type = "";
       this.expire_date = "";
       this.total_price = null;
+      this.showConfirRegisterProduct = false;
     },
   },
 };

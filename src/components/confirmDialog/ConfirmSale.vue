@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-dialog v-model="dialog" persistent max-width="550">
+    <v-dialog v-model="dialog" persistent max-width="650">
       <v-card>
         <v-card-title class="text-h5">
           Esta seguro que desea terminar la compra?
