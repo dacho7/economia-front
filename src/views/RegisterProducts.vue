@@ -17,6 +17,23 @@
             </v-col>
           </v-row>
           <v-row>
+            <v-col cols="8">
+              <v-text-field
+                v-model="code"
+                label="Ingrese codigo de Barras"
+                :disabled="whithoutCode"
+              >
+              </v-text-field>
+            </v-col>
+            <v-col>
+              <v-checkbox
+                v-model="whithoutCode"
+                label="No Tiene codigo"
+                @change="cleanCodeBar()"
+              ></v-checkbox>
+            </v-col>
+          </v-row>
+          <v-row>
             <v-col>
               <v-text-field
                 v-model="total_price"
@@ -46,14 +63,20 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col cols="8">
               <v-text-field
                 v-model="expire_date"
                 label="Fecha de Expiración"
                 type="date"
                 :disabled="noexpire"
               ></v-text-field>
-              <v-checkbox v-model="noexpire" label="No expira"></v-checkbox>
+            </v-col>
+            <v-col>
+              <v-checkbox
+                v-model="noexpire"
+                label="No expira"
+                @change="cleanDate()"
+              ></v-checkbox>
             </v-col>
           </v-row>
         </v-container>
@@ -100,7 +123,8 @@ export default {
     return {
       product: null,
       code: "",
-      description: "",
+      whithoutCode: false,
+      description: null,
       total_price: null,
       quantity: 24,
       typesSelection: [
@@ -132,8 +156,8 @@ export default {
         "Embutidos",
         "Carnes",
       ],
-      type: "",
-      expire_date: "",
+      type: null,
+      expire_date: null,
       noexpire: false,
       showConfirRegisterProduct: false,
     };
@@ -175,6 +199,12 @@ export default {
       this.expire_date = "";
       this.total_price = null;
       this.showConfirRegisterProduct = false;
+    },
+    cleanCodeBar() {
+      this.code = "";
+    },
+    cleanDate() {
+      this.expire_date = null;
     },
   },
 };
