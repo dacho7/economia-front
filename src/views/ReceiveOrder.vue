@@ -20,7 +20,7 @@
               <v-text-field
                 @input="findByDescription()"
                 v-model="description"
-                label="Descripcion"
+                label="Digite Descripcion del producto"
               >
               </v-text-field>
             </v-col>
@@ -31,7 +31,7 @@
                 v-model="id"
                 item-value="id_product"
                 item-text="description"
-                label="Seleccionar productos encontrados"
+                :label="quantityFinded"
                 @input="setDate()"
               ></v-select>
             </v-col>
@@ -147,11 +147,19 @@ export default {
       textfind: "Sin busqueda",
       msgExpireDate: "",
       showConfirmReceiveOrder: false,
+      quatityProductsFinded: 0,
     };
   },
   computed: {
     getUnitPrice() {
       return this.total / this.amount;
+    },
+    quantityFinded() {
+      if (this.quatityProductsFinded > 1 || this.quatityProductsFinded == 0) {
+        return this.quatityProductsFinded + " Productos Encontrados";
+      } else {
+        return this.quatityProductsFinded + " Producto Encontrado";
+      }
     },
   },
   methods: {
@@ -163,9 +171,11 @@ export default {
             prod.push(product);
           });
           this.products = prod;
+          this.quatityProductsFinded = prod.length;
         } else {
           this.products = [];
           this.id = "";
+          this.quatityProductsFinded = 0;
         }
       });
     },
@@ -212,13 +222,13 @@ export default {
         (parseInt(this.product.quantity) * parseFloat(this.product.cost_price) +
           parseFloat(this.total)) /
         (parseInt(this.product.quantity) + parseInt(this.amount));
-      const amount = parseInt(this.amount) + parseInt(this.product.quantity);
-
+      const totalUnits =
+        parseInt(this.amount) + parseInt(this.product.quantity);
       updateProduct(
         this.product.id_product,
         unitPrice,
         this.product.sale_price,
-        parseInt(this.product.quantity) + parseInt(amount),
+        totalUnits,
         this.expire_date,
         "WITHOUT-REVIEW"
       )
