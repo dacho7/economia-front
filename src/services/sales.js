@@ -35,24 +35,6 @@ export function undoSales(ids) {
   });
 }
 
-export function registerProduct(
-  description,
-  cost_price,
-  sale_price,
-  quantity,
-  type,
-  expire_date
-) {
-  return axios.post("http://localhost:4000/api/products/product", {
-    description,
-    cost_price,
-    sale_price,
-    quantity,
-    type,
-    expire_date,
-  });
-}
-
 export function findProductByDescription(description) {
   return axios.get("http://localhost:4000/api/products/productdescription", {
     params: { description },

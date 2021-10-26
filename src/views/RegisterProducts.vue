@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { registerProduct } from "../services/sales";
+import { REGISTERPRODUCT } from "../services/products";
 import Barcode from "../components/Barcode";
 import ConfirmRegisterProduct from "../components/confirmDialog/ConfirmRegisterProduct.vue";
 
@@ -169,8 +169,9 @@ export default {
       }
       const cost = Number(this.total_price) / Number(this.quantity);
       const sale = Number(cost) + Number(cost) * 0.15;
-      registerProduct(
+      REGISTERPRODUCT(
         this.description,
+        this.code,
         cost,
         sale,
         this.quantity,
@@ -198,6 +199,7 @@ export default {
       this.type = "";
       this.expire_date = "";
       this.total_price = null;
+      this.whithoutCode = false;
       this.showConfirRegisterProduct = false;
     },
     cleanCodeBar() {
