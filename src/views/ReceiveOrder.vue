@@ -102,7 +102,7 @@
                     :disabled="
                       !product || !amount || !total || total < 0 || amount < 1
                     "
-                    @click="finish"
+                    @click="showConfirmReceiveOrder = true"
                     class="primary"
                     >Terminar Registro
                   </v-btn>
@@ -113,6 +113,11 @@
         </v-container>
       </v-card-text>
     </v-card>
+    <ConfirmReceiveOrder
+      :dialog="showConfirmReceiveOrder"
+      @cancel="showConfirmReceiveOrder = false"
+      @acept="finish()"
+    />
   </v-container>
 </template>
 
@@ -122,8 +127,13 @@ import {
   findProductByCode,
   updateProduct,
 } from "../services/sales";
+import ConfirmReceiveOrder from "../components/confirmDialog/ConfirmReceiveOrder.vue";
+
 export default {
   name: "ReceiveOrder",
+  components: {
+    ConfirmReceiveOrder,
+  },
   data() {
     return {
       product: null,
@@ -136,6 +146,7 @@ export default {
       products: [],
       textfind: "Sin busqueda",
       msgExpireDate: "",
+      showConfirmReceiveOrder: false,
     };
   },
   computed: {
@@ -163,6 +174,7 @@ export default {
         .then((result) => {
           if (result.data.ok) {
             this.product = result.data.data;
+            this.textfind = `${this.product.description} | ${this.product.quantity} unidades |  precio unitario $ ${this.product.cost_price} | Fecha de Vencimimiento `;
           } else {
             this.description = "";
             this.products = [];
@@ -186,8 +198,13 @@ export default {
         this.msgExpireDate = "No vence";
         this.expire_date = null;
       } else {
-        this.expire_date = this.product.expire_date.substr(0, 10);
-        this.msgExpireDate = "";
+        if (this.product.expire_date) {
+          this.expire_date = this.product.expire_date.substr(0, 10);
+          this.msgExpireDate = "";
+        } else {
+          this.msgExpireDate = "No vence";
+          this.expire_date = null;
+        }
       }
     },
     finish() {
@@ -201,7 +218,7 @@ export default {
         this.product.id_product,
         unitPrice,
         this.product.sale_price,
-        amount,
+        parseInt(this.product.quantity) + parseInt(amount),
         this.expire_date,
         "WITHOUT-REVIEW"
       )
@@ -221,6 +238,7 @@ export default {
       this.total = null;
       this.expire_date = "";
       this.products = [];
+      this.showConfirmReceiveOrder = false;
     },
   },
 };
