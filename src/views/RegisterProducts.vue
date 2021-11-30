@@ -112,6 +112,7 @@
 import { REGISTERPRODUCT } from "../services/products";
 import Barcode from "../components/Barcode";
 import ConfirmRegisterProduct from "../components/confirmDialog/ConfirmRegisterProduct.vue";
+import { round100 } from "../services/functions/functions";
 
 export default {
   name: "RegisterProducts",
@@ -168,7 +169,7 @@ export default {
         this.expire_date = "2100-01-01";
       }
       const cost = Number(this.total_price) / Number(this.quantity);
-      const sale = Number(cost) + Number(cost) * 0.15;
+      const sale = round100(Number(cost) + Number(cost) * 0.15);
       REGISTERPRODUCT(
         this.description,
         this.code,

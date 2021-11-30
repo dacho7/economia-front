@@ -21,6 +21,7 @@
               <tr>
                 <th class="text-left">Producto</th>
                 <th class="text-left">Precio Unitario</th>
+                <th class="text-left">Precio De Venta</th>
                 <th class="text-left">Ganancia</th>
                 <th class="text-left">Porcentaje de Ganancia</th>
                 <th class="text-left">Cantidad de productos</th>
@@ -32,6 +33,7 @@
               <tr v-for="(item, index) in products" :key="index">
                 <td>{{ item.description | capitalize }}</td>
                 <td>{{ Math.round(item.cost_price) }}</td>
+                <td>{{ Math.round(item.sale_price) }}</td>
                 <td>{{ Math.round(item.sale_price - item.cost_price) }}</td>
                 <td>
                   {{
