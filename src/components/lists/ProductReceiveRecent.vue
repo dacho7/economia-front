@@ -52,7 +52,8 @@
                   <td>
                     <v-btn
                       :disabled="
-                        product.cost_price == cost_price || cost_price < 1
+                        product.cost_price == cost_price ||
+                        cost_price < 1
                       "
                       class="warning"
                     >
@@ -91,7 +92,9 @@
                   </td>
                   <td>
                     <v-btn
-                      :disabled="product.quantity == quantity || quantity < 0"
+                      :disabled="
+                        product.quantity == quantity || quantity < 0
+                      "
                       class="warning"
                     >
                       Actualizar
@@ -112,7 +115,10 @@
                     ></v-text-field>
                   </td>
                   <td>
-                    <v-btn :disabled="disableexpiredatebutton" class="warning">
+                    <v-btn
+                      :disabled="disableexpiredatebutton"
+                      class="warning"
+                    >
                       Actualizar
                     </v-btn>
                   </td>
@@ -127,7 +133,9 @@
             >Cancelar</v-btn
           >
           <v-spacer></v-spacer>
-          <v-btn large class="col-4 success" @click="finish()">Finalizar</v-btn>
+          <v-btn large class="col-4 success" @click="finish()"
+            >Finalizar</v-btn
+          >
           {{ product }}{{ sale_price }}
           <v-spacer></v-spacer>
         </v-card-actions>
@@ -148,9 +156,9 @@ import {
   FINDPRODUCTBYID,
   UPDATEPRICEPRODUCT,
   UPDATEPRODUCTSTATE,
-} from "../../services/products";
+} from '../../services/products';
 export default {
-  name: "ProductReceiveRecent",
+  name: 'ProductReceiveRecent',
   data() {
     return {
       product: null,
@@ -170,43 +178,50 @@ export default {
     },
     utilityporcent() {
       return (
-        100 * ((this.sale_price - this.cost_price) / this.sale_price) + " %"
+        100 *
+          ((this.sale_price - this.cost_price) / this.sale_price) +
+        ' %'
       );
     },
   },
   methods: {
+    async loadProduct() {
+      try {
+        const result = await FINDPRODUCTBYID(this.$route.params.id);
+        this.product = result.data.data;
+        this.productAux = result.data.data;
+        this.description = this.product.description;
+        this.cost_price = this.product.cost_price;
+        this.sale_price = this.product.sale_price;
+        this.quantity = this.product.quantity;
+        if (this.product.expire_date.substr(0, 10) != '2100-01-01') {
+          this.disableexpiredateinput = false;
+          this.expire_date = this.product.expire_date.substr(0, 10);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
     finish() {
-      UPDATEPRODUCTSTATE(this.product.id_product, "ACTIVE")
+      UPDATEPRODUCTSTATE(this.product.id_product, 'ACTIVE')
         .then(() => {
-          this.$router.push("/updateprice");
+          this.$router.push('/updateprice');
         })
         .catch((e) => console.log(e));
     },
     updatePrice() {
-      UPDATEPRICEPRODUCT(this.product.id_product, this.sale_price).then(() => {
-        this.findProduct();
-      });
+      UPDATEPRICEPRODUCT(this.product.id_product, this.sale_price)
+        .then(() => {
+          this.loadProduct();
+        })
+        .catch((e) => console.log(e));
     },
     activateUpdateDateExpire() {
       this.disableexpiredatebutton = false;
     },
   },
-  async created() {
-    try {
-      const result = await FINDPRODUCTBYID(this.$route.params.id);
-      this.product = result.data.data;
-      this.productAux = result.data.data;
-      this.description = this.product.description;
-      this.cost_price = this.product.cost_price;
-      this.sale_price = this.product.sale_price;
-      this.quantity = this.product.quantity;
-      if (this.product.expire_date.substr(0, 10) != "2100-01-01") {
-        this.disableexpiredateinput = false;
-        this.expire_date = this.product.expire_date.substr(0, 10);
-      }
-    } catch (e) {
-      console.log(e);
-    }
+  created() {
+    this.loadProduct();
   },
 };
 </script>

@@ -12,7 +12,9 @@
         <v-container>
           <v-row>
             <v-col>
-              <h2 class="center-text">Buscar Producto por Descripción</h2>
+              <h2 class="center-text">
+                Buscar Producto por Descripción
+              </h2>
             </v-col>
           </v-row>
           <v-row>
@@ -48,7 +50,9 @@
           </v-row>
           <v-row>
             <v-col class="text-center mt-4 mb-4">
-              <v-btn large block class="primary">{{ textfind }}</v-btn>
+              <v-btn large block class="primary">{{
+                textfind
+              }}</v-btn>
             </v-col>
             <v-container>
               <v-row>
@@ -82,7 +86,10 @@
                   ></v-text-field>
                 </v-col>
                 <v-col>
-                  <v-text-field disabled v-model="getUnitPrice"></v-text-field>
+                  <v-text-field
+                    disabled
+                    v-model="getUnitPrice"
+                  ></v-text-field>
                 </v-col>
                 <v-col>
                   <v-text-field
@@ -100,7 +107,11 @@
                   <v-btn
                     large
                     :disabled="
-                      !product || !amount || !total || total < 0 || amount < 1
+                      !product ||
+                      !amount ||
+                      !total ||
+                      total < 0 ||
+                      amount < 1
                     "
                     @click="showConfirmReceiveOrder = true"
                     class="primary"
@@ -126,26 +137,26 @@ import {
   findProductByDescription,
   findProductByCode,
   updateProduct,
-} from "../services/sales";
-import ConfirmReceiveOrder from "../components/confirmDialog/ConfirmReceiveOrder.vue";
+} from '../services/sales';
+import ConfirmReceiveOrder from '../components/confirmDialog/ConfirmReceiveOrder.vue';
 
 export default {
-  name: "ReceiveOrder",
+  name: 'ReceiveOrder',
   components: {
     ConfirmReceiveOrder,
   },
   data() {
     return {
       product: null,
-      code: "",
-      id: "",
-      description: "",
+      code: '',
+      id: '',
+      description: '',
       amount: 12,
       total: null,
       expire_date: null,
       products: [],
-      textfind: "Sin busqueda",
-      msgExpireDate: "",
+      textfind: 'Sin busqueda',
+      msgExpireDate: '',
       showConfirmReceiveOrder: false,
       quatityProductsFinded: 0,
     };
@@ -155,29 +166,34 @@ export default {
       return this.total / this.amount;
     },
     quantityFinded() {
-      if (this.quatityProductsFinded > 1 || this.quatityProductsFinded == 0) {
-        return this.quatityProductsFinded + " Productos Encontrados";
+      if (
+        this.quatityProductsFinded > 1 ||
+        this.quatityProductsFinded == 0
+      ) {
+        return this.quatityProductsFinded + ' Productos Encontrados';
       } else {
-        return this.quatityProductsFinded + " Producto Encontrado";
+        return this.quatityProductsFinded + ' Producto Encontrado';
       }
     },
   },
   methods: {
     findByDescription() {
-      findProductByDescription(this.description).then((productsDB) => {
-        let prod = [];
-        if (productsDB.data.ok) {
-          productsDB.data.data.forEach((product) => {
-            prod.push(product);
-          });
-          this.products = prod;
-          this.quatityProductsFinded = prod.length;
-        } else {
-          this.products = [];
-          this.id = "";
-          this.quatityProductsFinded = 0;
-        }
-      });
+      findProductByDescription(this.description).then(
+        (productsDB) => {
+          let prod = [];
+          if (productsDB.data.ok) {
+            productsDB.data.data.forEach((product) => {
+              prod.push(product);
+            });
+            this.products = prod;
+            this.quatityProductsFinded = prod.length;
+          } else {
+            this.products = [];
+            this.id = '';
+            this.quatityProductsFinded = 0;
+          }
+        },
+      );
     },
     findByCode() {
       findProductByCode(this.code)
@@ -186,11 +202,11 @@ export default {
             this.product = result.data.data;
             this.textfind = `${this.product.description} | ${this.product.quantity} unidades |  precio unitario $ ${this.product.cost_price} | Fecha de Vencimimiento `;
           } else {
-            this.description = "";
+            this.description = '';
             this.products = [];
-            this.textfind = "no econtrado";
+            this.textfind = 'no econtrado';
             this.product = result.data.data;
-            this.code = "";
+            this.code = '';
           }
         })
         .catch((e) => console.log(e));
@@ -204,22 +220,32 @@ export default {
       });
     },
     setDate() {
-      if (this.product.expire_date == "2100-01-01T00:00:00.000Z") {
-        this.msgExpireDate = "No vence";
+      if (this.product.expire_date == '2100-01-01T00:00:00.000Z') {
+        this.msgExpireDate = 'No vence';
         this.expire_date = null;
       } else {
         if (this.product.expire_date) {
           this.expire_date = this.product.expire_date.substr(0, 10);
-          this.msgExpireDate = "";
+          this.msgExpireDate = '';
         } else {
-          this.msgExpireDate = "No vence";
+          this.msgExpireDate = 'No vence';
           this.expire_date = null;
         }
       }
     },
     finish() {
+      let expAux = '';
+      if (
+        this.product.expire_date === '2100-01-01T00:00:00.000Z' ||
+        !this.product.expire_date
+      ) {
+        expAux = '2100-01-01';
+      } else {
+        expAux = this.product.expire_date;
+      }
       const unitPrice =
-        (parseInt(this.product.quantity) * parseFloat(this.product.cost_price) +
+        (parseInt(this.product.quantity) *
+          parseFloat(this.product.cost_price) +
           parseFloat(this.total)) /
         (parseInt(this.product.quantity) + parseInt(this.amount));
       const totalUnits =
@@ -229,8 +255,8 @@ export default {
         unitPrice,
         this.product.sale_price,
         totalUnits,
-        this.expire_date,
-        "WITHOUT-REVIEW"
+        expAux,
+        'WITHOUT-REVIEW',
       )
         .then(() => {
           this.clean();
@@ -241,12 +267,12 @@ export default {
     },
     clean() {
       this.product = null;
-      this.code = "";
-      this.id = "";
-      this.description = "";
+      this.code = '';
+      this.id = '';
+      this.description = '';
       this.amount = 12;
       this.total = null;
-      this.expire_date = "";
+      this.expire_date = '';
       this.products = [];
       this.showConfirmReceiveOrder = false;
     },

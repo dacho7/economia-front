@@ -34,25 +34,35 @@
                 <td>{{ item.description | capitalize }}</td>
                 <td>{{ Math.round(item.cost_price) }}</td>
                 <td>{{ Math.round(item.sale_price) }}</td>
-                <td>{{ Math.round(item.sale_price - item.cost_price) }}</td>
+                <td>
+                  {{ Math.round(item.sale_price - item.cost_price) }}
+                </td>
                 <td>
                   {{
                     `
                   ${Math.round(
-                    ((item.sale_price - item.cost_price) / item.cost_price) *
-                      100
+                    ((item.sale_price - item.cost_price) /
+                      item.cost_price) *
+                      100,
                   )}%`
                   }}
                 </td>
                 <td>{{ item.quantity }}</td>
 
-                <td v-if="item.expire_date == '2100-01-01T00:00:00.000Z'">
+                <td
+                  v-if="
+                    item.expire_date == '2100-01-01T00:00:00.000Z'
+                  "
+                >
                   No Vence
                 </td>
-                <td v-if="item.expire_date != '2100-01-01T00:00:00.000Z'">
+                <td
+                  v-if="
+                    item.expire_date != '2100-01-01T00:00:00.000Z'
+                  "
+                >
                   {{ item.expire_date | dateFormat }}
                 </td>
-
                 <td>
                   <v-row>
                     <v-col>
@@ -64,16 +74,23 @@
                     </v-col>
                     <v-col>
                       <v-btn
-                        @click="ignorarProduct(item.id_product)"
+                        @click="
+                          dialogIgnore = true;
+                          id_ElementIgnore = item.id_product;
+                          descriptionDialogIgnore = `${item.description} | Precio de Compra: ${item.cost_price}  Precio de Venta: ${item.sale_price}`;
+                        "
                         class="secondary"
-                        >Ignorar</v-btn
+                      >
+                        Ignorar</v-btn
                       >
                     </v-col>
                   </v-row>
                 </td>
               </tr>
             </tbody>
-            <h3 v-if="products.length == 0">No hay productos sin revisar</h3>
+            <h3 v-if="products.length == 0">
+              No hay productos sin revisar
+            </h3>
           </template>
         </v-simple-table>
       </template>
@@ -100,6 +117,17 @@
           <v-text-field label="Buscar Por Código"></v-text-field>
         </v-container>
         <ListAllProducts :products="productsFinded" />
+        <ConfirmDialog
+          :dialog="dialogIgnore"
+          :msm="'Ignorar Este producto'"
+          :description="descriptionDialogIgnore"
+          @cancel="dialogIgnore = false"
+          @acept="
+            ignorarProduct(id_ElementIgnore);
+            dialogIgnore = false;
+            descriptionDialogIgnore = null;
+          "
+        />
       </v-card-text>
     </v-card>
   </v-container>
@@ -110,12 +138,13 @@ import {
   FINDPRODUCTBYSTATE,
   FINDPRODUCTSBYDESCRIPTION,
   UPDATEPRODUCTSTATE,
-} from "../services/products";
+} from '../services/products';
 
-import ListAllProducts from "../components/updateproducts/ListAllProducts.vue";
+import ListAllProducts from '../components/updateproducts/ListAllProducts.vue';
+import ConfirmDialog from '../components/confirmDialog/ConfirmDialog.vue';
 
 export default {
-  name: "UpdatePrice",
+  name: 'UpdatePrice',
   data() {
     return {
       products: [],
@@ -125,12 +154,16 @@ export default {
       dateDatePicker: null,
       description: null,
       id_product: null,
+      dialog: false,
+      id_ElementIgnore: null,
+      descriptionDialogIgnore: null,
+      dialogIgnore: false,
     };
   },
-  components: { ListAllProducts },
+  components: { ListAllProducts, ConfirmDialog },
   methods: {
     listProducts() {
-      FINDPRODUCTBYSTATE("WITHOUT-REVIEW")
+      FINDPRODUCTBYSTATE('WITHOUT-REVIEW')
         .then((res) => {
           this.products = res.data.data;
         })
@@ -139,7 +172,9 @@ export default {
     async findByDescription() {
       if (this.description) {
         try {
-          const result = await FINDPRODUCTSBYDESCRIPTION(this.description);
+          const result = await FINDPRODUCTSBYDESCRIPTION(
+            this.description,
+          );
           if (result.data.ok) {
             this.productsFinded = result.data.data;
           } else {
@@ -148,7 +183,7 @@ export default {
         } catch (e) {
           console.log(e);
           this.productsFinded = [];
-          this.description = "";
+          this.description = '';
         }
       } else {
         this.productsFinded = [];
@@ -170,17 +205,17 @@ export default {
     },
     selectProduct(idproduct) {
       this.$router.push({
-        name: "ProductReceiveRecent",
+        name: 'ProductReceiveRecent',
         params: {
           id: idproduct,
         },
       });
     },
     ignorarProduct(idProduct) {
-      UPDATEPRODUCTSTATE(idProduct, "ACTIVE")
+      UPDATEPRODUCTSTATE(idProduct, 'ACTIVE')
         .then(() => {
           this.products = this.products.filter(
-            (prod) => prod.id_product != idProduct
+            (prod) => prod.id_product != idProduct,
           );
         })
         .catch((e) => console.log(e));
