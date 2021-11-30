@@ -6,11 +6,7 @@
           Esta seguro que desea {{ msm }}
         </v-card-title>
         <v-card-subtitle v-if="description">
-          <v-row>
-            <v-col>
-              <h3>Descripción: {{ description }}</h3>
-            </v-col>
-          </v-row>
+          <h3>Descripción: {{ description }}</h3>
         </v-card-subtitle>
         <v-card-actions>
           <v-spacer></v-spacer>

@@ -129,14 +129,13 @@
         </v-card-text>
         <v-card-actions class="pt-5 pb-5 white-text">
           <v-spacer></v-spacer>
-          <v-btn large class="col-4" @click="redirectUpdateProducts()"
+          <v-btn large class="col-4" @click="dialogCancel = true"
             >Cancelar</v-btn
           >
           <v-spacer></v-spacer>
           <v-btn large class="col-4 success" @click="finish()"
             >Finalizar</v-btn
           >
-          {{ product }}{{ sale_price }}
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -148,6 +147,13 @@
         <h1>No existe ese producto</h1>
       </v-col>
     </v-row>
+    <ConfirmDialog
+      :dialog="true"
+      :msm="'Cancelar Los Cambios'"
+      :description="'algo'"
+      @cancel="dialogCancel = false"
+      @acept="updatePrice()"
+    />
   </v-card>
 </template>
 
@@ -157,8 +163,12 @@ import {
   UPDATEPRICEPRODUCT,
   UPDATEPRODUCTSTATE,
 } from '../../services/products';
+
+import ConfirmDialog from '../confirmDialog/ConfirmDialog.vue';
+
 export default {
   name: 'ProductReceiveRecent',
+  components: { ConfirmDialog },
   data() {
     return {
       product: null,
@@ -170,6 +180,9 @@ export default {
       expire_date: null,
       disableexpiredatebutton: true,
       disableexpiredateinput: true,
+      dialogUpdatePrice: false,
+      dialogCancel: true,
+      dialogFinish: false,
     };
   },
   computed: {
@@ -220,7 +233,7 @@ export default {
       this.disableexpiredatebutton = false;
     },
   },
-  created() {
+  mounted() {
     this.loadProduct();
   },
 };
