@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pb-4 pt-4" v-if="product">
+  <v-card class="pt-4 pb-5" v-if="product">
     <v-row>
       <v-col class="text-center">
         <h1>Actualizar Precio de un producto</h1>
@@ -16,20 +16,22 @@
               <thead>
                 <tr>
                   <th><h2>Propiedad</h2></th>
-                  <th><h2>Actualizar</h2></th>
                 </tr>
               </thead>
-              <br />
-              <br />
               <tbody>
-                <tr></tr>
                 <tr>
                   <td>
+                    <v-text-field
+                      label="Cantidad de Productos En Inventario"
+                      v-model="product.quantity"
+                      disabled
+                      class="mt-3"
+                    ></v-text-field>
                     <v-row>
                       <v-col>
                         <v-text-field
                           label="Precio de Compra"
-                          v-model="cost_price"
+                          v-model="product.cost_price"
                           disabled
                         ></v-text-field>
                       </v-col>
@@ -49,16 +51,19 @@
                       </v-col>
                     </v-row>
                   </td>
-                  <td>
-                    <v-btn
-                      :disabled="
-                        product.cost_price == cost_price ||
-                        cost_price < 1
-                      "
-                      class="warning"
-                    >
-                      Actualizar
-                    </v-btn>
+                </tr>
+
+                <tr>
+                  <td v-if="disableExpireDateInput">
+                    <h3>Fecha de Expiración: No expira</h3>
+                  </td>
+                  <td v-else>
+                    <v-text-field
+                      label="Fecha de Expiracón"
+                      type="date"
+                      v-model="newValues.date"
+                      disabled
+                    ></v-text-field>
                   </td>
                 </tr>
 
@@ -66,61 +71,8 @@
                   <td>
                     <v-text-field
                       label="Precio De venta"
-                      v-model="sale_price"
+                      v-model="newValues.price"
                     ></v-text-field>
-                  </td>
-                  <td>
-                    <v-btn
-                      :disabled="
-                        product.sale_price == sale_price ||
-                        sale_price < cost_price
-                      "
-                      class="warning"
-                      @click="updatePrice()"
-                    >
-                      Actualizar
-                    </v-btn>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <v-text-field
-                      label="Cantidad de Productos En Inventario"
-                      v-model="quantity"
-                      disabled
-                    ></v-text-field>
-                  </td>
-                  <td>
-                    <v-btn
-                      :disabled="
-                        product.quantity == quantity || quantity < 0
-                      "
-                      class="warning"
-                    >
-                      Actualizar
-                    </v-btn>
-                  </td>
-                </tr>
-                <tr>
-                  <td v-if="disableexpiredateinput">
-                    <h3>No expira</h3>
-                  </td>
-                  <td v-else>
-                    <v-text-field
-                      label="Fecha de Expiracón"
-                      type="date"
-                      v-model="expire_date"
-                      @input="activateUpdateDateExpire()"
-                      :disabled="disableexpiredateinput"
-                    ></v-text-field>
-                  </td>
-                  <td>
-                    <v-btn
-                      :disabled="disableexpiredatebutton"
-                      class="warning"
-                    >
-                      Actualizar
-                    </v-btn>
                   </td>
                 </tr>
               </tbody>
@@ -133,13 +85,31 @@
             >Cancelar</v-btn
           >
           <v-spacer></v-spacer>
-          <v-btn large class="col-4 success" @click="finish()"
+          <v-btn
+            large
+            class="col-4 success"
+            @click="dialogFinish = true"
+            :disabled="newValues.price <= product.cost_price"
             >Finalizar</v-btn
           >
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
     </v-card-text>
+    <ConfirmDialog
+      :dialog="dialogCancel"
+      :msm="'Cancelar Los Cambios'"
+      :description="'Puede solicitar un cambio despues'"
+      @cancel="dialogCancel = false"
+      @acept="redirectToBack()"
+    />
+    <ConfirmDialog
+      :dialog="dialogFinish"
+      :msm="'Finalizar Cambio Precio'"
+      :description="finishText"
+      @cancel="dialogFinish = false"
+      @acept="finish()"
+    />
   </v-card>
   <v-card v-else>
     <v-row class="text-center">
@@ -147,13 +117,6 @@
         <h1>No existe ese producto</h1>
       </v-col>
     </v-row>
-    <ConfirmDialog
-      :dialog="true"
-      :msm="'Cancelar Los Cambios'"
-      :description="'algo'"
-      @cancel="dialogCancel = false"
-      @acept="updatePrice()"
-    />
   </v-card>
 </template>
 
@@ -172,29 +135,41 @@ export default {
   data() {
     return {
       product: null,
-      productAux: null,
-      description: null,
-      cost_price: null,
-      sale_price: null,
-      quantity: null,
-      expire_date: null,
-      disableexpiredatebutton: true,
-      disableexpiredateinput: true,
-      dialogUpdatePrice: false,
-      dialogCancel: true,
+      newValues: {
+        price: null,
+      },
+      disableSalePrice: true,
+      disableExpireDateInput: true,
+      dialogCancel: false,
       dialogFinish: false,
     };
   },
   computed: {
     utility() {
-      return this.sale_price - this.cost_price;
+      if (this.newValues.price > this.product.cost_price) {
+        return this.newValues.price - this.product.cost_price;
+      }
+      return '-';
     },
     utilityporcent() {
-      return (
-        100 *
-          ((this.sale_price - this.cost_price) / this.sale_price) +
-        ' %'
-      );
+      if (this.newValues.price > this.product.cost_price) {
+        return (
+          (
+            100 *
+            ((this.newValues.price - this.product.cost_price) /
+              this.newValues.price)
+          )
+            .toString()
+            .substr(0, 5) + ' %'
+        );
+      }
+      return '-';
+    },
+    finishText() {
+      if (this.newValues.price != this.product.sale_price) {
+        return `Precio Nuevo ${this.newValues.price}, Precio Anterior ${this.product.sale_price}`;
+      }
+      return 'No Se cambio el precio';
     },
   },
   methods: {
@@ -202,35 +177,34 @@ export default {
       try {
         const result = await FINDPRODUCTBYID(this.$route.params.id);
         this.product = result.data.data;
-        this.productAux = result.data.data;
-        this.description = this.product.description;
-        this.cost_price = this.product.cost_price;
-        this.sale_price = this.product.sale_price;
-        this.quantity = this.product.quantity;
+        this.newValues.price = this.product.sale_price;
         if (this.product.expire_date.substr(0, 10) != '2100-01-01') {
-          this.disableexpiredateinput = false;
-          this.expire_date = this.product.expire_date.substr(0, 10);
+          this.disableExpireDateInput = false;
+          this.newValues.date = this.product.expire_date.substr(
+            0,
+            10,
+          );
         }
       } catch (e) {
         console.log(e);
       }
     },
     finish() {
-      UPDATEPRODUCTSTATE(this.product.id_product, 'ACTIVE')
+      UPDATEPRICEPRODUCT(
+        this.product.id_product,
+        this.newValues.price,
+      )
         .then(() => {
-          this.$router.push('/updateprice');
+          UPDATEPRODUCTSTATE(this.product.id_product, 'ACTIVE')
+            .then(() => {
+              this.redirectToBack();
+            })
+            .catch((e) => console.log(e));
         })
         .catch((e) => console.log(e));
     },
-    updatePrice() {
-      UPDATEPRICEPRODUCT(this.product.id_product, this.sale_price)
-        .then(() => {
-          this.loadProduct();
-        })
-        .catch((e) => console.log(e));
-    },
-    activateUpdateDateExpire() {
-      this.disableexpiredatebutton = false;
+    redirectToBack() {
+      this.$router.push('/updateprice');
     },
   },
   mounted() {
