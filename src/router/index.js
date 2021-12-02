@@ -1,49 +1,50 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
+    path: '/',
+    name: 'Home',
     component: Home,
   },
   {
-    path: "/registersales",
-    name: "RegisterSales",
-    component: () => import("../views/RegisterSales.vue"),
+    path: '/registersales',
+    name: 'RegisterSales',
+    component: () => import('../views/RegisterSales.vue'),
   },
   {
-    path: "/registerproducts",
-    name: "RegisterProducts",
-    component: () => import("../views/RegisterProducts.vue"),
+    path: '/registerproducts',
+    name: 'RegisterProducts',
+    component: () => import('../views/RegisterProducts.vue'),
   },
   {
-    path: "/receiveorder",
-    name: "ReceiveOrder",
-    component: () => import("../views/ReceiveOrder.vue"),
+    path: '/receiveorder',
+    name: 'ReceiveOrder',
+    component: () => import('../views/ReceiveOrder.vue'),
   },
   {
-    path: "/updateprice",
-    name: "UpdatePrice",
-    component: () => import("../views/UpdatePrice.vue"),
+    path: '/updateprice',
+    name: 'UpdatePrice',
+    component: () => import('../views/UpdatePrice.vue'),
   },
   {
-    path: "/updateprice/product/:id",
-    name: "UpdatePriceProduct",
-    component: () => import("../components/lists/ProductAllFields.vue"),
+    path: '/updateprice/productrecent/:id',
+    name: 'UpdateOnlyPriceProduct',
+    component: () => import('../components/products/UpdateOnlyPrice'),
   },
   {
-    path: "/updateprice/productrecent/:id",
-    name: "ProductReceiveRecent",
-    component: () => import("../components/lists/ProductReceiveRecent"),
+    path: '/updateprice/product/:id',
+    name: 'UpdatePriceProduct',
+    component: () =>
+      import('../components/products/UpdateAllFields.vue'),
   },
 ];
 
 const router = new VueRouter({
-  mode: "history",
+  mode: 'history',
   base: process.env.BASE_URL,
   routes,
 });

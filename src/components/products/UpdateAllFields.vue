@@ -66,7 +66,8 @@
                   <td>
                     <v-btn
                       :disabled="
-                        product.cost_price == cost_price || cost_price < 1
+                        product.cost_price == cost_price ||
+                        cost_price < 1
                       "
                       class="warning"
                     >
@@ -103,7 +104,9 @@
                   </td>
                   <td>
                     <v-btn
-                      :disabled="product.quantity == quantity || quantity < 0"
+                      :disabled="
+                        product.quantity == quantity || quantity < 0
+                      "
                       class="warning"
                     >
                       Actualizar
@@ -124,7 +127,10 @@
                     ></v-text-field>
                   </td>
                   <td>
-                    <v-btn :disabled="disableexpiredatebutton" class="warning">
+                    <v-btn
+                      :disabled="disableexpiredatebutton"
+                      class="warning"
+                    >
                       Actualizar
                     </v-btn>
                   </td>
@@ -137,7 +143,10 @@
           <v-spacer></v-spacer>
           <v-btn large class="col-4">Cancelar</v-btn>
           <v-spacer></v-spacer>
-          <v-btn large class="col-4 success" @click="redirectUpdateProducts()"
+          <v-btn
+            large
+            class="col-4 success"
+            @click="redirectUpdateProducts()"
             >Finalizar</v-btn
           >
 
@@ -156,9 +165,9 @@
 </template>
 
 <script>
-import { FINDPRODUCTBYID } from "../../services/products";
+import { FINDPRODUCTBYID } from '../../services/products';
 export default {
-  name: "ProductAllFields",
+  name: 'UpdateAllFields',
   data() {
     return {
       product: null,
@@ -178,13 +187,15 @@ export default {
     },
     utilityporcent() {
       return (
-        100 * ((this.sale_price - this.cost_price) / this.sale_price) + " %"
+        100 *
+          ((this.sale_price - this.cost_price) / this.sale_price) +
+        ' %'
       );
     },
   },
   methods: {
     redirectUpdateProducts() {
-      this.$router.push("/updateprice");
+      this.$router.push('/updateprice');
     },
     activateUpdateDateExpire() {
       this.disableexpiredatebutton = false;
@@ -200,7 +211,7 @@ export default {
       this.sale_price = this.product.sale_price;
       this.quantity = this.product.quantity;
       this.expire_date = this.product.expire_date.substr(0, 10);
-      if (this.product.expire_date.substr(0, 10) != "2100-01-01") {
+      if (this.product.expire_date.substr(0, 10) != '2100-01-01') {
         this.disableexpiredateinput = false;
         this.expire_date = this.product.expire_date.substr(0, 10);
       }

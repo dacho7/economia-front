@@ -130,7 +130,7 @@ import {
 import ConfirmDialog from '../confirmDialog/ConfirmDialog.vue';
 
 export default {
-  name: 'ProductReceiveRecent',
+  name: 'UpdateOnlyPrice',
   components: { ConfirmDialog },
   data() {
     return {

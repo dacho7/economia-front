@@ -115,19 +115,19 @@
             @input="findByDateUpdate()"
           ></v-text-field>
           <v-text-field label="Buscar Por Código"></v-text-field>
+          <ListProductsFinded :products="productsFinded" />
+          <ConfirmDialog
+            :dialog="dialogIgnore"
+            :msm="'Ignorar Este producto'"
+            :description="descriptionDialogIgnore"
+            @cancel="dialogIgnore = false"
+            @acept="
+              ignorarProduct(id_ElementIgnore);
+              dialogIgnore = false;
+              descriptionDialogIgnore = null;
+            "
+          />
         </v-container>
-        <ListAllProducts :products="productsFinded" />
-        <ConfirmDialog
-          :dialog="dialogIgnore"
-          :msm="'Ignorar Este producto'"
-          :description="descriptionDialogIgnore"
-          @cancel="dialogIgnore = false"
-          @acept="
-            ignorarProduct(id_ElementIgnore);
-            dialogIgnore = false;
-            descriptionDialogIgnore = null;
-          "
-        />
       </v-card-text>
     </v-card>
   </v-container>
@@ -140,7 +140,7 @@ import {
   UPDATEPRODUCTSTATE,
 } from '../services/products';
 
-import ListAllProducts from '../components/updateproducts/ListAllProducts.vue';
+import ListProductsFinded from '../components/updateproducts/ListProductsFinded.vue';
 import ConfirmDialog from '../components/confirmDialog/ConfirmDialog.vue';
 
 export default {
@@ -160,7 +160,7 @@ export default {
       dialogIgnore: false,
     };
   },
-  components: { ListAllProducts, ConfirmDialog },
+  components: { ListProductsFinded, ConfirmDialog },
   methods: {
     listProducts() {
       FINDPRODUCTBYSTATE('WITHOUT-REVIEW')
