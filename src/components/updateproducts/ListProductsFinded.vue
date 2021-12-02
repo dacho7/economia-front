@@ -67,7 +67,7 @@ export default {
   methods: {
     selectProduct(idproduct) {
       this.$router.push({
-        name: 'UpdatePriceProduct',
+        name: 'UpdateAllFields',
         params: {
           id: idproduct,
         },

@@ -44,7 +44,10 @@
                       ></v-text-field>
                     </th>
                     <td v-on:keyup.enter="registerSale(code)">
-                      <v-text-field autofocus v-model="code"></v-text-field>
+                      <v-text-field
+                        autofocus
+                        v-model="code"
+                      ></v-text-field>
                     </td>
                     <td>
                       <v-btn @click="dialogAnonymous = true"
@@ -68,7 +71,9 @@
                   <tr v-for="(item, index) in products" :key="index">
                     <td>{{ item.amount }}</td>
                     <td>{{ item.description | capitalize }}</td>
-                    <td class="text-right">{{ item.subtotal | currency }}</td>
+                    <td class="text-right">
+                      {{ item.subtotal | currency }}
+                    </td>
                   </tr>
                 </tbody>
               </template>
@@ -179,24 +184,24 @@ import {
   registerSale,
   finishInvoice,
   undoSales,
-} from "../services/sales";
-import AnonymousSale from "../components/sales/AnonymousSale.vue";
-import InvoiceToPrint from "../components/sales/InvoiceToPrint.vue";
-import ConfirmSale from "../components/confirmDialog/ConfirmSale";
-import printJS from "print-js";
+} from '../services/sales';
+import AnonymousSale from '../components/sales/AnonymousSale.vue';
+import InvoiceToPrint from '../components/sales/InvoiceToPrint.vue';
+import ConfirmSale from '../components/confirmDialog/ConfirmSale';
+import printJS from 'print-js';
 
 export default {
-  name: "RegisterSales",
+  name: 'RegisterSales',
   data() {
     return {
-      headline: "",
-      client: "",
+      headline: '',
+      client: '',
       document: null,
-      date: "",
+      date: '',
       total: 0,
-      code: "",
+      code: '',
       amount: 1,
-      invoice: "",
+      invoice: '',
       products: [],
       dialog: false,
       dialogAnonymous: false,
@@ -220,22 +225,22 @@ export default {
       let hours = dat.getHours();
 
       if (month < 10) {
-        month = "0" + month;
+        month = '0' + month;
       }
       if (day < 10) {
-        day = "0" + day;
+        day = '0' + day;
       }
       if (minutes < 10) {
-        minutes = "0" + minutes;
+        minutes = '0' + minutes;
       }
       if (hours < 10) {
-        hours = "0" + hours;
+        hours = '0' + hours;
       }
       const date = `${day}/${month}/${dat.getFullYear()} ${hours}:${minutes}`;
       this.date = date;
     },
     registerSale(code) {
-      if (code != "") {
+      if (code != '') {
         findProductByCode(code)
           .then((product) => {
             if (product.data.ok) {
@@ -244,7 +249,7 @@ export default {
                 product.data.data.id_product,
                 this.amount,
                 product.data.data.sale_price * this.amount,
-                product.data.data.cost_price
+                product.data.data.cost_price,
               )
                 .then((sale) => {
                   const newSale = {
@@ -257,7 +262,7 @@ export default {
                     cost_price: sale.data.data.cost_price,
                   };
                   this.products.push(newSale);
-                  this.code = "";
+                  this.code = '';
                   this.amount = 1;
                   this.total += sale.data.data.subtotal;
                 })
@@ -265,7 +270,7 @@ export default {
                   console.log(err);
                 });
             }
-            this.code = "";
+            this.code = '';
           })
           .catch((err) => {
             console.log(err);
@@ -291,7 +296,7 @@ export default {
         .then(() => {
           this.products = [];
           this.total = 0;
-          this.client = "";
+          this.client = '';
           this.amount = 1;
           this.printInvoice();
           this.createInvoice();
@@ -322,7 +327,7 @@ export default {
     },
     printInvoice() {
       this.toPrint = true;
-      printJS("printJS-form", "html");
+      printJS('printJS-form', 'html');
     },
   },
   created() {

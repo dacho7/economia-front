@@ -136,9 +136,10 @@
 import {
   findProductByDescription,
   findProductByCode,
-  updateProduct,
 } from '../services/sales';
+
 import ConfirmReceiveOrder from '../components/confirmDialog/ConfirmReceiveOrder.vue';
+import { UPDATEPRODUCT } from '../services/products';
 
 export default {
   name: 'ReceiveOrder',
@@ -250,16 +251,25 @@ export default {
         (parseInt(this.product.quantity) + parseInt(this.amount));
       const totalUnits =
         parseInt(this.amount) + parseInt(this.product.quantity);
-      updateProduct(
+
+      UPDATEPRODUCT(
         this.product.id_product,
+        this.product.description,
         unitPrice,
         this.product.sale_price,
         totalUnits,
         expAux,
+        this.product.date_price_update,
+        new Date(),
+        this.product.type,
         'WITHOUT-REVIEW',
       )
-        .then(() => {
-          this.clean();
+        .then((res) => {
+          if (res.data.ok) {
+            this.clean();
+          } else {
+            console.log(res);
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -275,6 +285,7 @@ export default {
       this.expire_date = '';
       this.products = [];
       this.showConfirmReceiveOrder = false;
+      this.textfind = 'Sin busqueda';
     },
   },
 };

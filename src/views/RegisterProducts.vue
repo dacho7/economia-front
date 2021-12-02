@@ -184,6 +184,9 @@ export default {
             this.product = result.data.data;
             this.code = result.data.data.code;
             this.cleanForm();
+          } else {
+            console.log(result.data);
+            alert('Intente Registrar nuevamente');
           }
         })
         .catch((err) => {
