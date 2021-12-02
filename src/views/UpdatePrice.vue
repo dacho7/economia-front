@@ -109,12 +109,15 @@
           ></v-text-field>
           <v-text-field
             disabled
+            label="Buscar Por Código(No disponible)"
+          ></v-text-field>
+          <v-text-field
+            disabled
             label="Buscar Por Fecha de llegada (No disponible)"
             type="date"
             v-model="dateDatePicker"
             @input="findByDateUpdate()"
           ></v-text-field>
-          <v-text-field label="Buscar Por Código"></v-text-field>
           <ListProductsFinded :products="productsFinded" />
           <ConfirmDialog
             :dialog="dialogIgnore"
@@ -205,7 +208,7 @@ export default {
     },
     selectProduct(idproduct) {
       this.$router.push({
-        name: 'ProductReceiveRecent',
+        name: 'UpdateOnlyPrice',
         params: {
           id: idproduct,
         },

@@ -32,12 +32,12 @@ const routes = [
   },
   {
     path: '/updateprice/productrecent/:id',
-    name: 'UpdateOnlyPriceProduct',
+    name: 'UpdateOnlyPrice',
     component: () => import('../components/products/UpdateOnlyPrice'),
   },
   {
     path: '/updateprice/product/:id',
-    name: 'UpdatePriceProduct',
+    name: 'UpdateAllFields',
     component: () =>
       import('../components/products/UpdateAllFields.vue'),
   },

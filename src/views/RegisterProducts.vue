@@ -109,13 +109,13 @@
 </template>
 
 <script>
-import { REGISTERPRODUCT } from "../services/products";
-import Barcode from "../components/Barcode";
-import ConfirmRegisterProduct from "../components/confirmDialog/ConfirmRegisterProduct.vue";
-import { round100 } from "../services/functions/functions";
+import { REGISTERPRODUCT } from '../services/products';
+import Barcode from '../components/Barcode';
+import ConfirmRegisterProduct from '../components/confirmDialog/ConfirmRegisterProduct.vue';
+import { round100 } from '../services/functions/functions';
 
 export default {
-  name: "RegisterProducts",
+  name: 'RegisterProducts',
   components: {
     Barcode,
     ConfirmRegisterProduct,
@@ -123,39 +123,39 @@ export default {
   data() {
     return {
       product: null,
-      code: "",
+      code: '',
       whithoutCode: false,
       description: null,
       total_price: null,
       quantity: 24,
       typesSelection: [
-        "Granos",
-        "Aseo y Limpieza",
-        "Enlatados",
-        "Frituras",
-        "Variedades",
-        "Verduras",
-        "Dulces",
-        "Lacteos",
-        "Panaderia",
-        "Plasticos y recipientes",
-        "Galletas",
-        "Papeleria",
-        "Bebidas",
-        "Jugueteria",
-        "Licores",
-        "Tecnologia",
-        "Agro",
-        "Utiles Escolares",
-        "Bebidas",
-        "Detalles",
-        "Bioseguridad",
-        "Herramientas",
-        "Farmacia",
-        "Promociones",
-        "Cereales",
-        "Embutidos",
-        "Carnes",
+        'Granos',
+        'Aseo y Limpieza',
+        'Enlatados',
+        'Frituras',
+        'Variedades',
+        'Verduras',
+        'Dulces',
+        'Lacteos',
+        'Panaderia',
+        'Plasticos y recipientes',
+        'Galletas',
+        'Papeleria',
+        'Bebidas',
+        'Jugueteria',
+        'Licores',
+        'Tecnologia',
+        'Agro',
+        'Utiles Escolares',
+        'Bebidas',
+        'Detalles',
+        'Bioseguridad',
+        'Herramientas',
+        'Farmacia',
+        'Promociones',
+        'Cereales',
+        'Embutidos',
+        'Carnes',
       ],
       type: null,
       expire_date: null,
@@ -166,7 +166,7 @@ export default {
   methods: {
     registerProduct() {
       if (this.noexpire) {
-        this.expire_date = "2100-01-01";
+        this.expire_date = '2100-01-01';
       }
       const cost = Number(this.total_price) / Number(this.quantity);
       const sale = round100(Number(cost) + Number(cost) * 0.15);
@@ -177,7 +177,7 @@ export default {
         sale,
         this.quantity,
         this.type,
-        this.expire_date
+        this.expire_date,
       )
         .then((result) => {
           if (result.data.ok) {
@@ -192,19 +192,20 @@ export default {
     },
     cleanForm() {
       this.product = null;
-      this.code = "";
-      this.description = "";
-      this.cost_price = "";
-      this.sale_price = "";
+      this.code = '';
+      this.description = '';
+      this.cost_price = '';
+      this.sale_price = '';
       this.quantity = 24;
-      this.type = "";
-      this.expire_date = "";
+      this.type = '';
+      this.expire_date = null;
       this.total_price = null;
       this.whithoutCode = false;
       this.showConfirRegisterProduct = false;
+      this.noexpire = false;
     },
     cleanCodeBar() {
-      this.code = "";
+      this.code = '';
     },
     cleanDate() {
       this.expire_date = null;
