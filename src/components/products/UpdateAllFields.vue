@@ -88,16 +88,17 @@
               <v-col v-if="expire">
                 <h3>Fecha de Expiración: No expira</h3>
               </v-col>
-              <v-col v-else>
+              <v-col v-else @click="touch.expire_date = false">
                 <v-text-field
                   label="Fecha de Expiracón"
                   type="date"
                   v-model="newValues.expire_date"
+                  :disabled="touch.expire_date"
                 ></v-text-field>
               </v-col>
               <v-col>
                 <v-checkbox
-                  @click="newValues.expire_date = null"
+                  @click="validateExpire()"
                   label="No expira"
                   v-model="expire"
                 />
@@ -308,6 +309,19 @@ export default {
           }
         })
         .catch((e) => console.log(e));
+    },
+    validateExpire() {
+      if (this.expire) {
+        this.newValues.expire_date = null;
+        this.touch.expire_date = true;
+      } else {
+        if (this.product.expire_date.substr(0, 10) == '2100-01-01') {
+          this.newValues.expire_date = null;
+        } else {
+          this.newValues.expire_date =
+            this.product.expire_date.substr(0, 10);
+        }
+      }
     },
     clean() {
       this.dialogFinish = false;
