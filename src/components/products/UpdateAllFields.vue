@@ -120,7 +120,7 @@
                   :items="typesSelection"
                 ></v-autocomplete>
               </v-col>
-              <v-col v-if="newValues.type">
+              <v-col v-if="newValues.type != product.type">
                 <v-btn
                   @click="newValues.type = null"
                   block
@@ -141,6 +141,7 @@
             large
             class="col-4 success"
             @click="dialogFinish = true"
+            :disabled="validateFinish"
             >Actualizar</v-btn
           >
 
@@ -189,6 +190,7 @@ export default {
         sale_price: null,
         quantity: null,
         expire_date: null,
+        type: null,
       },
       touch: {
         description: true,
@@ -246,6 +248,26 @@ export default {
           .substr(0, 5) + ' %'
       );
     },
+    validateFinish() {
+      if (
+        this.product.description != this.newValues.description ||
+        this.product.cost_price != this.newValues.cost_price ||
+        this.product.sale_price != this.newValues.sale_price ||
+        this.product.quantity != this.newValues.quantity ||
+        this.product.type != this.newValues.type
+      ) {
+        return false;
+      }
+      if (this.newValues.expire_date) {
+        if (
+          this.product.expire_date.substr(0, 10) !=
+          this.newValues.expire_date.substr(0, 10)
+        ) {
+          return false;
+        }
+      }
+      return true;
+    },
   },
   methods: {
     redirectUpdateProducts() {
@@ -261,6 +283,8 @@ export default {
         this.newValues.quantity = this.product.quantity;
         this.newValues.expire_date = this.product.expire_date;
         this.newValues.price = this.product.sale_price;
+        this.newValues.type = this.product.type;
+        console.log(this.product.expire_date);
         if (this.product.expire_date.substr(0, 10) != '2100-01-01') {
           this.expire = false;
           this.newValues.expire_date =
@@ -274,12 +298,6 @@ export default {
     },
     updateProduct() {
       let expire_date = '';
-      let type = '';
-      if (!this.newValues.type) {
-        type = this.product.type;
-      } else {
-        type = this.newValues.type;
-      }
       if (
         !this.newValues.expire_date ||
         this.newValues.expire_date == '2100-01-01'
@@ -297,8 +315,8 @@ export default {
         expire_date,
         new Date(),
         this.product.date_arrive,
-        type,
-        'Active',
+        this.newValues.type,
+        'ACTIVE',
       )
         .then((res) => {
           if (res.data.ok) {

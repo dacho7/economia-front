@@ -13,17 +13,28 @@
           <v-card-text>
             <v-container class="ml-5">
               <v-row>
-                <v-col cols="3">
+                <v-col cols="4">
                   <v-text-field
                     color="blue-grey lighten-2"
-                    label="Nombre del Cliente"
+                    label="Nombre del Cliente(No Registrado)"
                     v-model="headline"
                   >
                   </v-text-field>
                 </v-col>
-                <!-- <v-col cols="1">
-                  <v-btn>Registrar Cliente</v-btn>
-                </v-col> -->
+                <v-col>
+                  <v-text-field
+                    label="Cliente Registrado(Cedula)"
+                    v-model="clientRegister"
+                  ></v-text-field>
+                </v-col>
+                <v-spacer></v-spacer>
+                <v-col>
+                  <v-btn
+                    @click="dialogRegisterClient = true"
+                    class="warning"
+                    >Registrar Cliente</v-btn
+                  >
+                </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -162,6 +173,11 @@
             </v-card>
           </v-dialog>
         </v-container>
+        <RegisterClient
+          :dialog="dialogRegisterClient"
+          @cancel="dialogRegisterClient = false"
+          @acept="reloadClientRegister"
+        />
         <ConfirmSale
           :dialog="showConfirmSale"
           @cancel="showConfirmSale = false"
@@ -204,6 +220,7 @@ import InvoiceToPrint from '../components/sales/InvoiceToPrint.vue';
 import ConfirmSale from '../components/confirmDialog/ConfirmSale';
 import ProductNotRegister from '../components/sales/ProductNotRegister.vue';
 import printJS from 'print-js';
+import RegisterClient from '../components/clients/RegisterClient.vue';
 
 export default {
   name: 'RegisterSales',
@@ -223,6 +240,8 @@ export default {
       toPrint: false,
       showConfirmSale: false,
       dialogProductNotRegister: false,
+      dialogRegisterClient: false,
+      clientRegister: '',
     };
   },
   components: {
@@ -230,6 +249,7 @@ export default {
     InvoiceToPrint,
     ConfirmSale,
     ProductNotRegister,
+    RegisterClient,
   },
   methods: {
     getDate() {
@@ -264,20 +284,18 @@ export default {
               REGISTERSALE(
                 this.invoice,
                 product.data.data.id_product,
+                product.data.data.description,
                 this.amount,
                 product.data.data.sale_price * this.amount,
                 product.data.data.cost_price,
               )
                 .then((sale) => {
-                  console.log(sale);
                   const newSale = {
                     amount: this.amount,
                     description: product.data.data.description,
                     subtotal: sale.data.data.subtotal,
                     id_sale: sale.data.data.id_sale,
                     id_product: sale.data.data.id_product,
-                    id_invoice: sale.data.data.invoice,
-                    cost_price: sale.data.data.cost_price,
                   };
                   this.products.push(newSale);
                   this.code = '';
@@ -339,7 +357,6 @@ export default {
         });
     },
     eventSoon(newSale) {
-      console.log(newSale);
       this.amount = newSale.mount;
       this.registerSaleCode(newSale.code);
       this.dialogAnonymous = false;
@@ -348,6 +365,7 @@ export default {
       this.dialogProductNotRegister = false;
       REGISTERSALE(
         this.invoice,
+        'No Register',
         sale.description,
         sale.quantitiy,
         sale.total,
@@ -355,13 +373,11 @@ export default {
       )
         .then((sale) => {
           const newSale = {
-            amount: this.amount,
-            description: sale.data.data.product,
+            amount: sale.data.data.amount,
+            description: sale.data.data.description,
             subtotal: sale.data.data.subtotal,
             id_sale: sale.data.data.id_sale,
             id_product: sale.data.data.id_product,
-            id_invoice: sale.data.data.invoice,
-            cost_price: sale.data.data.cost_price,
           };
           this.products.push(newSale);
           this.code = '';
@@ -371,6 +387,10 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    reloadClientRegister(client) {
+      this.headline = client.names + ' ' + client.surnames;
+      this.dialogRegisterClient = false;
     },
     changeshowConfirmSaleFalse() {
       this.showConfirmSale = false;

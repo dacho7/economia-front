@@ -16,6 +16,7 @@
               <v-text-field
                 type="text"
                 label="Descripción del producto"
+                v-model="description"
               ></v-text-field>
             </v-col>
             <v-col cols="2">
@@ -23,7 +24,6 @@
                 type="number"
                 label="Cantidad"
                 v-model="amount"
-                @blur="validate()"
                 min="1"
               ></v-text-field>
             </v-col>
@@ -36,7 +36,6 @@
                 v-model="total"
                 type="number"
                 label="Total"
-                @blur="validate()"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -51,7 +50,7 @@
             color="green darken-1"
             text
             @click="acept()"
-            :disabled="val"
+            :disabled="amount < 1 || total < 100"
           >
             Aceptar
           </v-btn>
@@ -72,14 +71,7 @@ export default {
       total: null,
     };
   },
-  computed: {
-    val() {
-      if (this.amount >= 1 && this.total >= 100) {
-        return false;
-      }
-      return true;
-    },
-  },
+
   methods: {
     acept() {
       const newSale = {
@@ -87,21 +79,16 @@ export default {
         total: this.total,
         description: this.description,
       };
-      if (!this.description) newSale.description = 'no Registrado';
-      this.$emit('acept', newSale);
+      if (!newSale.description) newSale.description = 'Sin Registro';
       this.clean();
+      this.$emit('acept', newSale);
     },
     cancel() {
       this.amount = 1;
       this.total = null;
       this.$emit('cancel');
     },
-    validate() {
-      if (this.amount < 1 || this.total < 100) {
-        this.amount = 1;
-        this.total = null;
-      }
-    },
+
     clean() {
       this.amount = 1;
       this.description = null;

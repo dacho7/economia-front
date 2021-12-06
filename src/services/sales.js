@@ -13,6 +13,7 @@ export function createInvoice() {
 export function REGISTERSALE(
   invoice,
   product,
+  description,
   amount,
   subtotal,
   cost_price,
@@ -20,6 +21,7 @@ export function REGISTERSALE(
   return axios.post('http://localhost:4000/api/sales/sale', {
     invoice,
     product,
+    description,
     amount,
     subtotal,
     cost_price,
