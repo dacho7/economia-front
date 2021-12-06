@@ -185,8 +185,10 @@ export default {
             this.code = result.data.data.code;
             this.cleanForm();
           } else {
-            console.log(result.data);
-            alert('Intente Registrar nuevamente');
+            console.log(result);
+            alert(
+              'Intente Registrar nuevamente, puede que exista un producto con esa descripción',
+            );
           }
         })
         .catch((err) => {

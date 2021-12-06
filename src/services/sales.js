@@ -10,7 +10,7 @@ export function createInvoice() {
   return axios.post('http://localhost:4000/api/invoices/invoice');
 }
 
-export function registerSale(
+export function REGISTERSALE(
   invoice,
   product,
   amount,

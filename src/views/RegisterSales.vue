@@ -16,11 +16,14 @@
                 <v-col cols="3">
                   <v-text-field
                     color="blue-grey lighten-2"
-                    label="Factura a Nombre de "
+                    label="Nombre del Cliente"
                     v-model="headline"
                   >
                   </v-text-field>
                 </v-col>
+                <!-- <v-col cols="1">
+                  <v-btn>Registrar Cliente</v-btn>
+                </v-col> -->
               </v-row>
             </v-container>
           </v-card-text>
@@ -33,17 +36,20 @@
                   <tr>
                     <th>Cantidad</th>
                     <th>Code</th>
+                    <th>Otras Opciones de Registro Productos</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th class="text-left">
+                    <th class="text-left col-1">
                       <v-text-field
                         type="number"
                         v-model="amount"
+                        min="1"
+                        @blur="validateAmount()"
                       ></v-text-field>
                     </th>
-                    <td v-on:keyup.enter="registerSale(code)">
+                    <td @input="registerSaleCode(code)" class="col-6">
                       <v-text-field
                         autofocus
                         v-model="code"
@@ -51,7 +57,11 @@
                     </td>
                     <td>
                       <v-btn @click="dialogAnonymous = true"
-                        >Agregar venta sin codigo</v-btn
+                        >Buscar un Producto</v-btn
+                      >
+                      |
+                      <v-btn @click="dialogProductNotRegister = true"
+                        >Producto No Registrado</v-btn
                       >
                     </td>
                   </tr>
@@ -157,11 +167,15 @@
           @cancel="showConfirmSale = false"
           @acept="finishInvoice()"
         ></ConfirmSale>
-        <AnonymousSale
-          :invoice="invoice"
+        <FindProductRegister
           :dialog="dialogAnonymous"
           @cancelAnonymousSale="dialogAnonymous = false"
           @aceptAnonymousSale="eventSoon"
+        />
+        <ProductNotRegister
+          :dialog="dialogProductNotRegister"
+          @cancel="dialogProductNotRegister = false"
+          @acept="aceptProductNotRegister"
         />
         <br />
         <br />
@@ -181,13 +195,14 @@
 import {
   findProductByCode,
   createInvoice,
-  registerSale,
+  REGISTERSALE,
   finishInvoice,
   undoSales,
 } from '../services/sales';
-import AnonymousSale from '../components/sales/AnonymousSale.vue';
+import FindProductRegister from '../components/sales/FindProductRegister.vue';
 import InvoiceToPrint from '../components/sales/InvoiceToPrint.vue';
 import ConfirmSale from '../components/confirmDialog/ConfirmSale';
+import ProductNotRegister from '../components/sales/ProductNotRegister.vue';
 import printJS from 'print-js';
 
 export default {
@@ -207,12 +222,14 @@ export default {
       dialogAnonymous: false,
       toPrint: false,
       showConfirmSale: false,
+      dialogProductNotRegister: false,
     };
   },
   components: {
-    AnonymousSale,
+    FindProductRegister,
     InvoiceToPrint,
     ConfirmSale,
+    ProductNotRegister,
   },
   methods: {
     getDate() {
@@ -239,12 +256,12 @@ export default {
       const date = `${day}/${month}/${dat.getFullYear()} ${hours}:${minutes}`;
       this.date = date;
     },
-    registerSale(code) {
+    registerSaleCode(code) {
       if (code != '') {
         findProductByCode(code)
           .then((product) => {
             if (product.data.ok) {
-              registerSale(
+              REGISTERSALE(
                 this.invoice,
                 product.data.data.id_product,
                 this.amount,
@@ -252,6 +269,7 @@ export default {
                 product.data.data.cost_price,
               )
                 .then((sale) => {
+                  console.log(sale);
                   const newSale = {
                     amount: this.amount,
                     description: product.data.data.description,
@@ -275,6 +293,11 @@ export default {
           .catch((err) => {
             console.log(err);
           });
+      }
+    },
+    validateAmount() {
+      if (this.amount < 1) {
+        this.amount = 1;
       }
     },
     createInvoice() {
@@ -316,8 +339,38 @@ export default {
         });
     },
     eventSoon(newSale) {
-      this.products.push(newSale);
+      console.log(newSale);
+      this.amount = newSale.mount;
+      this.registerSaleCode(newSale.code);
       this.dialogAnonymous = false;
+    },
+    aceptProductNotRegister(sale) {
+      this.dialogProductNotRegister = false;
+      REGISTERSALE(
+        this.invoice,
+        sale.description,
+        sale.quantitiy,
+        sale.total,
+        sale.total / (1 + 0.15),
+      )
+        .then((sale) => {
+          const newSale = {
+            amount: this.amount,
+            description: sale.data.data.product,
+            subtotal: sale.data.data.subtotal,
+            id_sale: sale.data.data.id_sale,
+            id_product: sale.data.data.id_product,
+            id_invoice: sale.data.data.invoice,
+            cost_price: sale.data.data.cost_price,
+          };
+          this.products.push(newSale);
+          this.code = '';
+          this.amount = 1;
+          this.total += sale.data.data.subtotal;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     changeshowConfirmSaleFalse() {
       this.showConfirmSale = false;
