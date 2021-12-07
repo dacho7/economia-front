@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="800px">
       <v-card>
-        <v-card-title>
+        <v-card-title class="blue white--text">
           <span class="text-h5">Registar Cliente</span>
         </v-card-title>
         <v-card-text>
@@ -48,10 +48,36 @@
           <v-btn color="blue darken-1" text @click="cancel()">
             Cancelar
           </v-btn>
-          <v-btn color="green " text @click="register()">
+          <v-btn
+            color="green "
+            text
+            @click="confirm = true"
+            :disabled="validateRegiste"
+          >
             Registrar
           </v-btn>
         </v-card-actions>
+        <v-dialog v-model="confirm" persistent max-width="500">
+          <v-card>
+            <v-card-title class="text-h5">
+              Esta Seguro de Registrar este cliente?
+            </v-card-title>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                text
+                class="btn warning"
+                @click="confirm = false"
+              >
+                Cancelar
+              </v-btn>
+              <v-btn class="btn success" text @click="register()">
+                Registrar
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-card>
     </v-dialog>
   </v-row>
@@ -70,7 +96,23 @@ export default {
       surnames: '',
       addres: '',
       phone: '',
+      confirm: false,
     };
+  },
+  computed: {
+    validateRegiste() {
+      if (
+        !this.document ||
+        !this.names ||
+        !this.surnames ||
+        !this.addres ||
+        !this.phone ||
+        this.document.length < 7
+      ) {
+        return true;
+      }
+      return false;
+    },
   },
   methods: {
     cancel() {
@@ -78,11 +120,11 @@ export default {
     },
     register() {
       REGISTERCLIENT(
-        this.document,
-        this.names,
-        this.surnames,
-        this.addres,
-        this.phone,
+        this.document.trim(),
+        this.names.trim(),
+        this.surnames.trim(),
+        this.addres.trim(),
+        this.phone.trim(),
       )
         .then((result) => {
           if (result.data.ok) {
@@ -101,6 +143,7 @@ export default {
       this.surnames = '';
       this.addres = '';
       this.phone = '';
+      this.confirm = false;
     },
   },
 };

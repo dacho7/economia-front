@@ -140,6 +140,7 @@ export default {
       this.product = {};
       this.allProducts = [];
       this.quantity = 1;
+      this.desc = '';
       this.$emit('cancelAnonymousSale');
     },
   },

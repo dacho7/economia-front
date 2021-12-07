@@ -15,3 +15,9 @@ export function REGISTERCLIENT(
     phone,
   });
 }
+
+export function FINDCLIENT(document) {
+  return axios.get('http://localhost:4000/api/users/findclient', {
+    params: { document },
+  });
+}

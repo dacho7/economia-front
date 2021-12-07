@@ -28,14 +28,6 @@ export function REGISTERSALE(
   });
 }
 
-export function finishInvoice(id_invoice, total, client) {
-  return axios.put('http://localhost:4000/api/invoices/invoice', {
-    id_invoice,
-    total,
-    client,
-  });
-}
-
 export function undoSales(ids) {
   const id_sales = JSON.stringify(ids);
   return axios.delete('http://localhost:4000/api/sales/sales', {

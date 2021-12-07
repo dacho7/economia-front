@@ -24,7 +24,8 @@
                 <v-col>
                   <v-text-field
                     label="Cliente Registrado(Cedula)"
-                    v-model="clientRegister"
+                    v-model="documentClient"
+                    @input="findClient()"
                   ></v-text-field>
                 </v-col>
                 <v-spacer></v-spacer>
@@ -114,7 +115,7 @@
           <v-layout align="button">
             <v-btn
               :disabled="products.length === 0"
-              @click="answerAcept()"
+              @click="showConfirmSale = true"
               block
               x-large
               class="success mt-4"
@@ -212,23 +213,26 @@ import {
   findProductByCode,
   createInvoice,
   REGISTERSALE,
-  finishInvoice,
   undoSales,
 } from '../services/sales';
+import {
+  FINDINVOICECERO,
+  COMPLETEINVOICE,
+} from '../services/invoices';
 import FindProductRegister from '../components/sales/FindProductRegister.vue';
 import InvoiceToPrint from '../components/sales/InvoiceToPrint.vue';
 import ConfirmSale from '../components/confirmDialog/ConfirmSale';
 import ProductNotRegister from '../components/sales/ProductNotRegister.vue';
 import printJS from 'print-js';
 import RegisterClient from '../components/clients/RegisterClient.vue';
+import { FINDCLIENT } from '../services/users';
 
 export default {
   name: 'RegisterSales',
   data() {
     return {
       headline: '',
-      client: '',
-      document: null,
+      client: null,
       date: '',
       total: 0,
       code: '',
@@ -241,7 +245,7 @@ export default {
       showConfirmSale: false,
       dialogProductNotRegister: false,
       dialogRegisterClient: false,
-      clientRegister: '',
+      documentClient: '',
     };
   },
   components: {
@@ -252,30 +256,6 @@ export default {
     RegisterClient,
   },
   methods: {
-    getDate() {
-      let dat = new Date();
-
-      let day = dat.getDate();
-      let month = dat.getMonth() + 1;
-
-      let minutes = dat.getMinutes();
-      let hours = dat.getHours();
-
-      if (month < 10) {
-        month = '0' + month;
-      }
-      if (day < 10) {
-        day = '0' + day;
-      }
-      if (minutes < 10) {
-        minutes = '0' + minutes;
-      }
-      if (hours < 10) {
-        hours = '0' + hours;
-      }
-      const date = `${day}/${month}/${dat.getFullYear()} ${hours}:${minutes}`;
-      this.date = date;
-    },
     registerSaleCode(code) {
       if (code != '') {
         findProductByCode(code)
@@ -313,27 +293,59 @@ export default {
           });
       }
     },
+    findClient() {
+      if (this.documentClient.length > 6) {
+        FINDCLIENT(this.documentClient)
+          .then((result) => {
+            if (result.data.ok) {
+              this.client = result.data.data;
+              this.headline =
+                result.data.data.names +
+                ' ' +
+                result.data.data.surnames;
+            } else {
+              this.client = null;
+              this.headline = '';
+            }
+          })
+          .catch((e) => console.log(e));
+      }
+    },
     validateAmount() {
       if (this.amount < 1) {
         this.amount = 1;
       }
     },
     createInvoice() {
-      createInvoice()
+      FINDINVOICECERO()
         .then((result) => {
-          this.invoice = result.data.data.id_invoice;
+          if (!result.data.ok) {
+            createInvoice()
+              .then((result) => {
+                this.invoice = result.data.data.id_invoice;
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          } else {
+            this.invoice = result.data.data.id_invoice;
+          }
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((e) => console.log(e));
     },
     finishInvoice() {
       this.showConfirmSale = false;
       let total = 0;
+      let document = '';
       this.products.forEach((sale) => {
         total += sale.subtotal;
       });
-      finishInvoice(this.invoice, total, this.client)
+      if (!this.client) {
+        document = 'NO REGISTRADO';
+      } else {
+        document = this.client.document;
+      }
+      COMPLETEINVOICE(this.invoice, total, document, this.headline)
         .then(() => {
           this.products = [];
           this.total = 0;
@@ -392,19 +404,12 @@ export default {
       this.headline = client.names + ' ' + client.surnames;
       this.dialogRegisterClient = false;
     },
-    changeshowConfirmSaleFalse() {
-      this.showConfirmSale = false;
-    },
-    answerAcept() {
-      this.showConfirmSale = true;
-    },
     printInvoice() {
       this.toPrint = true;
       printJS('printJS-form', 'html');
     },
   },
   created() {
-    this.getDate();
     this.createInvoice();
   },
 };
