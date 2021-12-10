@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="800px">
       <v-card>
-        <v-card-title class="blue white--text">
+        <v-card-title class="green white--text">
           <span class="text-h5">Registar Cliente</span>
         </v-card-title>
         <v-card-text>
@@ -11,7 +11,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="document"
-                  label="Número de Documento*"
+                  label="Número de Documento (Cédula)*"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
@@ -29,16 +29,29 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="phone"
-                  label="Número de Celular"
+                  label="Número de Celular*"
                   type="text"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="addres"
-                  label="Dirección"
+                  label="Dirección*"
                   type="text"
                 ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="email"
+                  label="Email"
+                  type="email"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-checkbox
+                  v-model="createAccount"
+                  label="Abrir cuenta"
+                />
               </v-col>
             </v-row>
           </v-container>
@@ -85,6 +98,7 @@
 
 <script>
 import { REGISTERCLIENT } from '../../services/users';
+import { CREATEACCOUNT } from '../../services/account';
 
 export default {
   name: 'RegisterClient',
@@ -96,7 +110,10 @@ export default {
       surnames: '',
       addres: '',
       phone: '',
+      email: '',
+      createAccount: false,
       confirm: false,
+      opencount: false,
     };
   },
   computed: {
@@ -125,14 +142,34 @@ export default {
         this.surnames.trim(),
         this.addres.trim(),
         this.phone.trim(),
+        this.email.trim(),
       )
         .then((result) => {
           if (result.data.ok) {
-            this.clean();
-            this.$emit('acept', result.data.data);
-            alert('Usuario registrado con exito');
+            if (this.createAccount) {
+              CREATEACCOUNT(result.data.data.document)
+                .then((result) => {
+                  if (result.data.ok) {
+                    this.$emit('cancel');
+                    alert('Cuenta Registrada con exito');
+                    this.document = null;
+                    this.client = null;
+                  } else {
+                    alert('La cuenta ya existe');
+                  }
+                })
+                .catch((e) => console.log(e));
+              this.clean();
+              this.$emit('acept', result.data.data);
+              alert('Usuario registrado con exito');
+            } else {
+              this.clean();
+              this.$emit('acept', result.data.data);
+              alert('Usuario registrado con exito');
+            }
           } else {
             alert('Cedula ya registrada');
+            this.confirm = false;
           }
         })
         .catch((e) => console.log(e));
@@ -144,6 +181,8 @@ export default {
       this.addres = '';
       this.phone = '';
       this.confirm = false;
+      this.email = '';
+      this.opencount = false;
     },
   },
 };

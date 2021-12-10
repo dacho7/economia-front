@@ -36,6 +36,13 @@
                     >Registrar Cliente</v-btn
                   >
                 </v-col>
+                <v-col>
+                  <v-btn
+                    @click="OpenAccountDialogg = true"
+                    class="warning"
+                    >Abrir Cuenta</v-btn
+                  >
+                </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -68,11 +75,15 @@
                       ></v-text-field>
                     </td>
                     <td>
-                      <v-btn @click="dialogAnonymous = true"
+                      <v-btn
+                        @click="dialogAnonymous = true"
+                        class="primary"
                         >Buscar un Producto</v-btn
                       >
                       |
-                      <v-btn @click="dialogProductNotRegister = true"
+                      <v-btn
+                        @click="dialogProductNotRegister = true"
+                        class="primary"
                         >Producto No Registrado</v-btn
                       >
                     </td>
@@ -80,7 +91,7 @@
                 </tbody>
               </template>
             </v-simple-table>
-            <v-simple-table fixed-header height="460px">
+            <v-simple-table fixed-header height="300px">
               <template mt-6 v-slot:default>
                 <thead>
                   <tr>
@@ -112,16 +123,21 @@
               <h2 align="center">{{ total | currency }}</h2>
             </v-flex>
           </v-layout>
-          <v-layout align="button">
-            <v-btn
-              :disabled="products.length === 0"
-              @click="showConfirmSale = true"
-              block
-              x-large
-              class="success mt-4"
-              >Finalizar Compra</v-btn
-            >
-          </v-layout>
+          <v-row>
+            <v-col>
+              <v-btn
+                :disabled="products.length === 0"
+                @click="showConfirmSale = true"
+                block
+                x-large
+                class="success mt-4"
+                >Finalizar Compra Efectivo</v-btn
+              >
+            </v-col>
+            <v-col cols="1">
+              <v-btn class="success mt-4" block x-large>Fiar</v-btn>
+            </v-col>
+          </v-row>
         </v-container>
 
         <v-container>
@@ -194,6 +210,21 @@
           @cancel="dialogProductNotRegister = false"
           @acept="aceptProductNotRegister"
         />
+        <OpenAccountDialog
+          :dialog="OpenAccountDialogg"
+          @cancel="OpenAccountDialogg = false"
+        />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br /><br />
+        <br />
+        <br />
+        <br />
         <br />
         <br />
         <br />
@@ -226,6 +257,7 @@ import ProductNotRegister from '../components/sales/ProductNotRegister.vue';
 import printJS from 'print-js';
 import RegisterClient from '../components/clients/RegisterClient.vue';
 import { FINDCLIENT } from '../services/users';
+import OpenAccountDialog from '../components/accounts/OpenAccountDialog.vue';
 
 export default {
   name: 'RegisterSales',
@@ -245,6 +277,7 @@ export default {
       showConfirmSale: false,
       dialogProductNotRegister: false,
       dialogRegisterClient: false,
+      OpenAccountDialogg: false,
       documentClient: '',
     };
   },
@@ -254,6 +287,7 @@ export default {
     ConfirmSale,
     ProductNotRegister,
     RegisterClient,
+    OpenAccountDialog,
   },
   methods: {
     registerSaleCode(code) {

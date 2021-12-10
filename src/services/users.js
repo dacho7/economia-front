@@ -6,6 +6,7 @@ export function REGISTERCLIENT(
   surnames,
   addres,
   phone,
+  email,
 ) {
   return axios.post('http://localhost:4000/api/users/createclient', {
     document,
@@ -13,6 +14,7 @@ export function REGISTERCLIENT(
     surnames,
     addres,
     phone,
+    email,
   });
 }
 
