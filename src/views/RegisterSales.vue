@@ -196,6 +196,7 @@
         />
         <TrustSaleDialogVue
           :dialog="dialogSaleTrust"
+          :mount="total"
           @cancel="dialogSaleTrust = false"
         />
         <ConfirmSale

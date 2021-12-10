@@ -44,7 +44,7 @@
           <v-card>
             <v-card-title class="text-h5">
               Esta Seguro de Fiar esta compra a {{ showNames }} de
-              {{ addres }}?
+              {{ addres }}, valor: {{ mount }}?
             </v-card-title>
 
             <v-card-actions>

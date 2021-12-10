@@ -48,6 +48,7 @@
                 ></v-text-field>
               </v-col>
             </v-row>
+            <span>Nota: evite tildes en los nombres</span>
           </v-container>
         </v-card-text>
         <v-card-actions>
