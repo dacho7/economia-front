@@ -36,13 +36,6 @@
                     >Registrar Cliente</v-btn
                   >
                 </v-col>
-                <v-col>
-                  <v-btn
-                    @click="OpenAccountDialogg = true"
-                    class="warning"
-                    >Abrir Cuenta</v-btn
-                  >
-                </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -135,7 +128,13 @@
               >
             </v-col>
             <v-col cols="1">
-              <v-btn class="success mt-4" block x-large>Fiar</v-btn>
+              <v-btn
+                @click="dialogSaleTrust = true"
+                class="success mt-4"
+                block
+                x-large
+                >Fiar</v-btn
+              >
             </v-col>
           </v-row>
         </v-container>
@@ -195,6 +194,10 @@
           @cancel="dialogRegisterClient = false"
           @acept="reloadClientRegister"
         />
+        <TrustSaleDialogVue
+          :dialog="dialogSaleTrust"
+          @cancel="dialogSaleTrust = false"
+        />
         <ConfirmSale
           :dialog="showConfirmSale"
           @cancel="showConfirmSale = false"
@@ -209,10 +212,6 @@
           :dialog="dialogProductNotRegister"
           @cancel="dialogProductNotRegister = false"
           @acept="aceptProductNotRegister"
-        />
-        <OpenAccountDialog
-          :dialog="OpenAccountDialogg"
-          @cancel="OpenAccountDialogg = false"
         />
         <br />
         <br />
@@ -257,7 +256,7 @@ import ProductNotRegister from '../components/sales/ProductNotRegister.vue';
 import printJS from 'print-js';
 import RegisterClient from '../components/clients/RegisterClient.vue';
 import { FINDCLIENT } from '../services/users';
-import OpenAccountDialog from '../components/accounts/OpenAccountDialog.vue';
+import TrustSaleDialogVue from '../components/sales/TrustSaleDialog.vue';
 
 export default {
   name: 'RegisterSales',
@@ -271,14 +270,14 @@ export default {
       amount: 1,
       invoice: '',
       products: [],
+      documentClient: '',
       dialog: false,
       dialogAnonymous: false,
       toPrint: false,
       showConfirmSale: false,
       dialogProductNotRegister: false,
       dialogRegisterClient: false,
-      OpenAccountDialogg: false,
-      documentClient: '',
+      dialogSaleTrust: false,
     };
   },
   components: {
@@ -287,7 +286,7 @@ export default {
     ConfirmSale,
     ProductNotRegister,
     RegisterClient,
-    OpenAccountDialog,
+    TrustSaleDialogVue,
   },
   methods: {
     registerSaleCode(code) {
@@ -437,6 +436,7 @@ export default {
     reloadClientRegister(client) {
       this.headline = client.names + ' ' + client.surnames;
       this.dialogRegisterClient = false;
+      this.client = client;
     },
     printInvoice() {
       this.toPrint = true;

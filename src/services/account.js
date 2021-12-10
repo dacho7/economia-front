@@ -6,3 +6,9 @@ export function CREATEACCOUNT(document) {
     { document },
   );
 }
+
+export function FINDACCOUNT(document) {
+  return axios.get('http://localhost:4000/api/accounts/findaccount', {
+    params: { document },
+  });
+}
