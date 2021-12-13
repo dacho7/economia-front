@@ -13,7 +13,7 @@
           <v-card-text>
             <v-container class="ml-5">
               <v-row>
-                <v-col cols="4">
+                <v-col cols="2">
                   <v-text-field
                     color="blue-grey lighten-2"
                     label="Nombre del Cliente(No Registrado)"
@@ -21,9 +21,9 @@
                   >
                   </v-text-field>
                 </v-col>
-                <v-col>
+                <v-col cols="3">
                   <v-text-field
-                    label="Cliente Registrado(Cedula)"
+                    label="Cliente Registrado(Cédula)"
                     v-model="documentClient"
                     @input="findClient()"
                   ></v-text-field>
@@ -36,6 +36,9 @@
                     >Registrar Cliente</v-btn
                   >
                 </v-col>
+                <v-col>
+                  <PayAccount />
+                </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -46,9 +49,11 @@
               <template>
                 <thead>
                   <tr>
-                    <th>Cantidad</th>
-                    <th>Code</th>
-                    <th>Otras Opciones de Registro Productos</th>
+                    <th><h3>Cantidad</h3></th>
+                    <th><h3>Código de barras</h3></th>
+                    <th>
+                      <h3>Otras Opciones de Registro Productos</h3>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -130,6 +135,7 @@
             <v-col cols="1">
               <v-btn
                 @click="dialogSaleTrust = true"
+                :disabled="products.length === 0"
                 class="success mt-4"
                 block
                 x-large
@@ -197,12 +203,14 @@
         <TrustSaleDialogVue
           :dialog="dialogSaleTrust"
           :mount="total"
+          :invoice="invoice"
           @cancel="dialogSaleTrust = false"
+          @acept="finishTrustSale"
         />
         <ConfirmSale
           :dialog="showConfirmSale"
           @cancel="showConfirmSale = false"
-          @acept="finishInvoice()"
+          @acept="finishInvoice('PAGADO')"
         ></ConfirmSale>
         <FindProductRegister
           :dialog="dialogAnonymous"
@@ -258,6 +266,7 @@ import printJS from 'print-js';
 import RegisterClient from '../components/clients/RegisterClient.vue';
 import { FINDCLIENT } from '../services/users';
 import TrustSaleDialogVue from '../components/sales/TrustSaleDialog.vue';
+import PayAccount from '../components/sales/PayAccount.vue';
 
 export default {
   name: 'RegisterSales',
@@ -265,7 +274,6 @@ export default {
     return {
       headline: '',
       client: null,
-      date: '',
       total: 0,
       code: '',
       amount: 1,
@@ -288,6 +296,7 @@ export default {
     ProductNotRegister,
     RegisterClient,
     TrustSaleDialogVue,
+    PayAccount,
   },
   methods: {
     registerSaleCode(code) {
@@ -367,24 +376,41 @@ export default {
         })
         .catch((e) => console.log(e));
     },
-    finishInvoice() {
+    finishTrustSale(client) {
+      this.headline = client.names + ' ' + client.surnames;
+      this.dialogSaleTrust = false;
+      this.client = client;
+      this.finishInvoice('FIADO');
+    },
+    finishInvoice(type) {
       this.showConfirmSale = false;
       let total = 0;
       let document = '';
+      let address = '';
       this.products.forEach((sale) => {
         total += sale.subtotal;
       });
       if (!this.client) {
         document = 'NO REGISTRADO';
+        address = '';
       } else {
         document = this.client.document;
+        address = this.client.address;
       }
-      COMPLETEINVOICE(this.invoice, total, document, this.headline)
+      COMPLETEINVOICE(
+        this.invoice,
+        total,
+        document,
+        this.headline,
+        type,
+        address,
+      )
         .then(() => {
           this.products = [];
           this.total = 0;
           this.client = '';
           this.amount = 1;
+          this.clean();
           this.printInvoice();
           this.createInvoice();
         })
@@ -438,6 +464,22 @@ export default {
       this.headline = client.names + ' ' + client.surnames;
       this.dialogRegisterClient = false;
       this.client = client;
+    },
+    clean() {
+      this.headline = '';
+      this.client = null;
+      this.total = 0;
+      this.code = '';
+      this.amount = 1;
+      this.products = [];
+      this.documentClient = '';
+      this.dialog = false;
+      this.dialogAnonymousfalse;
+      this.toPrint = false;
+      this.showConfirmSale = false;
+      this.dialogProductNotRegister = false;
+      this.dialogRegisterClient = false;
+      this.dialogSaleTrust = false;
     },
     printInvoice() {
       this.toPrint = true;

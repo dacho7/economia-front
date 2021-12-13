@@ -11,6 +11,8 @@ export function COMPLETEINVOICE(
   total,
   client,
   name_client,
+  type,
+  address,
 ) {
   return axios.put(
     'http://localhost:4000/api/invoices/updateinvoice',
@@ -19,6 +21,8 @@ export function COMPLETEINVOICE(
       total,
       client,
       name_client,
+      type,
+      address,
     },
   );
 }

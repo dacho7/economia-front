@@ -2,7 +2,7 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="800px">
       <v-card>
-        <v-card-title class="green white--text">
+        <v-card-title class="warning white--text">
           <span class="text-h5">Registar Cliente</span>
         </v-card-title>
         <v-card-text>

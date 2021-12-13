@@ -61,7 +61,7 @@
                 text
                 @click="registerTrust()"
               >
-                Registrar
+                FIAR
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -74,15 +74,17 @@
 <script>
 import { CREATEACCOUNT, FINDACCOUNT } from '../../services/account';
 import { FINDCLIENT } from '../../services/users';
+import { MAKEMOVEMENT } from '../../services/transactions';
 
 export default {
   name: 'TrustSaleDialog',
-  props: ['dialog', 'mount'],
+  props: ['dialog', 'mount', 'invoice'],
   data() {
     return {
       documentClient: null,
       client: null,
       confirm: false,
+      balanceAccount: 0,
     };
   },
   computed: {
@@ -102,6 +104,7 @@ export default {
   methods: {
     cancel() {
       this.$emit('cancel');
+      this.clean();
     },
     findClient() {
       if (this.documentClient.length > 6) {
@@ -114,20 +117,28 @@ export default {
             }
           })
           .catch((e) => console.log(e));
+      } else {
+        this.client = null;
       }
     },
     registerTrust() {
       FINDACCOUNT(this.client.document)
         .then((result) => {
           if (result.data.ok) {
-            console.log('existe cuenta');
             this.confirm = false;
-            this.registerMovement(this.mount);
+            this.balanceAccount = result.data.data.balance;
+            this.registerMovementTrust(
+              result.data.data.client,
+              this.mount,
+            );
           } else {
             CREATEACCOUNT(this.client.document).then((result2) => {
               if (result2.data.ok) {
-                console.log('se creo cuenta');
-                this.registerMovement(this.mount);
+                this.balanceAccount = result2.data.data.balance;
+                this.registerMovementTrust(
+                  result2.data.data.client,
+                  this.mount,
+                );
               } else {
                 alert(
                   'algo sucedio comunicarse con soporte 3193983994',
@@ -138,15 +149,28 @@ export default {
         })
         .catch((e) => console.log(e));
     },
-    registerMovement() {
-      alert('Registro exitoso de fio');
-      console.log('registro exitoso de fio');
-      this.clean();
+    registerMovementTrust(account, mount) {
+      MAKEMOVEMENT(
+        account,
+        'DEB',
+        `Fio de compra ${new Date().toString().substr(4, 20)} n. ${
+          this.invoice
+        }`,
+        mount,
+      )
+        .then((resMov) => {
+          const total = this.balanceAccount + resMov.data.data.mount;
+          alert(`Registro exitoso de fio, Total cuenta ${total}`);
+          this.$emit('acept', this.client);
+          this.clean();
+        })
+        .catch((e) => console.log(e));
     },
     clean() {
       this.documentClient = null;
       this.client = null;
       this.confirm = false;
+      this.balanceAccount = 0;
     },
   },
 };
