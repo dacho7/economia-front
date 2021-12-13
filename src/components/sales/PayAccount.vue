@@ -2,7 +2,7 @@
   <v-dialog v-model="dialog" persistent max-width="800px">
     <template v-slot:activator="{ on, attrs }">
       <v-btn color="secondary" dark v-bind="attrs" v-on="on">
-        Cuentas
+        Abonar a Cuenta
       </v-btn>
     </template>
     <v-card>

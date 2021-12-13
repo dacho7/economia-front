@@ -136,7 +136,7 @@
               <v-btn
                 @click="dialogSaleTrust = true"
                 :disabled="products.length === 0"
-                class="success mt-4"
+                class="warning mt-4"
                 block
                 x-large
                 >Fiar</v-btn
@@ -267,6 +267,7 @@ import RegisterClient from '../components/clients/RegisterClient.vue';
 import { FINDCLIENT } from '../services/users';
 import TrustSaleDialogVue from '../components/sales/TrustSaleDialog.vue';
 import PayAccount from '../components/sales/PayAccount.vue';
+import { UPDATEQUANTITY } from '../services/products';
 
 export default {
   name: 'RegisterSales',
@@ -313,17 +314,26 @@ export default {
                 product.data.data.cost_price,
               )
                 .then((sale) => {
-                  const newSale = {
-                    amount: this.amount,
-                    description: product.data.data.description,
-                    subtotal: sale.data.data.subtotal,
-                    id_sale: sale.data.data.id_sale,
-                    id_product: sale.data.data.id_product,
-                  };
-                  this.products.push(newSale);
-                  this.code = '';
-                  this.amount = 1;
-                  this.total += sale.data.data.subtotal;
+                  if (sale.data.ok) {
+                    this.updateQuantityProduc(
+                      product.data.data.id_product,
+                      product.data.data.quantity -
+                        sale.data.data.amount,
+                    );
+                    const newSale = {
+                      amount: sale.data.data.amount,
+                      description: product.data.data.description,
+                      subtotal: sale.data.data.subtotal,
+                      id_sale: sale.data.data.id_sale,
+                      id_product: sale.data.data.id_product,
+                    };
+                    this.products.push(newSale);
+                    this.code = '';
+                    this.amount = 1;
+                    this.total += sale.data.data.subtotal;
+                  } else {
+                    alert('algo sucedio');
+                  }
                 })
                 .catch((err) => {
                   console.log(err);
@@ -335,6 +345,33 @@ export default {
             console.log(err);
           });
       }
+    },
+    aceptProductNotRegister(sale) {
+      this.dialogProductNotRegister = false;
+      REGISTERSALE(
+        this.invoice,
+        'No Register',
+        sale.description,
+        sale.quantitiy,
+        sale.total,
+        sale.total / (1 + 0.15),
+      )
+        .then((sale) => {
+          const newSale = {
+            amount: sale.data.data.amount,
+            description: sale.data.data.description,
+            subtotal: sale.data.data.subtotal,
+            id_sale: sale.data.data.id_sale,
+            id_product: sale.data.data.id_product,
+          };
+          this.products.push(newSale);
+          this.code = '';
+          this.amount = 1;
+          this.total += sale.data.data.subtotal;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     findClient() {
       if (this.documentClient.length > 6) {
@@ -374,6 +411,11 @@ export default {
             this.invoice = result.data.data.id_invoice;
           }
         })
+        .catch((e) => console.log(e));
+    },
+    updateQuantityProduc(id_product, quantity) {
+      UPDATEQUANTITY(id_product, quantity)
+        .then()
         .catch((e) => console.log(e));
     },
     finishTrustSale(client) {
@@ -433,33 +475,7 @@ export default {
       this.registerSaleCode(newSale.code);
       this.dialogAnonymous = false;
     },
-    aceptProductNotRegister(sale) {
-      this.dialogProductNotRegister = false;
-      REGISTERSALE(
-        this.invoice,
-        'No Register',
-        sale.description,
-        sale.quantitiy,
-        sale.total,
-        sale.total / (1 + 0.15),
-      )
-        .then((sale) => {
-          const newSale = {
-            amount: sale.data.data.amount,
-            description: sale.data.data.description,
-            subtotal: sale.data.data.subtotal,
-            id_sale: sale.data.data.id_sale,
-            id_product: sale.data.data.id_product,
-          };
-          this.products.push(newSale);
-          this.code = '';
-          this.amount = 1;
-          this.total += sale.data.data.subtotal;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+
     reloadClientRegister(client) {
       this.headline = client.names + ' ' + client.surnames;
       this.dialogRegisterClient = false;

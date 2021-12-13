@@ -2,8 +2,8 @@
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="800px">
       <v-card>
-        <v-card-title class="green white--text">
-          <span class="text-h5">Registar Cliente</span>
+        <v-card-title class="orange white--text">
+          <span class="text-h5">Registar En Cuenta</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -40,7 +40,7 @@
             Fiar Compra
           </v-btn>
         </v-card-actions>
-        <v-dialog v-model="confirm" persistent max-width="500">
+        <v-dialog v-model="confirm" persistent max-width="700">
           <v-card>
             <v-card-title class="text-h5">
               Esta Seguro de Fiar esta compra a {{ showNames }} de

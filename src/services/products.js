@@ -98,3 +98,10 @@ export function UPDATEPRODUCT(
     },
   );
 }
+
+export function UPDATEQUANTITY(id_product, quantity) {
+  return axios.put(
+    'http://localhost:4000/api/products/productupdatequantity',
+    { id_product, quantity },
+  );
+}
