@@ -129,18 +129,18 @@ export default {
     },
     register() {
       REGISTERCLIENT(
-        this.document.trim(),
-        this.names.trim(),
-        this.surnames.trim(),
-        this.addres.trim(),
-        this.phone.trim(),
-        this.email.trim(),
+        this.document,
+        this.names,
+        this.surnames,
+        this.addres,
+        this.phone,
+        this.email,
       )
         .then((result) => {
           if (result.data.ok) {
-            this.clean();
             this.$emit('acept', result.data.data);
             alert('Usuario registrado con exito');
+            this.clean();
           } else {
             alert('Cedula ya registrada');
             this.confirm = false;

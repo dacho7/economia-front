@@ -151,15 +151,15 @@
     </v-card-text>
     <ConfirmDialog
       :dialog="dialogCancel"
-      msm="cancelar los cambios"
+      msm="cancelar los cambios?"
       description="Podra Actualizar Cuando Desee"
       @cancel="dialogCancel = false"
       @acept="redirectUpdateProducts()"
     />
     <ConfirmDialog
       :dialog="dialogFinish"
-      msm="Actualizar Los Datos"
-      description="Podra Actualizar Cuando Desee"
+      msm="Actualizar Los Datos?"
+      :description="finishText"
       @cancel="dialogFinish = false"
       @acept="updateProduct()"
     />
@@ -249,12 +249,16 @@ export default {
       );
     },
     validateFinish() {
+      if (this.newValues.description.length < 4) {
+        return true;
+      }
       if (
         this.product.description != this.newValues.description ||
         this.product.cost_price != this.newValues.cost_price ||
         this.product.sale_price != this.newValues.sale_price ||
         this.product.quantity != this.newValues.quantity ||
-        this.product.type != this.newValues.type
+        this.product.type != this.newValues.type ||
+        this.newValues.description.length < 4
       ) {
         return false;
       }
@@ -267,6 +271,39 @@ export default {
         }
       }
       return true;
+    },
+    finishText() {
+      let text = '';
+      if (this.product.description != this.newValues.description) {
+        text += `Descripción anterior <${this.product.description}> Descripción nueva <${this.newValues.description}>`;
+      }
+      if (this.product.cost_price != this.newValues.cost_price) {
+        text += `, Precio de compra anterior <${this.product.cost_price}> Precio de Compra Nuevo <${this.newValues.cost_price}>`;
+      }
+      if (this.product.sale_price != this.newValues.sale_price) {
+        text += `, Precio de Venta anterior <${this.product.sale_price}> Precio de Venta Nuevo <${this.newValues.sale_price}>`;
+      }
+      if (this.product.quantity != this.newValues.quantity) {
+        text += `, Cantidad de Unidades anterior <${this.product.quantity}> Cantidad de Unidades Nuevo <${this.newValues.quantity}>`;
+      }
+      if (this.product.type != this.newValues.type) {
+        text += `, Tipo de Producto Anterior <${this.product.type}> Tipo de Producto Nuevo<${this.newValues.type}>`;
+      }
+      // if (this.newValues.expire_date) {
+      //   if (
+      //     this.product.expire_date.substr(0, 10) !=
+      //     this.newValues.expire_date.substr(0, 10)
+      //   ) {
+      //     text += `Fecha anterior <${this.product.expire_date.substr(
+      //       0,
+      //       10,
+      //     )}> Nueva Fecha <${this.newValues.expire_date.substr(
+      //       0,
+      //       10,
+      //     )}>`;
+      //   }
+      // }
+      return text;
     },
   },
   methods: {
@@ -284,8 +321,7 @@ export default {
         this.newValues.expire_date = this.product.expire_date;
         this.newValues.price = this.product.sale_price;
         this.newValues.type = this.product.type;
-        console.log(this.product.expire_date);
-        if (this.product.expire_date.substr(0, 10) != '2100-01-01') {
+        if (this.product.expire_date.substr(0, 10) != '2000-01-01') {
           this.expire = false;
           this.newValues.expire_date =
             this.product.expire_date.substr(0, 10);
@@ -300,9 +336,9 @@ export default {
       let expire_date = '';
       if (
         !this.newValues.expire_date ||
-        this.newValues.expire_date == '2100-01-01'
+        this.newValues.expire_date == '2000-01-01'
       ) {
-        expire_date = new Date('2100-01-01');
+        expire_date = new Date('2000-01-01');
       } else {
         expire_date = this.newValues.expire_date;
       }
@@ -323,7 +359,9 @@ export default {
             this.clean();
             this.loadProduct();
           } else {
-            alert('Algo sucedio intente nuevamente');
+            alert(
+              'Esa descripción de producto esta repetida, ingrese otra',
+            );
           }
         })
         .catch((e) => console.log(e));
@@ -333,7 +371,7 @@ export default {
         this.newValues.expire_date = null;
         this.touch.expire_date = true;
       } else {
-        if (this.product.expire_date.substr(0, 10) == '2100-01-01') {
+        if (this.product.expire_date.substr(0, 10) == '2000-01-01') {
           this.newValues.expire_date = null;
         } else {
           this.newValues.expire_date =

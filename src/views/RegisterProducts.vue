@@ -89,7 +89,8 @@
               !type ||
               quantity < 0 ||
               total_price < 0 ||
-              (!expire_date && !noexpire)
+              (!expire_date && !noexpire) ||
+              description.length < 4
             "
             @click="showConfirRegisterProduct = true"
             class="primary"
@@ -112,7 +113,6 @@
 import { REGISTERPRODUCT } from '../services/products';
 import Barcode from '../components/Barcode';
 import ConfirmRegisterProduct from '../components/confirmDialog/ConfirmRegisterProduct.vue';
-import { round100 } from '../services/functions/functions';
 
 export default {
   name: 'RegisterProducts',
@@ -166,15 +166,12 @@ export default {
   methods: {
     registerProduct() {
       if (this.noexpire) {
-        this.expire_date = '2100-01-01';
+        this.expire_date = '2000-01-01';
       }
-      const cost = Number(this.total_price) / Number(this.quantity);
-      const sale = round100(Number(cost) + Number(cost) * 0.15);
       REGISTERPRODUCT(
         this.description,
         this.code,
-        cost,
-        sale,
+        this.total_price,
         this.quantity,
         this.type,
         this.expire_date,

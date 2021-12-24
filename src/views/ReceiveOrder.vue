@@ -221,7 +221,7 @@ export default {
       });
     },
     setDate() {
-      if (this.product.expire_date == '2100-01-01T00:00:00.000Z') {
+      if (this.product.expire_date == '2000-01-01T00:00:00.000Z') {
         this.msgExpireDate = 'No vence';
         this.expire_date = null;
       } else {
@@ -237,10 +237,10 @@ export default {
     finish() {
       let expAux = '';
       if (
-        this.product.expire_date === '2100-01-01T00:00:00.000Z' ||
+        this.product.expire_date === '2000-01-01T00:00:00.000Z' ||
         !this.product.expire_date
       ) {
-        expAux = '2100-01-01';
+        expAux = '2000-01-01';
       } else {
         expAux = this.product.expire_date;
       }

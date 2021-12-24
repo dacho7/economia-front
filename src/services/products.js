@@ -3,8 +3,7 @@ import axios from 'axios';
 export function REGISTERPRODUCT(
   description,
   code,
-  cost_price,
-  sale_price,
+  total_price,
   quantity,
   type,
   expire_date,
@@ -12,8 +11,7 @@ export function REGISTERPRODUCT(
   return axios.post('http://localhost:4000/api/products/product', {
     description,
     code,
-    cost_price,
-    sale_price,
+    total_price,
     quantity,
     type,
     expire_date,
