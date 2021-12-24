@@ -178,7 +178,7 @@ export default {
         const result = await FINDPRODUCTBYID(this.$route.params.id);
         this.product = result.data.data;
         this.newValues.price = this.product.sale_price;
-        if (this.product.expire_date.substr(0, 10) != '2100-01-01') {
+        if (this.product.expire_date.substr(0, 10) != '2000-01-01') {
           this.disableExpireDateInput = false;
           this.newValues.date = this.product.expire_date.substr(
             0,
