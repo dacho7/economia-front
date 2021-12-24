@@ -139,7 +139,7 @@ import {
 } from '../services/sales';
 
 import ConfirmReceiveOrder from '../components/confirmDialog/ConfirmReceiveOrder.vue';
-import { UPDATEPRODUCT } from '../services/products';
+import { RECEIVEORDER } from '../services/products';
 
 export default {
   name: 'ReceiveOrder',
@@ -242,27 +242,20 @@ export default {
       ) {
         expAux = '2000-01-01';
       } else {
-        expAux = this.product.expire_date;
+        expAux = this.expire_date;
       }
-      const unitPrice =
-        (parseInt(this.product.quantity) *
-          parseFloat(this.product.cost_price) +
-          parseFloat(this.total)) /
-        (parseInt(this.product.quantity) + parseInt(this.amount));
       const totalUnits =
         parseInt(this.amount) + parseInt(this.product.quantity);
+      const totalPrice =
+        parseInt(this.product.quantity) *
+          parseFloat(this.product.cost_price) +
+        parseFloat(this.total);
 
-      UPDATEPRODUCT(
+      RECEIVEORDER(
         this.product.id_product,
-        this.product.description,
-        unitPrice,
-        this.product.sale_price,
         totalUnits,
+        totalPrice,
         expAux,
-        this.product.date_price_update,
-        new Date(),
-        this.product.type,
-        'WITHOUT-REVIEW',
       )
         .then((res) => {
           if (res.data.ok) {

@@ -97,6 +97,19 @@ export function UPDATEPRODUCT(
   );
 }
 
+export function RECEIVEORDER(
+  id_product,
+  quantityTotal,
+  totalPrice,
+  expire_date,
+) {
+  console.log(expire_date);
+  return axios.put(
+    'http://localhost:4000/api/products/receiveorder',
+    { id_product, quantityTotal, totalPrice, expire_date },
+  );
+}
+
 export function UPDATEQUANTITY(id_product, quantity) {
   return axios.put(
     'http://localhost:4000/api/products/productupdatequantity',

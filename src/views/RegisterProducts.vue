@@ -156,6 +156,7 @@ export default {
         'Cereales',
         'Embutidos',
         'Carnes',
+        'Libreria',
       ],
       type: null,
       expire_date: null,

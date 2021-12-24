@@ -227,6 +227,7 @@ export default {
         'Cereales',
         'Embutidos',
         'Carnes',
+        'Libreria',
       ],
       expire: false,
       dialogCancel: false,
@@ -260,6 +261,9 @@ export default {
         this.product.type != this.newValues.type ||
         this.newValues.description.length < 4
       ) {
+        return false;
+      }
+      if (this.newValues.sale_price < this.product.cost_price) {
         return false;
       }
       if (this.newValues.expire_date) {
@@ -360,7 +364,7 @@ export default {
             this.loadProduct();
           } else {
             alert(
-              'Esa descripción de producto esta repetida, ingrese otra',
+              'Error, Esa descripción de producto esta repetida, o el precio de venta es invalido favor ingrese otro',
             );
           }
         })
