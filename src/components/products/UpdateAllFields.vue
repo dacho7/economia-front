@@ -250,20 +250,15 @@ export default {
       );
     },
     validateFinish() {
-      if (this.newValues.description.length < 4) {
-        return true;
-      }
       if (
-        this.product.description != this.newValues.description ||
+        (this.product.description != this.newValues.description &&
+          this.newValues.description.length > 4) ||
         this.product.cost_price != this.newValues.cost_price ||
-        this.product.sale_price != this.newValues.sale_price ||
+        (this.product.sale_price != this.newValues.sale_price &&
+          this.newValues.sale_price > this.product.cost_price) ||
         this.product.quantity != this.newValues.quantity ||
-        this.product.type != this.newValues.type ||
-        this.newValues.description.length < 4
+        this.product.type != this.newValues.type
       ) {
-        return false;
-      }
-      if (this.newValues.sale_price < this.product.cost_price) {
         return false;
       }
       if (this.newValues.expire_date) {
@@ -323,7 +318,7 @@ export default {
         this.newValues.sale_price = this.product.sale_price;
         this.newValues.quantity = this.product.quantity;
         this.newValues.expire_date = this.product.expire_date;
-        this.newValues.price = this.product.sale_price;
+        this.newValues.sale_price = this.product.sale_price;
         this.newValues.type = this.product.type;
         if (this.product.expire_date.substr(0, 10) != '2000-01-01') {
           this.expire = false;

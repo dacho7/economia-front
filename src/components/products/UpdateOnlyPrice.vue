@@ -178,7 +178,7 @@ export default {
         const result = await FINDPRODUCTBYID(this.$route.params.id);
         this.product = result.data.data;
         this.newValues.price = this.product.sale_price;
-        if (this.product.expire_date.substr(0, 10) != '2000-01-01') {
+        if (this.product.expire_date.substr(0, 10) != '2100-01-01') {
           this.disableExpireDateInput = false;
           this.newValues.date = this.product.expire_date.substr(
             0,
@@ -194,10 +194,15 @@ export default {
         this.product.id_product,
         this.newValues.price,
       )
-        .then(() => {
+        .then((res) => {
           UPDATEPRODUCTSTATE(this.product.id_product, 'ACTIVE')
             .then(() => {
-              this.redirectToBack();
+              if (res.data.ok) {
+                this.clean();
+                this.redirectToBack();
+              } else {
+                alert('ingrese un valor valido');
+              }
             })
             .catch((e) => console.log(e));
         })
@@ -205,6 +210,14 @@ export default {
     },
     redirectToBack() {
       this.$router.push('/updateprice');
+    },
+    clean() {
+      this.product = null;
+      this.newValues.price = null;
+      this.disableSalePrice = true;
+      this.disableExpireDateInput = true;
+      this.dialogCancel = false;
+      this.dialogFinish = false;
     },
   },
   mounted() {

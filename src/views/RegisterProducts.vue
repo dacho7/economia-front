@@ -90,7 +90,7 @@
               quantity < 0 ||
               total_price < 0 ||
               (!expire_date && !noexpire) ||
-              description.length < 4
+              description.length < 5
             "
             @click="showConfirRegisterProduct = true"
             class="primary"

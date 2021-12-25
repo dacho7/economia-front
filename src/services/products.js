@@ -103,7 +103,6 @@ export function RECEIVEORDER(
   totalPrice,
   expire_date,
 ) {
-  console.log(expire_date);
   return axios.put(
     'http://localhost:4000/api/products/receiveorder',
     { id_product, quantityTotal, totalPrice, expire_date },
