@@ -89,7 +89,10 @@
             large
             class="col-4 success"
             @click="dialogFinish = true"
-            :disabled="newValues.price <= product.cost_price"
+            :disabled="
+              newValues.price <= product.cost_price ||
+              newValues.price == product.sale_price
+            "
             >Finalizar</v-btn
           >
           <v-spacer></v-spacer>
@@ -124,7 +127,6 @@
 import {
   FINDPRODUCTBYID,
   UPDATEPRICEPRODUCT,
-  UPDATEPRODUCTSTATE,
 } from '../../services/products';
 
 import ConfirmDialog from '../confirmDialog/ConfirmDialog.vue';
@@ -195,16 +197,13 @@ export default {
         this.newValues.price,
       )
         .then((res) => {
-          UPDATEPRODUCTSTATE(this.product.id_product, 'ACTIVE')
-            .then(() => {
-              if (res.data.ok) {
-                this.clean();
-                this.redirectToBack();
-              } else {
-                alert('ingrese un valor valido');
-              }
-            })
-            .catch((e) => console.log(e));
+          if (res.data.ok) {
+            this.clean();
+            this.redirectToBack();
+          } else {
+            alert('ingrese un valor valido');
+            this.dialogFinish = false;
+          }
         })
         .catch((e) => console.log(e));
     },

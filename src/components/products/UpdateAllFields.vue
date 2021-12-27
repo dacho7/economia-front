@@ -122,7 +122,7 @@
               </v-col>
               <v-col v-if="newValues.type != product.type">
                 <v-btn
-                  @click="newValues.type = null"
+                  @click="newValues.type = product.type"
                   block
                   class="warning"
                   >Cancelar</v-btn
@@ -322,9 +322,11 @@ export default {
         this.newValues.type = this.product.type;
         if (this.product.expire_date.substr(0, 10) != '2000-01-01') {
           this.expire = false;
+          console.log('expirea');
           this.newValues.expire_date =
             this.product.expire_date.substr(0, 10);
         } else {
+          console.log('no expira');
           this.expire = true;
         }
       } catch (e) {
@@ -361,9 +363,13 @@ export default {
             alert(
               'Error, Esa descripción de producto esta repetida, o el precio de venta es invalido favor ingrese otro',
             );
+            this.dialogFinish = false;
           }
         })
-        .catch((e) => console.log(e));
+        .catch(() => {
+          this.dialogFinish = false;
+          alert('Ya existe un producto con esa descripción');
+        });
     },
     validateExpire() {
       if (this.expire) {
