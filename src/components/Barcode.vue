@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import VueBarcode from "vue-barcode";
+import VueBarcode from 'vue-barcode';
 export default {
-  name: "Barcode",
-  props: ["code"],
+  name: 'Barcode',
+  props: ['code'],
   components: {
     barcode: VueBarcode,
   },

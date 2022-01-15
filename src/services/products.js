@@ -48,6 +48,15 @@ export function FINDPRODUCTBYDATEUPDATE(date) {
   );
 }
 
+export function FINDPRODUCTBYCODE(code) {
+  return axios.get(
+    'http://localhost:4000/api/products/findbydateupdate',
+    {
+      params: { code },
+    },
+  );
+}
+
 export function UPDATEPRODUCTSTATE(id_product, state) {
   return axios.put(
     'http://localhost:4000/api/products/productupdatestate',

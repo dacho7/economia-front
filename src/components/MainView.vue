@@ -41,7 +41,9 @@
             class="subheading mx-3"
             target="_blank"
           >
-            <router-link :to="link.route">{{ link.text }}</router-link>
+            <router-link :to="link.route">{{
+              link.text
+            }}</router-link>
           </a>
         </v-row>
       </v-col>
@@ -51,25 +53,25 @@
 
 <script>
 export default {
-  name: "MainView",
+  name: 'MainView',
 
   data: () => ({
     importantLinks: [
       {
-        text: "Registro de Ventas",
-        route: "/registersales",
+        text: 'Registro de Ventas',
+        route: '/registersales',
       },
       {
-        text: "Registro De Productos",
-        route: "/registerproducts",
+        text: 'Registro De Productos',
+        route: '/registerproducts',
       },
       {
-        text: "Recibir Pedido",
-        route: "/receiveorder",
+        text: 'Recibir Pedido',
+        route: '/receiveorder',
       },
       {
-        text: "Actualizar Precios",
-        route: "/updateprice",
+        text: 'Actualizar Precios',
+        route: '/updateprice',
       },
     ],
   }),

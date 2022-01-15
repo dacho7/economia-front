@@ -7,10 +7,17 @@
         </v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="danger" color="red darken-1" text @click="cancel()">
+          <v-btn
+            class="danger"
+            color="red darken-1"
+            text
+            @click="cancel()"
+          >
             Cancelar
           </v-btn>
-          <v-btn color="green darken-1" text @click="finish()"> Aceptar </v-btn>
+          <v-btn color="green darken-1" text @click="finish()">
+            Aceptar
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -19,14 +26,14 @@
 
 <script>
 export default {
-  name: "ConfirmReceiveOrder",
-  props: ["dialog"],
+  name: 'ConfirmReceiveOrder',
+  props: ['dialog'],
   methods: {
     cancel() {
-      this.$emit("cancel");
+      this.$emit('cancel');
     },
     finish() {
-      this.$emit("acept");
+      this.$emit('acept');
     },
   },
 };

@@ -3,12 +3,12 @@
     <div>
       <!-- <h1>Autoservicio La Economia</h1>
       <h2>Nit:432432</h2> -->
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Autoservicio La
-      Economia <br />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Autoservicio
+      La Economia <br />
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nit:
       432432 <br />
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3 Sector
-      Barrio Libertad
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3
+      Sector Barrio Libertad
       <br />
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Celular
       3147581354 <br />________________________________
@@ -46,8 +46,8 @@
 
 <script>
 export default {
-  name: "InvoiceToPrint",
-  props: ["client", "products", "total"],
+  name: 'InvoiceToPrint',
+  props: ['client', 'products', 'total'],
 };
 //something here
 </script>
