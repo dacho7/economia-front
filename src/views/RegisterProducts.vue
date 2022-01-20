@@ -57,8 +57,10 @@
             <v-col>
               <v-autocomplete
                 label="Tipo de producto"
-                v-model="type"
+                v-model="typeDescription"
                 :items="typesSelection"
+                item-text="description"
+                @input="selectIdType()"
               ></v-autocomplete>
             </v-col>
           </v-row>
@@ -86,7 +88,7 @@
             large
             :disabled="
               !description ||
-              !type ||
+              !id_type ||
               quantity < 0 ||
               total_price < 0 ||
               (!expire_date && !noexpire) ||
@@ -113,6 +115,7 @@
 import { REGISTERPRODUCT } from '../services/products';
 import Barcode from '../components/Barcode';
 import ConfirmRegisterProduct from '../components/confirmDialog/ConfirmRegisterProduct.vue';
+import { LISTPRODUCTSTYPE } from '../services/producttype';
 
 export default {
   name: 'RegisterProducts',
@@ -158,7 +161,8 @@ export default {
         'Carnes',
         'Libreria',
       ],
-      type: null,
+      typeDescription: null,
+      id_type: null,
       expire_date: null,
       noexpire: false,
       showConfirRegisterProduct: false,
@@ -174,7 +178,7 @@ export default {
         this.code,
         this.total_price,
         this.quantity,
-        this.type,
+        this.id_type,
         this.expire_date,
       )
         .then((result) => {
@@ -200,7 +204,8 @@ export default {
       this.cost_price = '';
       this.sale_price = '';
       this.quantity = 24;
-      this.type = '';
+      this.typeDescription = null;
+      this.idType = null;
       this.expire_date = null;
       this.total_price = null;
       this.whithoutCode = false;
@@ -213,6 +218,22 @@ export default {
     cleanDate() {
       this.expire_date = null;
     },
+    listproducttype() {
+      LISTPRODUCTSTYPE().then((e) => {
+        this.typesSelection = e.data.data;
+        console.log(e.data.data);
+      });
+    },
+    selectIdType() {
+      this.typesSelection.forEach((type) => {
+        if (type.description === this.typeDescription) {
+          this.id_type = type.id_type;
+        }
+      });
+    },
+  },
+  created() {
+    this.listproducttype();
   },
 };
 </script>
