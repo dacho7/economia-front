@@ -108,7 +108,7 @@
               <v-col>
                 <v-text-field
                   label="Tipo de Producto"
-                  v-model="product.type"
+                  v-model="showTypeOfProduct"
                   disabled
                 >
                 </v-text-field>
@@ -118,6 +118,8 @@
                   label="Cambiar tipo producto"
                   v-model="newValues.type"
                   :items="typesSelection"
+                  item-text="description"
+                  @input="selectIdType()"
                 ></v-autocomplete>
               </v-col>
               <v-col v-if="newValues.type != product.type">
@@ -177,6 +179,7 @@
 import { FINDPRODUCTBYID } from '../../services/products';
 import ConfirmDialog from '../confirmDialog/ConfirmDialog.vue';
 import { UPDATEPRODUCT } from '../../services/products';
+import { LISTPRODUCTSTYPE } from '../../services/producttype';
 
 export default {
   name: 'UpdateAllFields',
@@ -199,36 +202,7 @@ export default {
         quantity: true,
         expire_date: true,
       },
-      typesSelection: [
-        'Granos',
-        'Aseo y Limpieza',
-        'Enlatados',
-        'Frituras',
-        'Variedades',
-        'Verduras',
-        'Dulces',
-        'Lacteos',
-        'Panaderia',
-        'Plasticos y recipientes',
-        'Galletas',
-        'Papeleria',
-        'Bebidas',
-        'Jugueteria',
-        'Licores',
-        'Tecnologia',
-        'Agro',
-        'Utiles Escolares',
-        'Bebidas',
-        'Detalles',
-        'Bioseguridad',
-        'Herramientas',
-        'Farmacia',
-        'Promociones',
-        'Cereales',
-        'Embutidos',
-        'Carnes',
-        'Libreria',
-      ],
+      typesSelection: [],
       expire: false,
       dialogCancel: false,
       dialogFinish: false,
@@ -286,7 +260,17 @@ export default {
         text += `, Cantidad de Unidades anterior <${this.product.quantity}> Cantidad de Unidades Nuevo <${this.newValues.quantity}>`;
       }
       if (this.product.type != this.newValues.type) {
-        text += `, Tipo de Producto Anterior <${this.product.type}> Tipo de Producto Nuevo<${this.newValues.type}>`;
+        let newType = '';
+        let oldType = '';
+        this.typesSelection.forEach((element) => {
+          if (element.id_type === this.newValues.type) {
+            newType = element.description;
+          }
+          if (element.id_type === this.product.type) {
+            oldType = element.description;
+          }
+        });
+        text += `, Tipo de Producto Anterior <${oldType}> Tipo de Producto Nuevo<${newType}>`;
       }
       // if (this.newValues.expire_date) {
       //   if (
@@ -303,6 +287,15 @@ export default {
       //   }
       // }
       return text;
+    },
+    showTypeOfProduct() {
+      let typeShow = '';
+      this.typesSelection.forEach((element) => {
+        if (element.id_type == this.newValues.type) {
+          typeShow = element.description;
+        }
+      });
+      return typeShow;
     },
   },
   methods: {
@@ -322,7 +315,6 @@ export default {
         this.newValues.type = this.product.type;
         if (this.product.expire_date.substr(0, 10) != '2000-01-01') {
           this.expire = false;
-          console.log('expirea');
           this.newValues.expire_date =
             this.product.expire_date.substr(0, 10);
         } else {
@@ -384,6 +376,22 @@ export default {
         }
       }
     },
+    listproducttype() {
+      LISTPRODUCTSTYPE()
+        .then((e) => {
+          this.typesSelection = e.data.data;
+          this.loadProduct();
+        })
+        .catch((e) => console.log(e));
+    },
+    selectIdType() {
+      console.log(this.newValues.type);
+      this.typesSelection.forEach((type) => {
+        if (type.description === this.newValues.type) {
+          this.newValues.type = type.id_type;
+        }
+      });
+    },
     clean() {
       this.dialogFinish = false;
       this.touch.description = true;
@@ -395,7 +403,7 @@ export default {
     },
   },
   created() {
-    this.loadProduct();
+    this.listproducttype();
   },
 };
 </script>

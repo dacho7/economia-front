@@ -131,36 +131,7 @@ export default {
       description: null,
       total_price: null,
       quantity: 24,
-      typesSelection: [
-        'Granos',
-        'Aseo y Limpieza',
-        'Enlatados',
-        'Frituras',
-        'Variedades',
-        'Verduras',
-        'Dulces',
-        'Lacteos',
-        'Panaderia',
-        'Plasticos y recipientes',
-        'Galletas',
-        'Papeleria',
-        'Bebidas',
-        'Jugueteria',
-        'Licores',
-        'Tecnologia',
-        'Agro',
-        'Utiles Escolares',
-        'Bebidas',
-        'Detalles',
-        'Bioseguridad',
-        'Herramientas',
-        'Farmacia',
-        'Promociones',
-        'Cereales',
-        'Embutidos',
-        'Carnes',
-        'Libreria',
-      ],
+      typesSelection: [],
       typeDescription: null,
       id_type: null,
       expire_date: null,
@@ -219,10 +190,11 @@ export default {
       this.expire_date = null;
     },
     listproducttype() {
-      LISTPRODUCTSTYPE().then((e) => {
-        this.typesSelection = e.data.data;
-        console.log(e.data.data);
-      });
+      LISTPRODUCTSTYPE()
+        .then((e) => {
+          this.typesSelection = e.data.data;
+        })
+        .catch((e) => console.log(e));
     },
     selectIdType() {
       this.typesSelection.forEach((type) => {
